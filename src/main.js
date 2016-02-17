@@ -4,8 +4,9 @@
 
 // ---NODE MODULES---//
 require('d3');
-//require("script!./d3.slider.js");
 var time = require("./time.js");
+require("./main.css");
+
 
 // ---GLOBAL VAIABLES---//
 
@@ -85,7 +86,7 @@ function createDivs() {
 	var wrapper = document.createElement('DIV');
 
 	var playPause = document.createElement('DIV');
-	playPause.setAttribute('id', "playPause");
+	playPause.setAttribute('class', "playPause");
 	wrapper.appendChild(playPause);
 
 	var timeSlider = document.createElement('DIV');
@@ -128,8 +129,10 @@ function move() {
 // http://stackoverflow.com/questions/27639005/how-to-copy-static-files-to-build-directory-with-webpack
 
 function render() {
-	var json = require("json!./global_swine.H1.json");
+//	var json = require("json!./global_swine.H1.json");
 
+	var json = require("./global_swine.H1.json");
+	
 	lineAttributes = json.lineAttributes;
 	pointAttributes = json.pointAttributes;
 
