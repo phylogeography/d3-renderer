@@ -30,10 +30,7 @@ module.exports = {
     module: {
         loaders: [
             
-//            {
-//                test: /\.css$/,
-//                loader: ExtractTextPlugin.extract('style-loader', 'css-loader?module&localIdentName=css_[name]__[local]___[hash:base64:5]')
-//            },
+                  { test: /\.css$/, loader: 'style-loader!css-loader' }
             
 //            {
 //                test: /\.json/,

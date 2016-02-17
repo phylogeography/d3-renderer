@@ -4,7 +4,7 @@
 
 // ---NODE MODULES---//
 require('d3');
-require("script!./d3.slider.js");
+//require("script!./d3.slider.js");
 var time = require("./time.js");
 
 // ---GLOBAL VAIABLES---//

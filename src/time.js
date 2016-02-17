@@ -2,13 +2,16 @@
  * @fbielejec
  */
 
-// ---MODULE IMPORTS---//
+//---MODULE IMPORTS---//
+
 var d3 = require('d3');
 var utils = require('./utils');
+require("script!./d3.slider.js");
+require("./d3.slider.css");
 
-// ---MODULE EXPORTS---//
+//---MODULE EXPORTS---//
 
-var exports = module.exports = {  };
+var exports = module.exports = {};
 
 exports.generateTime = function(timeline) {
 
