@@ -59,15 +59,15 @@ exports.initializeTimeSlider = function(timeSlider, timeScale, currentDateDispla
 					"click",
 					function() {
 
-						if (playing) {
-							playing = false;
-							playPauseButton.classed("playing", playing);
+						if (global.playing) {
+							global.playing = false;
+							playPauseButton.classed("playing", global.playing);
 
 							clearInterval(processID);
 
 						} else {
-							playing = true;
-							playPauseButton.classed("playing", playing);
+							global.playing = true;
+							playPauseButton.classed("playing", global.playing);
 
 							processID = setInterval(function() {
 
@@ -90,3 +90,142 @@ exports.initializeTimeSlider = function(timeSlider, timeScale, currentDateDispla
 					});
 
 }// END: initializeTimeSlider
+
+function updateDateDisplay(value, timeScale, currentDateDisplay, dateFormat) {
+
+	var currentDate = timeScale.invert(timeScale(value));
+	currentDateDisplay.text(dateFormat(currentDate));
+
+}// END: updateDateDisplay
+
+function update(value, timeScale, currentDateDisplay, dateFormat) {
+
+	updateDateDisplay(value, timeScale, currentDateDisplay, dateFormat);
+
+	// ---LINES---//
+
+	// ---select lines painting now---//
+
+	global.linesLayer.selectAll("path.line") //
+	.filter(
+			function(d) {
+
+				var linePath = this;
+				var lineStartDate = formDate(
+						linePath.attributes.startTime.value).getTime();
+				var lineEndDate = formDate(linePath.attributes.endTime.value)
+						.getTime();
+
+				return (lineStartDate <= value && value <= lineEndDate);
+			}) //
+	.transition() //
+	.ease("linear") //
+	.attr(
+			"stroke-dashoffset",
+			function(d, i) {
+
+				var linePath = this;
+				var totalLength = linePath.getTotalLength();
+
+				var lineStartDate = formDate(
+						linePath.attributes.startTime.value).getTime();
+				var lineEndDate = formDate(linePath.attributes.endTime.value)
+						.getTime();
+				var duration = lineEndDate - lineStartDate;
+				var timePassed = value - lineStartDate;
+
+				// TODO one month difference, why?
+				// console.log("lineStartDate");
+				// console.log(linePath.attributes.startTime.value);
+				// console.log(dateFormat(formDate(linePath.attributes.startTime.value)));
+
+				var offset = totalLength;
+				if (duration == 0) {
+
+					offset = 0;
+
+				} else {
+
+					offset = map(timePassed, 0, duration, 0, totalLength);
+
+//					if (d.westofsource) {
+//
+//						offset = offset + totalLength;
+//
+//					} else {
+
+						offset = totalLength - offset;
+//					}
+
+				}// END: instantaneous line check
+
+				return (offset);
+			}) //
+	.attr("visibility", "visible");
+
+	// ---select lines yet to be painted---//
+
+	global.linesLayer.selectAll("path.line") //
+	.filter(
+			function(d) {
+				var linePath = this;
+				var lineStartDate = formDate(
+						linePath.attributes.startTime.value).getTime();
+
+				return (lineStartDate > value);
+			}) //
+	.attr("stroke-dashoffset", function(d, i) {
+		var linePath = this;
+		var totalLength = linePath.getTotalLength();
+
+		return (totalLength);
+	}) //
+	.attr("visibility", "hidden");
+
+	// ---select lines already painted---//
+
+	global.linesLayer.selectAll("path.line") //
+	.filter(
+			function(d) {
+				var linePath = this;
+				var lineEndDate = formDate(linePath.attributes.endTime.value)
+						.getTime();
+
+				return (lineEndDate < value);
+			}) //
+	.attr("stroke-dashoffset", 0) //
+	.attr("visibility", "visible");
+
+	// ---POINTS---//
+
+	// ---select points yet to be displayed---//
+
+	global.pointsLayer.selectAll(".point") //
+	.filter(function(d) {
+		var point = this;
+		var startDate = formDate(point.attributes.startTime.value).getTime();
+
+		return (value < startDate);
+	}) //
+	.transition() //
+	.ease("linear") //
+//	.duration(1000) //
+	.attr("visibility", "hidden")
+	.attr("opacity", 0);
+//
+//	// ---select point displayed now---//
+
+	global.pointsLayer.selectAll(".point") //
+	.filter(function(d) {
+		var point = this;
+		var startDate = formDate(point.attributes.startTime.value).getTime();
+
+		return (value >= startDate);
+	}) //
+	.transition() //
+	.ease("linear") //
+//	.duration(500) //
+	.attr("visibility", "visible") //
+	.attr("opacity", 1);
+	
+}// END: update

@@ -28,9 +28,9 @@ var g = svg.append("g");
 var xAxisLayer = g.append("g").attr("class", "x axis");
 var yAxisLayer = g.append("g").attr("class", "y axis");
 
-var areasLayer = g.append("g").attr("class", "areasLayer");
-var linesLayer = g.append("g").attr("class", "linesLayer");
-var pointsLayer = g.append("g").attr("class", "pointsLayer");
+global.areasLayer = g.append("g").attr("class", "areasLayer");
+global.linesLayer = g.append("g").attr("class", "linesLayer");
+global.pointsLayer = g.append("g").attr("class", "pointsLayer");
 
 // ---FUNCTIONS---//
 
@@ -52,7 +52,7 @@ function createDivs() {
 	var wrapper = document.createElement('DIV');
 
 	var playPause = document.createElement('DIV');
-	playPause.setAttribute('class', "playPause");
+	playPause.setAttribute('id', "playPause");
 	wrapper.appendChild(playPause);
 
 	var timeSlider = document.createElement('DIV');

@@ -6,6 +6,12 @@ var lineAttributes;
 
 var pointAttributes;
 
+var areasLayer ;
+exports.areasLayer = areasLayer;
+var linesLayer ;
+exports.linesLayer = linesLayer;
+var pointsLayer;
+exports.pointsLayer = pointsLayer;
 
 var margin = {
 	top : 30,
@@ -28,6 +34,8 @@ var lineWidth = 2;
 
 // time slider
 var playing = false;
+exports.playing = playing;
+
 var processID;
 var currentSliderValue;
 var sliderInterval;
