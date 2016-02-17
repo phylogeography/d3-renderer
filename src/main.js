@@ -5,56 +5,22 @@
 // ---NODE MODULES---//
 require('d3');
 var time = require("./time.js");
+var global = require('./global');
 require("./main.css");
 
 
 // ---GLOBAL VAIABLES---//
 
-var lineAttributes;
-var pointAttributes;
 
-// var projection;
-
-var margin = {
-	top : 30,
-	right : 50,
-	bottom : 50,
-	left : 200,
-};
-//
-// var width = 1100 - margin.left - margin.right;
-// var height =width;//= 900 - margin.top - margin.bottom;
-
-width = 1100 - margin.left - margin.right, height = 1100 - margin.top
-		- margin.bottom;
-
-var minScaleExtent = 1;// 0.7;
-var maxScaleExtent = 5;
-// var sliderStartValue;
-// var sliderEndValue;
-var lineWidth = 2;
-
-// time slider
-var playing = false;
-var processID;
-var currentSliderValue;
-var sliderInterval;
-var sliderStartValue;
-var sliderEndValue;
-var timeSlider;
-var timeScale;
-var currentDateDisplay;
-var dateFormat;
-
-var zoom = d3.behavior.zoom().scaleExtent([ minScaleExtent, maxScaleExtent ])
-		.center([ width / 2, height / 2 ]).size([ width, height ]).on("zoom",
+var zoom = d3.behavior.zoom().scaleExtent([ global.minScaleExtent, global.maxScaleExtent ])
+		.center([ global.width / 2, global.height / 2 ]).size([ global.width, global.height ]).on("zoom",
 				move);
 
 createDivs();
 
 var svg = d3.select("#container").append('svg') //
-.attr("width", width + margin.left + margin.right) //
-.attr("height", height + margin.top + margin.bottom) //
+.attr("width", global.width + global.margin.left + global.margin.right) //
+.attr("height", global.height + global.margin.top + global.margin.bottom) //
 .call(zoom);
 
 var g = svg.append("g");
@@ -129,7 +95,6 @@ function move() {
 // http://stackoverflow.com/questions/27639005/how-to-copy-static-files-to-build-directory-with-webpack
 
 function render() {
-//	var json = require("json!./global_swine.H1.json");
 
 	var json = require("./global_swine.H1.json");
 	
@@ -141,6 +106,16 @@ function render() {
 	var timeline = json.timeLine;
 	time.generateTime(timeline);
 
+	
+	time.initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
+			dateFormat);
+	
+	
+	
+	
+	
+	
+	
 }// END: render
 
 // ---RENDERING---//

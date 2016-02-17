@@ -5,9 +5,11 @@
 //---MODULE IMPORTS---//
 
 var d3 = require('d3');
-var utils = require('./utils');
 require("script!./d3.slider.js");
 require("./d3.slider.css");
+var utils = require('./utils');
+var global = require('./global');
+
 
 //---MODULE EXPORTS---//
 
@@ -40,3 +42,51 @@ exports.generateTime = function(timeline) {
 
 }// END: generateTime
 
+exports.initializeTimeSlider = function(timeSlider, timeScale, currentDateDisplay,
+		dateFormat) {
+
+	// time slider listener
+	timeSlider.on('slide', function(evt, value) {
+
+		// TODO
+//		update(value, timeScale, currentDateDisplay, dateFormat);
+		currentSliderValue = value;
+
+	});// END: slide
+
+	var playPauseButton = d3.select('#playPause').attr("class", "playPause")
+			.on(
+					"click",
+					function() {
+
+						if (playing) {
+							playing = false;
+							playPauseButton.classed("playing", playing);
+
+							clearInterval(processID);
+
+						} else {
+							playing = true;
+							playPauseButton.classed("playing", playing);
+
+							processID = setInterval(function() {
+
+								var sliderValue = currentSliderValue
+										+ sliderInterval;
+								if (sliderValue > sliderEndValue) {
+									sliderValue = sliderStartValue;
+								}
+
+								timeSlider.value(sliderValue);
+								update(sliderValue, timeScale,
+										currentDateDisplay, dateFormat);
+
+								currentSliderValue = sliderValue;
+
+							}, 100);
+
+						}// END: playing check
+
+					});
+
+}// END: initializeTimeSlider
