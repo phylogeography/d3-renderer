@@ -1,0 +1,26 @@
+LICENSE
+-------
+
+ * ----------------------------------------------------------------------------
+ * "THE BEER-WARE LICENSE" (Revision 42):
+ * <fbielejece> wrote this software. As long as you retain this notice you
+ * can do whatever you want with this stuff. If we meet some day, and you think
+ * this stuff is worth it, you can buy me a beer in return.
+ * ----------------------------------------------------------------------------
+ */
+ 
+ PURPOSE
+ -------
+ Render SpreaD3 JSON files.
+ 
+ USAGE
+ ----- 
+ * DEV
+  npm install
+  npm start
+  Point your browser to http://localhost:8080
+ * DIST
+  npm install
+  webpack
+  Point your browser to dist.index.html
+

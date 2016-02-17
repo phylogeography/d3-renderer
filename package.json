@@ -1,0 +1,25 @@
+{
+  "name": "d3-renderer",
+  "version": "0.0.1",
+  "description": "Renderer for spreaD3 JSON files, packed with webpack",
+  "license": "BEERWARE",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server"
+  },
+  "dependencies": {
+    "colorbrewer": "^1.0.0",
+    "css-loader": "^0.14.5",
+    "d3": "^3.5.15",
+    "d3-slider": "git+ssh://git@github.com:MasterMaps/d3-slider.git",
+    "script-loader" : "git+ssh://git@github.com:webpack/script-loader.git",
+    "d3-svg-legend": "^1.8.0",
+    "extract-text-webpack-plugin": "^0.8.1",
+    "html-webpack-plugin": "^1.5.0",
+    "json-loader": "^0.5.4",
+    "kodama": "^1.4.3",
+    "webpack": "^1.9.10",
+    "webpack-dev-server": "^1.9.0"
+  }
+}
