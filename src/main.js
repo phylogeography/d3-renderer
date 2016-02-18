@@ -3,16 +3,13 @@
  */
 
 // ---NODE MODULES---//
-require("./main.css");
+//require("./main.css");
 var d3 = require('d3');
 var global = require('./global.js');
 var time = require("./time.js");
 var topo = require('./topo.js');
 var points = require('./points.js');
 var lines = require('./lines.js');
-
-
-
 
 // ---HTML---//
 
@@ -21,8 +18,9 @@ createDivs();
 // ---MODULE VARIABLES---//
 
 var zoom = d3.behavior.zoom().scaleExtent(
-		[  global.minScaleExtent,  global.maxScaleExtent ]).center(
-		[ global.width / 2, global.height / 2 ]).size([ global.width, global.height ]).on("zoom", move);
+		[ global.minScaleExtent, global.maxScaleExtent ]).center(
+		[ global.width / 2, global.height / 2 ]).size(
+		[ global.width, global.height ]).on("zoom", move);
 
 var svg = d3.select("#container").append('svg') //
 .attr("width", global.width + global.margin.left + global.margin.right) //
@@ -31,14 +29,7 @@ var svg = d3.select("#container").append('svg') //
 
 global.g = svg.append("g");
 
-//var g = svg.append("g");
-
-//var xAxisLayer = g.append("g").attr("class", "x axis");
-//var yAxisLayer = g.append("g").attr("class", "y axis");
-
-//areasLayer = g.append("g").attr("class", "areasLayer");
-//linesLayer = g.append("g").attr("class", "linesLayer");
-//pointsLayer = g.append("g").attr("class", "pointsLayer");
+// areasLayer = g.append("g").attr("class", "areasLayer");
 
 // ---FUNCTIONS---//
 
@@ -83,11 +74,11 @@ function move() {
 	var s = d3.event.scale;
 	var h = global.height / 4;
 
-	t[0] = Math
-			.min((global.width / global.height) * (s - 1), Math.max(global.width * (1 - s), t[0]));
+	t[0] = Math.min((global.width / global.height) * (s - 1), Math.max(
+			global.width * (1 - s), t[0]));
 
-	t[1] = Math.min(h * (s - 1) + h * s, Math.max(global.height * (1 - s) - h * s,
-			t[1]));
+	t[1] = Math.min(h * (s - 1) + h * s, Math.max(global.height * (1 - s) - h
+			* s, t[1]));
 
 	zoom.translate(t);
 	global.g.attr("transform", "translate(" + t + ")scale(" + s + ")");
@@ -106,25 +97,19 @@ function render() {
 
 	var json = require("./global_swine.H1.json");
 
-//	lineAttributes = json.lineAttributes;
-//	pointAttributes = json.pointAttributes;
-
 	var timeLine = json.timeLine;
-	time.initializeTimeSlider(timeLine);
-	
-
-	var nodeAttributes = json.pointAttributes;
-	var axisAttributes = json.axisAttributes;
-	topo.generateEmptyTopoLayer(nodeAttributes, axisAttributes);
-	
 	var nodes = json.layers[0].points;
-	points.generatePointsLayer(nodes, nodeAttributes);
-	
 	var branches = json.layers[0].lines;
+
+	var axisAttributes = json.axisAttributes;
+	var nodeAttributes = json.pointAttributes;
+	// var lineAttributes = json.lineAttributes;
+
+	time.initializeTimeSlider(timeLine);
+	topo.generateEmptyTopoLayer(nodeAttributes, axisAttributes);
 	lines.generateLinesLayer(branches, nodes, nodeAttributes);
-	
-	
-	
+	points.generatePointsLayer(nodes, nodeAttributes);
+
 }// END: render
 
 // ---RENDERING---//

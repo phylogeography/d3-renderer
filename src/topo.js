@@ -3,6 +3,8 @@
  */
 
 // ---MODULE IMPORTS---//
+
+require('./topo.css');
 var d3 = require('d3');
 var utils = require('./utils.js');
 var global = require('./global.js');

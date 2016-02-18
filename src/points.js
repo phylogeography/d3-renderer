@@ -2,13 +2,13 @@
  * @fbielejec
  */
 
-// ---MODULE IMPORTS---//
+//---MODULE IMPORTS---//
 require("script!kodama");
 var d3 = require('d3');
 var utils = require('./utils.js');
 var global = require('./global.js');
 
-// ---MODULE VARIABLES---//
+//---MODULE VARIABLES---//
 
 d3.kodama
 		.themeRegistry(
@@ -40,7 +40,7 @@ d3.kodama
 
 var pointsLayer;
 
-// ---MODULE EXPORTS---//
+//---MODULE EXPORTS---//
 
 var exports = module.exports = {};
 
@@ -204,4 +204,4 @@ exports.updatePointsLayer = function(value) {
 
 }// END: updatePointsLayer
 
-// ---FUNCTIONS---//
+//---FUNCTIONS---//

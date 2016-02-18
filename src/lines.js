@@ -3,7 +3,7 @@
  */
 
 // ---MODULE IMPORTS---//
-require("script!kodama");
+// require("script!kodama");
 var d3 = require('d3');
 var utils = require('./utils.js');
 var global = require('./global.js');
@@ -24,7 +24,7 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 	var h3cols = [ "#D6D6E2", "#65658F", "#59A5BF", "#ECE5BD", "#D2C161",
 			"#CAE2EB" ];
 	var h1cols = [ "#CD322E", "#D6D6E2", "#2481BA", "#89A24C", "#835B9C" ]; // =
-																			// colorbrewer.Dark2[8]
+	// colorbrewer.Dark2[8]
 	var colorscale = d3.scale.ordinal().range(h1cols).domain(
 			colorAttribute.domain);
 
@@ -34,11 +34,10 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 			[ 0.5, 1 ]);
 
 	linesLayer = global.g.append("g").attr("class", "linesLayer");
-	
-	var lines = linesLayer.selectAll("path").data(branches).enter().append("path")
-	//
-	.attr("class", "line")
-	//
+
+	var lines = linesLayer.selectAll("path").data(branches).enter().append(
+			"path") //
+	.attr("class", "line") //
 	.attr(
 			"d",
 			function(d, i) {
@@ -119,14 +118,10 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 
 				return (bearing);
 
-			})
-	//
-	.attr("fill", "none")
-	//
-	.attr("stroke-width", lineWidth + "px")
-	//
-	.attr("stroke-linejoin", "round")
-	//
+			}) //
+	.attr("fill", "none") //
+	.attr("stroke-width", lineWidth + "px") //
+	.attr("stroke-linejoin", "round") //
 	.attr("stroke", function(d) {
 
 		if (typeof (d.attributes.lineage) == "undefined") {
@@ -134,24 +129,19 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 		}
 
 		return (colorscale(d.attributes.lineage));
-	})
-	//
+	}) //
 	.attr("startTime", function(d) {
 		return (d.startTime);
-	})
-	//
+	}) //
 	.attr("endTime", function(d) {
 		return (d.endTime);
-	})
-	//
+	}) //
 	.attr("stroke-dasharray", function(d) {
 
 		var totalLength = d3.select(this).node().getTotalLength();
 		return (totalLength + " " + totalLength);
-	})
-	//
-	.attr("stroke-dashoffset", 0)
-	//
+	}) //
+	.attr("stroke-dashoffset", 0) //
 	.attr("opacity", function(d) {
 
 		return (opacityscale(+d.attributes.height));
@@ -163,96 +153,94 @@ exports.updateLinesLayer = function(value) {
 
 	// ---select lines painting now---//
 
-	// global.linesLayer.selectAll("path.line") //
-	// .filter(
-	// function(d) {
+	linesLayer.selectAll("path.line")
 	//
-	// var linePath = this;
-	// var lineStartDate = formDate(
-	// linePath.attributes.startTime.value).getTime();
-	// var lineEndDate = formDate(linePath.attributes.endTime.value)
-	// .getTime();
+	.filter(
+			function(d) {
+
+				var linePath = this;
+				var lineStartDate = utils.formDate(
+						linePath.attributes.startTime.value).getTime();
+				var lineEndDate = utils.formDate(
+						linePath.attributes.endTime.value).getTime();
+
+				return (lineStartDate <= value && value <= lineEndDate);
+			})
 	//
-	// return (lineStartDate <= value && value <= lineEndDate);
-	// }) //
-	// .transition() //
-	// .ease("linear") //
-	// .attr(
-	// "stroke-dashoffset",
-	// function(d, i) {
+	.transition()
 	//
-	// var linePath = this;
-	// var totalLength = linePath.getTotalLength();
-	//
-	// var lineStartDate = formDate(
-	// linePath.attributes.startTime.value).getTime();
-	// var lineEndDate = formDate(linePath.attributes.endTime.value)
-	// .getTime();
-	// var duration = lineEndDate - lineStartDate;
-	// var timePassed = value - lineStartDate;
-	//
-	// // TODO one month difference, why?
-	// // console.log("lineStartDate");
-	// // console.log(linePath.attributes.startTime.value);
-	// //
-	// console.log(dateFormat(formDate(linePath.attributes.startTime.value)));
-	//
-	// var offset = totalLength;
-	// if (duration == 0) {
-	//
-	// offset = 0;
-	//
-	// } else {
-	//
-	// offset = map(timePassed, 0, duration, 0, totalLength);
-	//
-	// // if (d.westofsource) {
-	// //
-	// // offset = offset + totalLength;
-	// //
-	// // } else {
-	//
-	// offset = totalLength - offset;
-	// // }
-	//
-	// }// END: instantaneous line check
-	//
-	// return (offset);
-	// }) //
-	// .attr("visibility", "visible");
-	//
-	// // ---select lines yet to be painted---//
-	//
-	// global.linesLayer.selectAll("path.line") //
-	// .filter(
-	// function(d) {
-	// var linePath = this;
-	// var lineStartDate = formDate(
-	// linePath.attributes.startTime.value).getTime();
-	//
-	// return (lineStartDate > value);
-	// }) //
-	// .attr("stroke-dashoffset", function(d, i) {
-	// var linePath = this;
-	// var totalLength = linePath.getTotalLength();
-	//
-	// return (totalLength);
-	// }) //
-	// .attr("visibility", "hidden");
-	//
-	// // ---select lines already painted---//
-	//
-	// global.linesLayer.selectAll("path.line") //
-	// .filter(
-	// function(d) {
-	// var linePath = this;
-	// var lineEndDate = formDate(linePath.attributes.endTime.value)
-	// .getTime();
-	//
-	// return (lineEndDate < value);
-	// }) //
-	// .attr("stroke-dashoffset", 0) //
-	// .attr("visibility", "visible");
-	//
+	.ease("linear")
+			//
+			.attr(
+					"stroke-dashoffset",
+					function(d, i) {
+
+						var linePath = this;
+						var totalLength = linePath.getTotalLength();
+
+						var lineStartDate = utils.formDate(
+								linePath.attributes.startTime.value).getTime();
+						var lineEndDate = utils.formDate(
+								linePath.attributes.endTime.value).getTime();
+						var duration = lineEndDate - lineStartDate;
+						var timePassed = value - lineStartDate;
+
+						var offset = totalLength;
+						if (duration == 0) {
+
+							offset = 0;
+
+						} else {
+
+							offset = utils.map(timePassed, 0, duration, 0,
+									totalLength);
+
+							// if (d.westofsource) {
+							//
+							// offset = offset + totalLength;
+							//
+							// } else {
+
+							offset = totalLength - offset;
+							// }
+
+						}// END: instantaneous line check
+
+						return (offset);
+					}) //
+			.attr("visibility", "visible");
+
+	// ---select lines yet to be painted---//
+
+	linesLayer.selectAll("path.line") //
+	.filter(
+			function(d) {
+				var linePath = this;
+				var lineStartDate = utils.formDate(
+						linePath.attributes.startTime.value).getTime();
+
+				return (lineStartDate > value);
+			}) //
+	.attr("stroke-dashoffset", function(d, i) {
+		var linePath = this;
+		var totalLength = linePath.getTotalLength();
+
+		return (totalLength);
+	}) //
+	.attr("visibility", "hidden");
+
+	// ---select lines already painted---//
+
+	linesLayer.selectAll("path.line") //
+	.filter(
+			function(d) {
+				var linePath = this;
+				var lineEndDate = utils.formDate(
+						linePath.attributes.endTime.value).getTime();
+
+				return (lineEndDate < value);
+			}) //
+	.attr("stroke-dashoffset", 0) //
+	.attr("visibility", "visible");
 
 }// END: updateLinesLayer

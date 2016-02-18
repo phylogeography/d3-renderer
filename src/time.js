@@ -3,6 +3,7 @@
  */
 
 // ---MODULE IMPORTS---//
+require("./time.css");
 var d3 = require('d3');
 // TODO: require form node_modules
 require("script!./d3.slider.js");
