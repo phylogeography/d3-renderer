@@ -90,16 +90,16 @@ function move() {
 
 	var t = d3.event.translate;
 	var s = d3.event.scale;
-	var h = height / 4;
+	var h = global.height / 4;
 
 	t[0] = Math
-			.min((width / height) * (s - 1), Math.max(width * (1 - s), t[0]));
+			.min((global.width / global.height) * (s - 1), Math.max(global.width * (1 - s), t[0]));
 
-	t[1] = Math.min(h * (s - 1) + h * s, Math.max(height * (1 - s) - h * s,
+	t[1] = Math.min(h * (s - 1) + h * s, Math.max(global.height * (1 - s) - h * s,
 			t[1]));
 
 	zoom.translate(t);
-	g.attr("transform", "translate(" + t + ")scale(" + s + ")");
+	global.g.attr("transform", "translate(" + t + ")scale(" + s + ")");
 
 	// fit the paths to the zoom level
 	// d3.selectAll(".country").attr("stroke-width", 1.0 / s);
