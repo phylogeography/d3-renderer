@@ -33,6 +33,38 @@ var processID;
 
 var exports = module.exports = {};
 
+exports.createHtml = function( document,  all) {
+	
+	var controls = document.createElement('DIV');
+	controls.setAttribute('id', "controls");
+
+	var h2 = document.createElement("H2");
+	var text = document.createTextNode("Current date:");
+	h2.appendChild(text);
+
+	var span = document.createElement('SPAN');
+	span.setAttribute('id', "currentDate");
+	h2.appendChild(span);
+
+	controls.appendChild(h2);
+	
+	var wrapper = document.createElement('DIV');
+
+	var playPause = document.createElement('DIV');
+	playPause.setAttribute('id', "playPause");
+	wrapper.appendChild(playPause);
+
+	var timeSliderDiv = document.createElement('DIV');
+	timeSliderDiv.setAttribute('id', "timeSlider");
+	wrapper.appendChild(timeSliderDiv);
+
+	controls.appendChild(wrapper);
+
+//	document.body
+	all.appendChild(controls);
+	
+}//END:createHtml
+
 exports.initializeTimeSlider = function( timeLine) {
 
 	// initialize module variables
@@ -41,7 +73,6 @@ exports.initializeTimeSlider = function( timeLine) {
 	// put slider at the end of timeLine, everything painted
 	timeSlider.value( sliderEndValue);
 	updateDateDisplay(sliderEndValue);
-	
 	
 	// time slider listener
 	timeSlider.on('slide', function(evt, value) {

@@ -1,0 +1,72 @@
+
+
+
+
+
+.container {
+	margin-top: 1.5cm;
+	border: 2px solid #000;
+	border-radius: 5px;
+	height: 100%;
+	overflow: hidden;
+	/* 	background: #000000; */
+	/* 	background: #ffffff; */
+}
+
+
+.selectors {
+	margin-top: 1.5cm;
+	float: left;
+}
+
+
+/* styling for collapsible panels */
+.panel, .panelcollapsed {
+	margin-top: 5px;
+	margin-right: 5px;
+}
+
+/* panel heading */
+.panel h2, .panelcollapsed h2 {
+	font-size: 14px;
+	font-weight: 300;
+	margin: 0px;
+	padding: 4px;
+	padding-left: 20px;
+	/*	background: #EEEEEE; */
+	background-image: url('./arrow-up.png');
+	background-repeat: no-repeat;
+	background-position: left center;
+	border-top: 1px solid #CCC;
+	/*	border-bottom: 1px solid #CCC;
+			border-right: 1px solid #CCC;
+			border-left: 1px solid #CCC;
+			-moz-border-radius: 3px;
+			-webkit-border-radius: 3px;
+			*/
+}
+
+/* panel heading on rollover */
+.panel h2:hover, .panelcollapsed h2:hover {
+	background-color: #F5F7F9;
+}
+
+/* heading of a collapsed panel */
+.panelcollapsed h2 {
+	/*	background: #DDDDDD; */
+	background-image: url('./arrow-dn.png');
+	background-repeat: no-repeat;
+	background-position: left center;
+	border-color: #CCC;
+}
+
+/* panel content - do not set borders or paddings */
+.panelcontent {
+	background: #FFFFFF;
+	overflow: hidden;
+}
+
+/* collapsed panel content */
+.panelcollapsed .panelcontent {
+	display: none;
+}

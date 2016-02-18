@@ -2,8 +2,9 @@
  * @fbielejec
  */
 
-// ---NODE MODULES---//
-//require("./main.css");
+// ---MODULE IMPORTS---//
+require("./main.css");
+var collapsible = require("./collapsible.js");
 var d3 = require('d3');
 var global = require('./global.js');
 var time = require("./time.js");
@@ -13,7 +14,10 @@ var lines = require('./lines.js');
 
 // ---HTML---//
 
-createDivs();
+createHtml();
+collapsible.setUpPanels();
+collapsible.collapseAll() ;
+//require("script!./collapsible.js");
 
 // ---MODULE VARIABLES---//
 
@@ -22,7 +26,7 @@ var zoom = d3.behavior.zoom().scaleExtent(
 		[ global.width / 2, global.height / 2 ]).size(
 		[ global.width, global.height ]).on("zoom", move);
 
-var svg = d3.select("#container").append('svg') //
+var svg = d3.select(".container").append('svg') //
 .attr("width", global.width + global.margin.left + global.margin.right) //
 .attr("height", global.height + global.margin.top + global.margin.bottom) //
 .call(zoom);
@@ -33,39 +37,81 @@ global.g = svg.append("g");
 
 // ---FUNCTIONS---//
 
-function createDivs() {
+function createHtml() {
 
-	var controls = document.createElement('DIV');
-	controls.setAttribute('id', "controls");
+	var document = this.document;
+	
+	var all = document.createElement('DIV');
+	all.setAttribute('id', "all");
+	all.setAttribute('style', "display: block;");
+	
+	time.createHtml(document, all);
+	
+	// <div class="selectorsANDcontainer" style="display: block;">
 
+	var selectorsANDcontainer = document.createElement('DIV');
+	selectorsANDcontainer.setAttribute('id', "selectorsANDcontainer");
+	selectorsANDcontainer.setAttribute('style', "display: block;");
+	
+
+//	<div class="selectors" style="display: block;">
+	var selectors = document.createElement('DIV');
+	selectors.setAttribute('class', "selectors");
+	selectors.setAttribute('style', "display: block;");
+	
+	
+	var buttons = document.createElement('DIV');
+	buttons.setAttribute('class', "buttons");
+	var button = document.createElement('BUTTON');
+	button.setAttribute('data-zoom', "+1");
+	var text = document.createTextNode("Zoom In");
+	button.appendChild(text);
+	buttons.appendChild(button);
+	var button = document.createElement('BUTTON');
+	button.setAttribute('data-zoom', "-1");
+	var text = document.createTextNode("Zoom Out");
+	button.appendChild(text);
+	buttons.appendChild(button);
+	selectors.appendChild(buttons);
+	
+
+	
+//	<div class="panel">
+//	<h2>Export</h2>
+//	<div class="panelcontent">
+//		<button id="saveSVG">Save SVG</button>
+//	</div>
+//</div>
+	var panel = document.createElement('DIV');
+	panel.setAttribute('class', "panel");
 	var h2 = document.createElement("H2");
-	var text = document.createTextNode("Current date:");
+	var text = document.createTextNode("Export");
 	h2.appendChild(text);
-
-	var span = document.createElement('SPAN');
-	span.setAttribute('id', "currentDate");
-	h2.appendChild(span);
-
-	controls.appendChild(h2);
-
-	var wrapper = document.createElement('DIV');
-
-	var playPause = document.createElement('DIV');
-	playPause.setAttribute('id', "playPause");
-	wrapper.appendChild(playPause);
-
-	var timeSliderDiv = document.createElement('DIV');
-	timeSliderDiv.setAttribute('id', "timeSlider");
-	wrapper.appendChild(timeSliderDiv);
-
-	controls.appendChild(wrapper);
-
-	document.body.appendChild(controls);
-
+	panel.appendChild(h2);
+	var panelcontent = document.createElement('DIV');
+	panelcontent.setAttribute('class', "panelcontent");
+	var button = document.createElement('BUTTON');
+	button.setAttribute('id', "saveSVG");
+	var text = document.createTextNode("Save SVG");
+	button.appendChild(text);
+	panelcontent.appendChild(button);
+	panel.appendChild(panelcontent);
+	selectors.appendChild(panel);
+	
+	
+	
+	selectorsANDcontainer.appendChild(selectors);
+	
+	///
+	
 	var container = document.createElement('DIV');
-	container.setAttribute('id', "container");
-	document.body.appendChild(container);
-
+	container.setAttribute('class', "container");
+	selectorsANDcontainer.appendChild(container);
+	
+	
+	all.appendChild(selectorsANDcontainer);
+	document.body.appendChild(all);
+	
 }// END: createDivs
 
 function move() {
