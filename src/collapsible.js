@@ -7,7 +7,6 @@ var PANEL_ANIMATION_DELAY = 20; /* ms */
 var PANEL_ANIMATION_STEPS = 10;
 
 var exports = module.exports = {
-		
 		setUpPanels : setUpPanels,
 		collapseAll : collapseAll,
 		expandAll : expandAll
