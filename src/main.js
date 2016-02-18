@@ -5,9 +5,10 @@
 // ---NODE MODULES---//
 require("./main.css");
 var d3 = require('d3');
+var global = require('./global.js');
 var time = require("./time.js");
 var topo = require('./topo.js');
-var global = require('./global.js');
+var points = require('./points.js');
 
 // ---HTML---//
 
@@ -122,9 +123,12 @@ function render() {
 	time.initializeTimeSlider(timeLine);
 	
 
-	var pointAttributes = json.pointAttributes;
+	var nodeAttributes = json.pointAttributes;
 	var axisAttributes = json.axisAttributes;
-	topo.generateEmptyTopoLayer(pointAttributes, axisAttributes);
+	topo.generateEmptyTopoLayer(nodeAttributes, axisAttributes);
+	
+	var nodes = json.layers[0].points;
+	points.generatePointsLayer(nodes, nodeAttributes);
 	
 
 }// END: render

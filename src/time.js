@@ -8,6 +8,7 @@ require("script!./d3.slider.js");
 require("./d3.slider.css");
 var utils = require('./utils.js');
 // var global = require('./global');
+var points = require('./points.js');
 
 // ---MODULE VARIABLES---//
 
@@ -121,7 +122,10 @@ function update(value) {
 		
 	updateDateDisplay(value);
 
-	// TODO: delegate to modules, call by value
+    //---POINTS---//
+	
+	points.updatePointsLayer(value);
+	
 	
 	// ---LINES---//
 
@@ -217,35 +221,6 @@ function update(value) {
 //	.attr("stroke-dashoffset", 0) //
 //	.attr("visibility", "visible");
 //
-//	// ---POINTS---//
-//
-//	// ---select points yet to be displayed---//
-//
-//	global.pointsLayer.selectAll(".point") //
-//	.filter(function(d) {
-//		var point = this;
-//		var startDate = formDate(point.attributes.startTime.value).getTime();
-//
-//		return (value < startDate);
-//	}) //
-//	.transition() //
-//	.ease("linear") //
-//	// .duration(1000) //
-//	.attr("visibility", "hidden").attr("opacity", 0);
-//	//
-//	// // ---select point displayed now---//
-//
-//	global.pointsLayer.selectAll(".point") //
-//	.filter(function(d) {
-//		var point = this;
-//		var startDate = formDate(point.attributes.startTime.value).getTime();
-//
-//		return (value >= startDate);
-//	}) //
-//	.transition() //
-//	.ease("linear") //
-//	// .duration(500) //
-//	.attr("visibility", "visible") //
-//	.attr("opacity", 1);
+
 
 }// END: update
