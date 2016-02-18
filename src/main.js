@@ -8,19 +8,33 @@ var time = require("./time.js");
 var global = require('./global');
 require("./main.css");
 
-
-// ---GLOBAL VAIABLES---//
-
-
-var zoom = d3.behavior.zoom().scaleExtent([ global.minScaleExtent, global.maxScaleExtent ])
-		.center([ global.width / 2, global.height / 2 ]).size([ global.width, global.height ]).on("zoom",
-				move);
+// ---HTML---//
 
 createDivs();
 
+// ---MODULE VAIABLES---//
+
+var minScaleExtent = 1;
+var maxScaleExtent = 5;
+
+var margin = {
+	top : 30,
+	right : 50,
+	bottom : 50,
+	left : 200,
+};
+
+var width = 1100 - margin.left - margin.right;
+var height = 1100 - margin.top - margin.bottom;
+
+
+var zoom = d3.behavior.zoom().scaleExtent(
+		[  minScaleExtent,  maxScaleExtent ]).center(
+		[ width / 2, height / 2 ]).size([ width, height ]).on("zoom", move);
+
 var svg = d3.select("#container").append('svg') //
-.attr("width", global.width + global.margin.left + global.margin.right) //
-.attr("height", global.height + global.margin.top + global.margin.bottom) //
+.attr("width", width + margin.left + margin.right) //
+.attr("height", height + margin.top + margin.bottom) //
 .call(zoom);
 
 var g = svg.append("g");
@@ -55,9 +69,9 @@ function createDivs() {
 	playPause.setAttribute('id', "playPause");
 	wrapper.appendChild(playPause);
 
-	var timeSlider = document.createElement('DIV');
-	timeSlider.setAttribute('id', "timeSlider");
-	wrapper.appendChild(timeSlider);
+	var timeSliderDiv = document.createElement('DIV');
+	timeSliderDiv.setAttribute('id', "timeSlider");
+	wrapper.appendChild(timeSliderDiv);
 
 	controls.appendChild(wrapper);
 
@@ -97,25 +111,19 @@ function move() {
 function render() {
 
 	var json = require("./global_swine.H1.json");
-	
-	lineAttributes = json.lineAttributes;
-	pointAttributes = json.pointAttributes;
+
+//	lineAttributes = json.lineAttributes;
+//	pointAttributes = json.pointAttributes;
 
 	// console.log(pointAttributes);
 
-	var timeline = json.timeLine;
-	time.generateTime(timeline);
+	var timeLine = json.timeLine;
+	time.initializeTimeSlider(timeLine);
+	
 
-	
-	time.initializeTimeSlider(timeSlider, timeScale, currentDateDisplay,
-			dateFormat);
-	
-	
-	
-	
-	
-	
-	
+	// put slider at the end of timeLine, everything painted
+//	timeSlider.value(global.sliderEndValue);
+
 }// END: render
 
 // ---RENDERING---//
