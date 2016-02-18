@@ -3,16 +3,16 @@
  */
 
 // ---NODE MODULES---//
-require('d3');
-var time = require("./time.js");
-var global = require('./global');
 require("./main.css");
+var d3 = require('d3');
+var time = require("./time.js");
+var topo = require('./topo');
 
 // ---HTML---//
 
 createDivs();
 
-// ---MODULE VAIABLES---//
+// ---MODULE VARIABLES---//
 
 var minScaleExtent = 1;
 var maxScaleExtent = 5;
@@ -115,14 +115,14 @@ function render() {
 //	lineAttributes = json.lineAttributes;
 //	pointAttributes = json.pointAttributes;
 
-	// console.log(pointAttributes);
-
 	var timeLine = json.timeLine;
 	time.initializeTimeSlider(timeLine);
 	
 
-	// put slider at the end of timeLine, everything painted
-//	timeSlider.value(global.sliderEndValue);
+	var pointAttributes = json.pointAttributes;
+	var axisAttributes = json.axisAttributes;
+	topo.generateEmptyTopoLayer(pointAttributes, axisAttributes);
+	
 
 }// END: render
 

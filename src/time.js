@@ -24,40 +24,9 @@ var currentDateDisplay;
 var timeScale;
 var processID;
 
-
 // ---MODULE EXPORTS---//
 
 var exports = module.exports = {};
-
-initializeVariables = function(timeLine) {
-
-	dateFormat = d3.time.format("%Y/%m/%d");
-
-	var startDate = utils.formDate(timeLine.startTime);
-	sliderStartValue = startDate.getTime();
-
-	var endDate = utils.formDate(timeLine.endTime);
-	sliderEndValue = endDate.getTime();
-
-	currentSliderValue =  sliderStartValue;
-
-	var duration =  sliderEndValue -  sliderStartValue;
-	sliderInterval = duration / sliderSpeed;
-
-	// initial value
-	currentDateDisplay = d3.select('#currentDate');//.text(dateFormat(startDate));
-
-	 timeScale = d3.time.scale.utc().domain([ startDate, endDate ]).range(
-			[ 0, 1 ]);
-
-	timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
-	d3.select('#timeSlider').call(timeSlider);
-
-}// END: generateTime
-
-
-
-
 
 exports.initializeTimeSlider = function( timeLine) {
 
@@ -114,6 +83,32 @@ exports.initializeTimeSlider = function( timeLine) {
 }// END: initializeTimeSlider
 
 // ---FUNCTIONS---//
+
+initializeVariables = function(timeLine) {
+
+	dateFormat = d3.time.format("%Y/%m/%d");
+
+	var startDate = utils.formDate(timeLine.startTime);
+	sliderStartValue = startDate.getTime();
+
+	var endDate = utils.formDate(timeLine.endTime);
+	sliderEndValue = endDate.getTime();
+
+	currentSliderValue =  sliderStartValue;
+
+	var duration =  sliderEndValue -  sliderStartValue;
+	sliderInterval = duration / sliderSpeed;
+
+	// initial value
+	currentDateDisplay = d3.select('#currentDate');//.text(dateFormat(startDate));
+
+	 timeScale = d3.time.scale.utc().domain([ startDate, endDate ]).range(
+			[ 0, 1 ]);
+
+	timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
+	d3.select('#timeSlider').call(timeSlider);
+
+}// END: generateTime
 
 function updateDateDisplay(value) {
 		

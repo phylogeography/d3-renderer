@@ -1,4 +1,6 @@
-
+/**
+ * @fbielejec
+ */
 
 //---EXPORTS---//
 
@@ -16,3 +18,27 @@ exports.formDate = function(dateString) {
 
 	return (date);
 }// END: formDate
+
+exports.map = function(value, fromLow, fromHigh, toLow, toHigh) {
+	return (toLow + (toHigh - toLow)
+			* ((value - fromLow) / (fromHigh - fromLow)));
+}// END: map
+
+exports.capitalizeFirstLetter = function(string) {
+	return string[0].toUpperCase() + string.slice(1);
+}// END: capitalizeFirstLetter
+
+exports.getObject = function(obj, key, val) {
+	var newObj = false;
+	$.each(obj, function() {
+		var testObject = this;
+		$.each(testObject, function(k, v) {
+			// alert(k);
+			if (val == v && k == key) {
+				newObj = testObject;
+			}
+		});
+	});
+
+	return newObj;
+}// END: getObject
