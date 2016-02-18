@@ -4,11 +4,14 @@
 
 // ---MODULE IMPORTS---//
 var d3 = require('d3');
+// TODO: require form node_modules
 require("script!./d3.slider.js");
 require("./d3.slider.css");
 var utils = require('./utils.js');
 // var global = require('./global');
 var points = require('./points.js');
+var lines = require('./lines.js');
+
 
 // ---MODULE VARIABLES---//
 
@@ -126,101 +129,7 @@ function update(value) {
 	
 	points.updatePointsLayer(value);
 	
-	
 	// ---LINES---//
-
-	// ---select lines painting now---//
-
-//	global.linesLayer.selectAll("path.line") //
-//	.filter(
-//			function(d) {
-//
-//				var linePath = this;
-//				var lineStartDate = formDate(
-//						linePath.attributes.startTime.value).getTime();
-//				var lineEndDate = formDate(linePath.attributes.endTime.value)
-//						.getTime();
-//
-//				return (lineStartDate <= value && value <= lineEndDate);
-//			}) //
-//	.transition() //
-//	.ease("linear") //
-//	.attr(
-//			"stroke-dashoffset",
-//			function(d, i) {
-//
-//				var linePath = this;
-//				var totalLength = linePath.getTotalLength();
-//
-//				var lineStartDate = formDate(
-//						linePath.attributes.startTime.value).getTime();
-//				var lineEndDate = formDate(linePath.attributes.endTime.value)
-//						.getTime();
-//				var duration = lineEndDate - lineStartDate;
-//				var timePassed = value - lineStartDate;
-//
-//				// TODO one month difference, why?
-//				// console.log("lineStartDate");
-//				// console.log(linePath.attributes.startTime.value);
-//				// console.log(dateFormat(formDate(linePath.attributes.startTime.value)));
-//
-//				var offset = totalLength;
-//				if (duration == 0) {
-//
-//					offset = 0;
-//
-//				} else {
-//
-//					offset = map(timePassed, 0, duration, 0, totalLength);
-//
-//					// if (d.westofsource) {
-//					//
-//					// offset = offset + totalLength;
-//					//
-//					// } else {
-//
-//					offset = totalLength - offset;
-//					// }
-//
-//				}// END: instantaneous line check
-//
-//				return (offset);
-//			}) //
-//	.attr("visibility", "visible");
-//
-//	// ---select lines yet to be painted---//
-//
-//	global.linesLayer.selectAll("path.line") //
-//	.filter(
-//			function(d) {
-//				var linePath = this;
-//				var lineStartDate = formDate(
-//						linePath.attributes.startTime.value).getTime();
-//
-//				return (lineStartDate > value);
-//			}) //
-//	.attr("stroke-dashoffset", function(d, i) {
-//		var linePath = this;
-//		var totalLength = linePath.getTotalLength();
-//
-//		return (totalLength);
-//	}) //
-//	.attr("visibility", "hidden");
-//
-//	// ---select lines already painted---//
-//
-//	global.linesLayer.selectAll("path.line") //
-//	.filter(
-//			function(d) {
-//				var linePath = this;
-//				var lineEndDate = formDate(linePath.attributes.endTime.value)
-//						.getTime();
-//
-//				return (lineEndDate < value);
-//			}) //
-//	.attr("stroke-dashoffset", 0) //
-//	.attr("visibility", "visible");
-//
-
-
+	lines.updateLinesLayer(value);
+	
 }// END: update

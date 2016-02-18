@@ -9,26 +9,16 @@ var global = require('./global.js');
 var time = require("./time.js");
 var topo = require('./topo.js');
 var points = require('./points.js');
+var lines = require('./lines.js');
+
+
+
 
 // ---HTML---//
 
 createDivs();
 
 // ---MODULE VARIABLES---//
-
-//var minScaleExtent = 1;
-//var maxScaleExtent = 5;
-
-//var margin = {
-//	top : 30,
-//	right : 50,
-//	bottom : 50,
-//	left : 200,
-//};
-//
-//var width = 1100 - margin.left - margin.right;
-//var height = 1100 - margin.top - margin.bottom;
-
 
 var zoom = d3.behavior.zoom().scaleExtent(
 		[  global.minScaleExtent,  global.maxScaleExtent ]).center(
@@ -130,7 +120,11 @@ function render() {
 	var nodes = json.layers[0].points;
 	points.generatePointsLayer(nodes, nodeAttributes);
 	
-
+	var branches = json.layers[0].lines;
+	lines.generateLinesLayer(branches, nodes, nodeAttributes);
+	
+	
+	
 }// END: render
 
 // ---RENDERING---//
