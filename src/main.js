@@ -6,7 +6,8 @@
 require("./main.css");
 var d3 = require('d3');
 var time = require("./time.js");
-var topo = require('./topo');
+var topo = require('./topo.js');
+var global = require('./global.js');
 
 // ---HTML---//
 
@@ -14,37 +15,39 @@ createDivs();
 
 // ---MODULE VARIABLES---//
 
-var minScaleExtent = 1;
-var maxScaleExtent = 5;
+//var minScaleExtent = 1;
+//var maxScaleExtent = 5;
 
-var margin = {
-	top : 30,
-	right : 50,
-	bottom : 50,
-	left : 200,
-};
-
-var width = 1100 - margin.left - margin.right;
-var height = 1100 - margin.top - margin.bottom;
+//var margin = {
+//	top : 30,
+//	right : 50,
+//	bottom : 50,
+//	left : 200,
+//};
+//
+//var width = 1100 - margin.left - margin.right;
+//var height = 1100 - margin.top - margin.bottom;
 
 
 var zoom = d3.behavior.zoom().scaleExtent(
-		[  minScaleExtent,  maxScaleExtent ]).center(
-		[ width / 2, height / 2 ]).size([ width, height ]).on("zoom", move);
+		[  global.minScaleExtent,  global.maxScaleExtent ]).center(
+		[ global.width / 2, global.height / 2 ]).size([ global.width, global.height ]).on("zoom", move);
 
 var svg = d3.select("#container").append('svg') //
-.attr("width", width + margin.left + margin.right) //
-.attr("height", height + margin.top + margin.bottom) //
+.attr("width", global.width + global.margin.left + global.margin.right) //
+.attr("height", global.height + global.margin.top + global.margin.bottom) //
 .call(zoom);
 
-var g = svg.append("g");
+global.g = svg.append("g");
 
-var xAxisLayer = g.append("g").attr("class", "x axis");
-var yAxisLayer = g.append("g").attr("class", "y axis");
+//var g = svg.append("g");
 
-global.areasLayer = g.append("g").attr("class", "areasLayer");
-global.linesLayer = g.append("g").attr("class", "linesLayer");
-global.pointsLayer = g.append("g").attr("class", "pointsLayer");
+//var xAxisLayer = g.append("g").attr("class", "x axis");
+//var yAxisLayer = g.append("g").attr("class", "y axis");
+
+//areasLayer = g.append("g").attr("class", "areasLayer");
+//linesLayer = g.append("g").attr("class", "linesLayer");
+//pointsLayer = g.append("g").attr("class", "pointsLayer");
 
 // ---FUNCTIONS---//
 

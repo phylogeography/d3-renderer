@@ -6,7 +6,7 @@
 var d3 = require('d3');
 require("script!./d3.slider.js");
 require("./d3.slider.css");
-var utils = require('./utils');
+var utils = require('./utils.js');
 // var global = require('./global');
 
 // ---MODULE VARIABLES---//
