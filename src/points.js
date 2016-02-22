@@ -10,6 +10,7 @@ var utils = require('./utils.js');
 var global = require('./global.js');
 var colorlegend = require('./colorlegend.js');
 
+//import("./jquery.simple-color.js");
 require("imports?$=jquery!./jquery.simple-color.js");
 
 
@@ -178,7 +179,59 @@ exports.generatePointsLayer = function(nodes, nodeAttributes) {
 	}) //
 	.theme('nodesTheme'));
 
+	// dump attribute values into DOM
+	points[0].forEach(function(d, i) {
+
+		var thisPoint = d3.select(d);
+		var properties = nodes[i].attributes;
+
+		for ( var property in properties) {
+			if (properties.hasOwnProperty(property)) {
+
+				thisPoint.attr(property, properties[property]);
+
+			}
+		}// END: properties loop
+	});
+	
 }// END: generatePointsLayer
+
+updatePointColorLegend = function(scale) {
+	
+//	var scale = d3.scale.linear().domain(data).range(
+//			[ pointStartColor, pointEndColor ]);
+
+	$('#pointColorLegend').html('');
+	colorlegend.colorlegend("#pointColorLegend", scale, "linear", {
+		title : "",
+		boxHeight : 20,
+		boxWidth : 6,
+		vertical : true
+	});
+	
+//	return (scale);
+}//END: updateColorScale
+
+
+updatePointColors = function(scale, colorAttribute) {
+	
+	pointsLayer.selectAll(".point").transition() //
+	.ease("linear") //
+	.attr("fill", function() {
+
+		var point = d3.select(this);
+		var attributeValue = point.attr(colorAttribute);
+		var color = scale(attributeValue);
+
+		if (attributeValue == null) {
+			console.log("null found");
+			color = "#000";
+		}
+
+		return (color);
+	});
+	
+}//ENDL updatePointColor
 
 exports.setupPanels = function(attributes) {
 
@@ -261,7 +314,6 @@ exports.setupPanels = function(attributes) {
 						var data;
 						var scale;
 						
-						$('#pointColorLegend').html('');
 						$('#pointStartColor').html('');
 						$('#pointEndColor').html('');
 						
@@ -270,28 +322,16 @@ exports.setupPanels = function(attributes) {
 							data = attribute.domain;
 							scale = d3.scale.ordinal().range(global.ordinalColors).domain(data);
 
-							colorlegend.colorlegend("#pointColorLegend", scale, "ordinal",
-									{
-										title : "",
-										boxHeight : 20,
-										boxWidth : 6,
-										vertical : true
-									});
+							updatePointColorLegend(scale);
 
 						} else if(attribute.scale == global.LINEAR) {
 
 							data = attribute.range;
+							
 							scale = d3.scale.linear().domain(data).range(
 									[ pointStartColor, pointEndColor ]);
 
-							colorlegend.colorlegend("#pointColorLegend", scale, "linear", {
-								title : "",
-								boxHeight : 20,
-								boxWidth : 6,
-								vertical : true
-							});
-
-							// TODO: setup with webpack 
+							updatePointColorLegend(scale);
 							
 							// start color
 							$('#pointStartColor').html("<h4>Start color<\/h4>");
@@ -307,24 +347,58 @@ exports.setupPanels = function(attributes) {
 								onSelect : function(hex, element) {
 
 									pointStartColor = "#" + hex;
-									// console.log(hex + " selected" + " for input "
-									// + element.attr('class'));
-								}
-
+									scale.range(
+											[ pointStartColor, pointEndColor ]);
+									updatePointColorLegend(scale);
+									
+									// TODO: triger repaint
+									updatePointColors(scale, colorAttribute);
+									
+								}//END: onSelect
 							});
+							
 							$('.pointStartColor').setColor(pointStartColor);
 							
 							
 							
-							//end color
+							// end color
 							$('#pointEndColor').html("<h4>End color<\/h4>");
 							$('#pointEndColor').append("<input class=\"pointEndColor\" \/>");
 							
-							////////////
+							$('.pointEndColor').simpleColor({
+								cellWidth : 13,
+								cellHeight : 13,
+								columns : 4,
+								colors : utils.getSimpleColors(global.pairedSimpleColors),
+								displayColorCode : true,
+								onSelect : function(hex, element) {
+
+									pointEndColor = "#" + hex;
+									scale.range(
+											[ pointStartColor, pointEndColor ]);
+									updatePointColorLegend(scale);
+									
+									// TODO: triger repaint
+									updatePointColors(scale, colorAttribute);
+								}
+							});
+							
+							$('.pointEndColor').setColor(pointEndColor);
 							
 						} else {
 							console.log("Error occured when resolving scale type!");
 						}
+						
+						
+						
+						
+						updatePointColors(scale, colorAttribute);
+						
+						
+						
+						
+						
+						
 						
 						
 					});
