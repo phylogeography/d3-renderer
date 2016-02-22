@@ -5,9 +5,15 @@
 // ---MODULE IMPORTS---//
 require("script!kodama");
 var d3 = require('d3');
+
 var utils = require('./utils.js');
 var global = require('./global.js');
 var colorlegend = require('./colorlegend.js');
+
+require("imports?$=jquery!./jquery.simple-color.js");
+
+
+//require("./jquery.simple-color.js");
 
 // ---MODULE VARIABLES---//
 
@@ -256,6 +262,9 @@ exports.setupPanels = function(attributes) {
 						var scale;
 						
 						$('#pointColorLegend').html('');
+						$('#pointStartColor').html('');
+						$('#pointEndColor').html('');
+						
 						if (attribute.scale == global.ORDINAL) {
 
 							data = attribute.domain;
@@ -282,10 +291,36 @@ exports.setupPanels = function(attributes) {
 								vertical : true
 							});
 
-							// TODO: dynamically create color selectors
+							// TODO: setup with webpack 
+							
+							// start color
+							$('#pointStartColor').html("<h4>Start color<\/h4>");
+							$('#pointStartColor').append("<input class=\"pointStartColor\" \/>");
+							
+							$('.pointStartColor').simpleColor({
+								cellWidth : 13,
+								cellHeight : 13,
+								columns : 4,
+								displayColorCode : true,
+								colors : utils.getSimpleColors(global.pairedSimpleColors),
+
+								onSelect : function(hex, element) {
+
+									pointStartColor = "#" + hex;
+									// console.log(hex + " selected" + " for input "
+									// + element.attr('class'));
+								}
+
+							});
+							$('.pointStartColor').setColor(pointStartColor);
 							
 							
 							
+							//end color
+							$('#pointEndColor').html("<h4>End color<\/h4>");
+							$('#pointEndColor').append("<input class=\"pointEndColor\" \/>");
+							
+							////////////
 							
 						} else {
 							console.log("Error occured when resolving scale type!");

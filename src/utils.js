@@ -2,8 +2,7 @@
  * @fbielejec
  */
 
-//---EXPORTS---//
-
+// ---EXPORTS---//
 var exports = module.exports = {};
 
 exports.formDate = function(dateString) {
@@ -43,7 +42,7 @@ exports.getObject = function(obj, key, val) {
 	return newObj;
 }// END: getObject
 
- exports.alternatingColorScale = function() {
+exports.alternatingColorScale = function() {
 	var domain;
 	var range;
 
@@ -70,3 +69,20 @@ exports.getObject = function(obj, key, val) {
 
 	return scale;
 }// END: alternatingColorScale
+
+exports.getSimpleColors = function(colors) {
+	var simpleColors = [];
+
+	var arrayLength = colors.length;
+	for (var i = 0; i < arrayLength; i++) {
+
+		var color = colors[i];
+		if (color.charAt(0) === '#') {
+			color = color.substr(1);
+			simpleColors[i] = color;
+		}
+
+	}
+
+	return simpleColors;
+}// END: getSimpleColors

@@ -88,7 +88,7 @@ function createHtml() {
 	document.write("				<\/div>");
 
 
-	document.write("				<div class=\"panel\">");
+	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Point color<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 	document.write("						<select id=\"pointFixedColor\">");
@@ -108,15 +108,15 @@ function createHtml() {
 	document.write("						<\/select>");
 	document.write("						<div id=\"pointColorLegend\" class=\"legend\"><\/div>");
 	
-//	document.write("						<div>");
+	document.write("						<div id=\"pointStartColor\">");
 //	document.write("							<h4>Start color<\/h4>");
 //	document.write("							<input class='pointStartColor' \/>");
-//	document.write("						<\/div>");
+	document.write("						<\/div>");
 //	
-//	document.write("						<div>");
+	document.write("						<div id=\"pointEndColor\">");
 //	document.write("							<h4>End color<\/h4>");
 //	document.write("							<input class='pointEndColor' \/>");
-//	document.write("						<\/div>");
+	document.write("						<\/div>");
 	
 	
 	

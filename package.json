@@ -19,6 +19,7 @@
     "html-webpack-plugin": "^1.5.0",
     "imports-loader": "^0.6.5",
     "jquery": "^2.2.0",
+    "jquery-simple-color": "git+ssh://git@github.com/recurser/jquery-simple-color.git",
     "json-loader": "^0.5.4",
     "kodama": "^1.4.3",
     "script-loader": "git+ssh://git@github.com:webpack/script-loader.git",

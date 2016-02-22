@@ -33,7 +33,8 @@ module.exports = {
                   { test: /\.css$/, loader: 'style-loader!css-loader' },
                   { test: /\.png$/, loader: 'url-loader?limit=10000' },
                   { test: /\.json$/, loader: 'json-loader' },
-//                  { test: /kodama/, loader: 'exports?kodama!imports?d3.kodama' }
+//                  { test: require.resolve("./jquery.simple-color.js"), loader: 'imports?jQuery=jquery,$=jquery' }
+                  
         ]
     },
 
@@ -49,7 +50,8 @@ module.exports = {
         }),
         new webpack.ProvidePlugin({
             $: "jquery",
-            jQuery: "jquery"
+            jQuery: "jquery",
+            jquery: "jquery"	
         })
         
     ]
