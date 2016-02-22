@@ -1,6 +1,21 @@
 //require("script!kodama.js");
 
+// ---MODULE IMPORTS---//
+
+var colorbrewer = require("colorbrewer");
+
+//---MODULE EXPORTS---//
+
 var exports = module.exports = {};
+
+var COUNT = "count";
+exports.COUNT = COUNT;
+
+var ORDINAL = "ordinal";
+exports.ORDINAL = ORDINAL;
+
+var LINEAR = "linear";
+exports.LINEAR = LINEAR;
 
 var margin = {
 	top : 30,
@@ -23,6 +38,20 @@ var minScaleExtent = 1;
 exports.minScaleExtent = minScaleExtent;
 var maxScaleExtent = 5;
 exports.maxScaleExtent = maxScaleExtent;
+
+//fixed colors
+var fixedColors = colorbrewer.RdYlBu[11];
+fixedColors.splice(6, 0, "#ffffff");
+fixedColors.push("#000000");
+exports.fixedColors = fixedColors;
+
+//colors for mappings (paired for better interpolating)
+var pairedSimpleColors = colorbrewer.Paired[12];
+exports.pairedSimpleColors = fixedColors;
+
+// colors for categorical attributes
+var ordinalColors = d3.scale.category20().range();// ordinalColors = colorbrewer.Blues[3] ;
+exports.ordinalColors = fixedColors;
 
 // var lineAttributes;
 // var pointAttributes;

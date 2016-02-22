@@ -2,13 +2,14 @@
  * @fbielejec
  */
 
-//---MODULE IMPORTS---//
+// ---MODULE IMPORTS---//
 require("script!kodama");
 var d3 = require('d3');
 var utils = require('./utils.js');
 var global = require('./global.js');
+var colorlegend = require('./colorlegend.js');
 
-//---MODULE VARIABLES---//
+// ---MODULE VARIABLES---//
 
 d3.kodama
 		.themeRegistry(
@@ -40,7 +41,11 @@ d3.kodama
 
 var pointsLayer;
 
-//---MODULE EXPORTS---//
+var pointDefaultColorIndex = 6;
+var pointStartColor = global.pairedSimpleColors[0];
+var pointEndColor = global.pairedSimpleColors[global.pairedSimpleColors.length - 1];
+
+// ---MODULE EXPORTS---//
 
 var exports = module.exports = {};
 
@@ -169,6 +174,128 @@ exports.generatePointsLayer = function(nodes, nodeAttributes) {
 
 }// END: generatePointsLayer
 
+exports.setupPanels = function(attributes) {
+
+	// ---POINT FIXED COLOR---//
+
+	var pointFixedColorSelect = document.getElementById("pointFixedColor");
+	var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
+			global.fixedColors);
+
+	for (var i = 0; i < global.fixedColors.length; i++) {
+
+		option = global.fixedColors[i];
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		pointFixedColorSelect.appendChild(element);
+
+	}// END: i loop
+
+	// select the default
+	pointFixedColorSelect.selectedIndex = pointDefaultColorIndex;
+
+	colorlegend.colorlegend("#pointFixedColorLegend", scale, "ordinal", {
+		title : "",
+		boxHeight : 20,
+		boxWidth : 6,
+		vertical : true
+	});
+
+	// point fixed color listener
+	d3
+			.select(pointFixedColorSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorSelect = pointFixedColorSelect.options[pointFixedColorSelect.selectedIndex].text;
+						var color = scale(colorSelect);
+
+						pointsLayer.selectAll(".point") //
+						.transition() //
+						.ease("linear") //
+						.attr("fill", color);
+
+					});
+
+	// ---POINT COLOR ATTRIBUTE---//
+	
+	// attribute
+	var pointColorAttributeSelect = document.getElementById("pointColorAttribute");
+
+	for (var i = 0; i < attributes.length; i++) {
+
+		option = attributes[i].id;
+		// skip points with count attribute
+		if (option == global.COUNT) {
+			continue;
+		}
+
+		element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		pointColorAttributeSelect.appendChild(element);
+
+	}// END: i loop
+	
+	
+	// point color attribute listener
+	d3
+			.select(pointColorAttributeSelect)
+			.on(
+					'change',
+					function() {
+	
+						var colorAttribute = pointColorAttributeSelect.options[pointColorAttributeSelect.selectedIndex].text;
+						var attribute = utils.getObject(attributes, "id", colorAttribute);
+
+						var data;
+						var scale;
+						
+						$('#pointColorLegend').html('');
+						if (attribute.scale == global.ORDINAL) {
+
+							data = attribute.domain;
+							scale = d3.scale.ordinal().range(global.ordinalColors).domain(data);
+
+							colorlegend.colorlegend("#pointColorLegend", scale, "ordinal",
+									{
+										title : "",
+										boxHeight : 20,
+										boxWidth : 6,
+										vertical : true
+									});
+
+						} else if(attribute.scale == global.LINEAR) {
+
+							data = attribute.range;
+							scale = d3.scale.linear().domain(data).range(
+									[ pointStartColor, pointEndColor ]);
+
+							colorlegend.colorlegend("#pointColorLegend", scale, "linear", {
+								title : "",
+								boxHeight : 20,
+								boxWidth : 6,
+								vertical : true
+							});
+
+							// TODO: dynamically create color selectors
+							
+							
+							
+							
+						} else {
+							console.log("Error occured when resolving scale type!");
+						}
+						
+						
+					});
+	
+}// END: setupPanels
+
 exports.updatePointsLayer = function(value) {
 
 	// ---select points yet to be displayed---//
@@ -204,4 +331,4 @@ exports.updatePointsLayer = function(value) {
 
 }// END: updatePointsLayer
 
-//---FUNCTIONS---//
+// ---FUNCTIONS---//

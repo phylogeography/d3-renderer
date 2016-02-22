@@ -42,3 +42,31 @@ exports.getObject = function(obj, key, val) {
 
 	return newObj;
 }// END: getObject
+
+ exports.alternatingColorScale = function() {
+	var domain;
+	var range;
+
+	function scale(x) {
+		return (range[domain.indexOf(x) % range.length]);
+	}
+
+	scale.domain = function(x) {
+		if (!arguments.length) {
+			return (domain);
+		}
+		domain = x;
+		return (scale);
+	}
+
+	scale.range = function(x) {
+		if (!arguments.length) {
+			return (range);
+		}
+
+		range = x;
+		return scale;
+	}
+
+	return scale;
+}// END: alternatingColorScale

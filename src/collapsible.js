@@ -165,9 +165,10 @@ function expandAll() {
 }
 
 function collapseAll() {
-	for ( var key in panelsStatus)
+	for ( var key in panelsStatus) {
 		saveSettings(key, "false");
-
+	}
+		
 	setUpPanels();
 }
 
