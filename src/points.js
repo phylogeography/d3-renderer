@@ -196,13 +196,13 @@ exports.generatePointsLayer = function(nodes, nodeAttributes) {
 	
 }// END: generatePointsLayer
 
-updatePointColorLegend = function(scale) {
+updatePointColorLegend = function(scale, type) {
 	
 //	var scale = d3.scale.linear().domain(data).range(
 //			[ pointStartColor, pointEndColor ]);
 
 	$('#pointColorLegend').html('');
-	colorlegend.colorlegend("#pointColorLegend", scale, "linear", {
+	colorlegend.colorlegend("#pointColorLegend", scale, type, {
 		title : "",
 		boxHeight : 20,
 		boxWidth : 6,
@@ -322,7 +322,7 @@ exports.setupPanels = function(attributes) {
 							data = attribute.domain;
 							scale = d3.scale.ordinal().range(global.ordinalColors).domain(data);
 
-							updatePointColorLegend(scale);
+							updatePointColorLegend(scale, global.ORDINAL);
 
 						} else if(attribute.scale == global.LINEAR) {
 
@@ -331,7 +331,7 @@ exports.setupPanels = function(attributes) {
 							scale = d3.scale.linear().domain(data).range(
 									[ pointStartColor, pointEndColor ]);
 
-							updatePointColorLegend(scale);
+							updatePointColorLegend(scale, global.LINEAR);
 							
 							// start color
 							$('#pointStartColor').html("<h4>Start color<\/h4>");
@@ -349,7 +349,7 @@ exports.setupPanels = function(attributes) {
 									pointStartColor = "#" + hex;
 									scale.range(
 											[ pointStartColor, pointEndColor ]);
-									updatePointColorLegend(scale);
+									updatePointColorLegend(scale, global.LINEAR);
 									
 									// TODO: triger repaint
 									updatePointColors(scale, colorAttribute);
@@ -376,7 +376,7 @@ exports.setupPanels = function(attributes) {
 									pointEndColor = "#" + hex;
 									scale.range(
 											[ pointStartColor, pointEndColor ]);
-									updatePointColorLegend(scale);
+									updatePointColorLegend(scale, global.LINEAR);
 									
 									// TODO: triger repaint
 									updatePointColors(scale, colorAttribute);
