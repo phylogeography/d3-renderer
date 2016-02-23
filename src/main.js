@@ -78,13 +78,16 @@ function createHtml() {
 
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Toggle layer visibility<\/h2>");
-	document.write("					<div class=\"panelcontent\">");
+	document.write("					<div id=\"layerVisibility\" class=\"panelcontent\">");
 	
-	document.write("						<input type=\"checkbox\" id=\"mapLayerCheckbox\"> Map layer<br>");
-	document.write("                        <input type=\"checkbox\" id=\"pointsLayerCheckbox\"> Points layer<br>");
-	document.write("						<input type=\"checkbox\" id=\"labelsLayerCheckbox\"> Labels layer<br>");
-	document.write("						<input type=\"checkbox\" id=\"linesLayerCheckbox\"> Lines layer<br>");
-	document.write("						<input type=\"checkbox\" id=\"areasLayerCheckbox\"> Polygons layer<br>");
+	
+//	document.write("                        <input type=\"checkbox\" id=\"pointsLayerCheckbox\"> Points layer<br>");
+//	document.write("						<input type=\"checkbox\" id=\"labelsLayerCheckbox\"> Labels layer<br>");
+
+//	document.write("						<input type=\"checkbox\" id=\"linesLayerCheckbox\"> Lines layer<br>");
+	
+//	document.write("						<input type=\"checkbox\" id=\"areasLayerCheckbox\"> Polygons layer<br>");
+//	document.write("						<input type=\"checkbox\" id=\"mapLayerCheckbox\"> Map layer<br>");
 	
 	document.write("					<\/div>");
 	document.write("				<\/div>");

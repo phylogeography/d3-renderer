@@ -20,6 +20,7 @@ var max_line_width = 5;
 var lineOpacity = 1.0;
 var min_line_opacity = 0.3;
 var max_line_opacity = 1;
+var linesLayerCheckbox;
 
 var linesLayer;
 
@@ -176,7 +177,7 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 
 exports.setupPanels = function(attributes) {
 
-//	setupLineVisibility();
+	setupLinesLayerCheckbox();
 	setupLineFixedColorPanel(attributes);
 	setupLineColorAttributePanel(attributes);
 	setupLineFixedOpacityPanel(attributes);
@@ -185,6 +186,34 @@ exports.setupPanels = function(attributes) {
 	setupLineCutoffPanel(attributes);
 
 }// END: setupPanels
+
+
+function setupLinesLayerCheckbox() {
+	
+	$('#layerVisibility').append(
+	"<input type=\"checkbox\" id=\"linesLayerCheckbox\"> Lines layer<br>");
+	
+	 linesLayerCheckbox = document.getElementById("linesLayerCheckbox");
+	// default state is checked
+	linesLayerCheckbox.checked = true;
+
+	d3.select(linesLayerCheckbox).on("change", function() {
+
+		if (this.checked) {
+			// remove style, then visibility is driven by the time-based
+			// selections
+			linesLayer.selectAll("path").style("visibility", null);
+		} else {
+			// style is superior to attribute, make them hidden
+			linesLayer.selectAll("path").style("visibility", "hidden");
+		}
+
+	});
+	
+	
+	
+}//END: setupLinesVisibility
+
 
 function setupLineFixedColorPanel(attributes) {
 
@@ -529,8 +558,8 @@ function setupLineCutoffPanel(attributes) {
 									var attributeValue = line.attr(attribute.id);
 									
 									var visibility = "visible";
-									// TODO: toggle
-									if(attributeValue < sliderValue ){ // || !linesLayerCheckbox.checked) {
+
+									if(attributeValue < sliderValue || !linesLayerCheckbox.checked) {
 										visibility = "hidden";
 									}
 									
