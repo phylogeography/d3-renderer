@@ -17,6 +17,12 @@ exports.ORDINAL = ORDINAL;
 var LINEAR = "linear";
 exports.LINEAR = LINEAR;
 
+var MIN_INDEX = 0;
+exports.MIN_INDEX = MIN_INDEX;
+
+var MAX_INDEX = 1;
+exports.MAX_INDEX = MAX_INDEX;
+
 var margin = {
 	top : 30,
 	right : 50,

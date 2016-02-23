@@ -23,7 +23,7 @@ var pointDefaultColorIndex = 6;
 var pointStartColor = global.pairedSimpleColors[0];
 var pointEndColor = global.pairedSimpleColors[global.pairedSimpleColors.length - 1];
 
-var point_fixed_radius = 2;
+var pointRadius = 2;
 var min_point_radius = 1;
 var max_point_radius = 7;
 
@@ -505,19 +505,19 @@ setupPointFixedRadiusPanel = function(attributes) {
 	
 	var pointFixedRadiusSlider = d3.slider().axis(d3.svg.axis().orient("top").ticks( (max_point_radius -min_point_radius)/step  ))
 			.min(min_point_radius).max(max_point_radius).step(1)
-			.value(point_fixed_radius);
+			.value(pointRadius);
 
 	d3.select('#pointFixedRadiusSlider').call(pointFixedRadiusSlider);
 
 	// point fixed area listener
 	pointFixedRadiusSlider.on("slide", function(evt, value) {
 
-		point_fixed_radius = value;
+		pointRadius = value;
 
 		pointsLayer.selectAll(".point")//
 		.transition()//
 		.ease("linear") //
-		.attr("r", point_fixed_radius);
+		.attr("r", pointRadius);
 
 	});
 

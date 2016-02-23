@@ -37,7 +37,7 @@ global.g = svg.append("g");
 
 function createHtml() {
    
-	// TODO: delegate relevant bits to modules
+	// TODO: delegate relevant bits to modules, setupPanel methods
 	
 	document.write("<div class=\"all\" style=\"display: block;\">");
 
@@ -79,11 +79,13 @@ function createHtml() {
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Toggle layer visibility<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
+	
 	document.write("						<input type=\"checkbox\" id=\"mapLayerCheckbox\"> Map layer<br>");
 	document.write("                        <input type=\"checkbox\" id=\"pointsLayerCheckbox\"> Points layer<br>");
 	document.write("						<input type=\"checkbox\" id=\"labelsLayerCheckbox\"> Labels layer<br>");
 	document.write("						<input type=\"checkbox\" id=\"linesLayerCheckbox\"> Lines layer<br>");
 	document.write("						<input type=\"checkbox\" id=\"areasLayerCheckbox\"> Polygons layer<br>");
+	
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
@@ -192,39 +194,27 @@ function createHtml() {
 //	document.write("							<input class='lineEndColor' \/>");
 	document.write("						<\/div>");
 
-
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
 	
 	
+		document.write("                <div class=\"panelcollapsed\">");
+	document.write("                    <h2>Line opacity<\/h2>");
+	document.write("                    <div class=\"panelcontent\">");
+	
+	document.write("                        <div class=\"wrapper\">");
+	document.write("                            <div id=\"lineFixedOpacitySlider\"><\/div>");
+	document.write("                        <\/div>");
+
+	document.write("                    <\/div>");
+	document.write("                <\/div>");
+
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//	document.write("                <div class=\"panelcollapsed\">");
-//	document.write("                    <h2>Line opacity<\/h2>");
-//	document.write("                    <div class=\"panelcontent\">");
-//	document.write("                        <div class=\"wrapper\">");
-//	document.write("                            <div id=\"lineFixedOpacitySlider\"><\/div>");
-//	document.write("                        <\/div>");
-//	document.write("                        <!-- END: wrapper-->");
-//	document.write("                    <\/div>");
-//	document.write("                <\/div>");
-//	document.write("                <!-- END: panel-->");
-//	document.write("");
-//	document.write("				<div class=\"panelcollapsed\">");
+	//TODO : curvature
+	//	document.write("				<div class=\"panelcollapsed\">");
 //	document.write("					<h2>Line curvature<\/h2>");
 //	document.write("					<div class=\"panelcontent\">");
 //	document.write("");
@@ -234,38 +224,41 @@ function createHtml() {
 //	document.write("");
 //	document.write("					<\/div>");
 //	document.write("				<\/div>");
-//	document.write("");
-//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Line width<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("");
-//	document.write("						<div class=\"wrapper\">");
-//	document.write("							<div id=\"lineWidthSlider\"><\/div>");
-//	document.write("						<\/div>");
-//	document.write("						<!-- END: wrapper-->");
-//	document.write("");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
-//	document.write("				<!-- END: panel-->");
-//	document.write("");
-//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Line cut-off<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("						<select id=\"lineCutoffAttribute\">");
-//	document.write("						<\/select>");
-//	document.write("						");
-//	document.write("						<\/br>");
-//	document.write("						<\/br>");
-//	document.write("						<\/br>");
-//	document.write("						<div class=\"wrapper\">");
-//	document.write("							<div id=\"lineCutoffSlider\"><\/div>");
-//	document.write("						<\/div>");
-//	document.write("						");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
-//	document.write("				<!-- END: panel-->");
-//	document.write("");
-//	document.write("");
+
+	
+	
+	document.write("				<div class=\"panelcollapsed\">");
+	document.write("					<h2>Line width<\/h2>");
+	document.write("					<div class=\"panelcontent\">");
+
+	document.write("						<div class=\"wrapper\">");
+	document.write("							<div id=\"lineWidthSlider\"><\/div>");
+	document.write("						<\/div>");
+
+	document.write("					<\/div>");
+	document.write("				<\/div>");
+	
+	
+	document.write("				<div class=\"panelcollapsed\">");
+	document.write("					<h2>Line cut-off<\/h2>");
+	document.write("					<div class=\"panelcontent\">");
+	
+	document.write("						<select id=\"lineCutoffAttribute\">");
+	document.write("						<\/select>");
+
+	document.write("						<\/br>");
+	document.write("						<\/br>");
+	document.write("						<\/br>");
+	
+	document.write("						<div class=\"wrapper\">");
+	document.write("							<div id=\"lineCutoffSlider\"><\/div>");
+	document.write("						<\/div>");
+
+	document.write("					<\/div>");
+	document.write("				<\/div>");
+
+	
+	
 //	document.write("				<div class=\"panelcollapsed\">");
 //	document.write("					<h2>Polygon color<\/h2>");
 //	document.write("					<div class=\"panelcontent\">");

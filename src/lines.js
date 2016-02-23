@@ -14,6 +14,12 @@ var lineDefaultColorIndex = 12;
 var lineStartColor = global.pairedSimpleColors[0];
 var lineEndColor = global.pairedSimpleColors[global.pairedSimpleColors.length - 1];
 var lineWidth = 2;
+var min_line_width = 0.5;
+var max_line_width = 5;
+
+var lineOpacity = 1.0;
+var min_line_opacity = 0.3;
+var max_line_opacity = 1;
 
 var linesLayer;
 
@@ -170,6 +176,7 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 
 exports.setupPanels = function(attributes) {
 
+//	setupLineVisibility();
 	setupLineFixedColorPanel(attributes);
 	setupLineColorAttributePanel(attributes);
 	setupLineFixedOpacityPanel(attributes);
@@ -416,18 +423,133 @@ function updateLineColors(scale, colorAttribute) {
 
 function setupLineFixedOpacityPanel(attributes) {
 
+	var step = 0.1
+	var lineFixedOpacitySlider = d3.slider().axis(
+			d3.svg.axis().orient("top").ticks(
+					(max_line_opacity - min_line_opacity) / step)).min(
+			min_line_opacity).max(max_line_opacity).step(step).value(
+			lineOpacity);
+
+	d3.select('#lineFixedOpacitySlider').call(lineFixedOpacitySlider);
+
+	// line fixed opacity listener
+	lineFixedOpacitySlider.on("slide", function(evt, value) {
+
+		lineOpacity = value;
+
+		// fill-opacity / stroke-opacity / opacity
+		linesLayer.selectAll(".line") //
+		.transition() //
+		.ease("linear") //
+		.attr("stroke-opacity", lineOpacity);
+
+	});
+
 }// END: setupLineFixedOpacityPanel
 
 function setupLineFixedCurvaturePanel(attributes) {
-
+	// TODO
 }// END: setupLineFixedCurvaturePanel
 
 function setupLineFixedWidthPanel(attributes) {
+
+	var lineWidthSlider = d3.slider().axis(d3.svg.axis().orient("top"))
+			.min(0.5).max(5.0).step(0.5).value(lineWidth);
+
+	d3.select('#lineWidthSlider').call(lineWidthSlider);
+
+	// line width listener
+	lineWidthSlider.on("slide", function(evt, value) {
+
+		lineWidth = value;
+
+		linesLayer.selectAll(".line").transition().ease("linear") //
+		.attr("stroke-width", lineWidth + "px");
+
+	});
 
 }// END: setupLineFixedWidthPanel
 
 function setupLineCutoffPanel(attributes) {
 
+	// TODO: discrete attributes
+	
+	var lineCutoffAttributeSelect = document.getElementById("lineCutoffAttribute");
+	
+	for (var i = 0; i < attributes.length; i++) {
+
+		if (attributes[i].scale == global.LINEAR) {
+			var option = attributes[i].id;
+			var element = document.createElement("option");
+			element.textContent = option;
+			element.value = option;
+			lineCutoffAttributeSelect.appendChild(element);
+		}
+
+	}// END: i loop
+	
+	
+	// listener
+	d3
+			.select(lineCutoffAttributeSelect)
+			.on(
+					'change',
+					function() {
+
+						// clean-up
+						$('#lineCutoffSlider').html('');
+//						linesLayer.selectAll("path").style("visibility", null); 
+						
+						var cutoffAttribute = lineCutoffAttributeSelect.options[lineCutoffAttributeSelect.selectedIndex].text;
+						var attribute = utils.getObject(attributes, "id",
+								cutoffAttribute);
+
+						// slider
+						// TODO: discrete too
+						if (attribute.scale == global.LINEAR) {
+
+							var minValue = Math.floor(attribute.range[global.MIN_INDEX]);
+							var maxValue = Math.ceil(attribute.range[global.MAX_INDEX]);
+							var step = (maxValue - minValue) / 10;
+
+							var lineCutoffSlider = d3.slider().axis(
+									d3.svg.axis().orient("top")).min(minValue)
+									.max(maxValue).step(step).value(minValue);
+							
+							d3.select('#lineCutoffSlider').call(
+									lineCutoffSlider);
+
+							lineCutoffSlider.on("slide", function(evt, value) {
+
+								linesLayer.selectAll("path").style("visibility", function(d) {
+
+									var sliderValue = value;
+									
+									var line = d3.select(this);
+									var attributeValue = line.attr(attribute.id);
+									
+									var visibility = "visible";
+									// TODO: toggle
+									if(attributeValue < sliderValue ){ // || !linesLayerCheckbox.checked) {
+										visibility = "hidden";
+									}
+									
+									return (visibility);
+								});
+								
+							});
+							
+						}//END: scale check
+
+					}// END: function
+			);
+	
+	
+	
+	
+	
+	
+	
 }// END: setupLineCutoffPanel
 
 exports.updateLinesLayer = function(value) {
