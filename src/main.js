@@ -93,7 +93,10 @@ function createHtml() {
 	document.write("					<div class=\"panelcontent\">");
 	document.write("						<select id=\"pointFixedColor\">");
 	document.write("						<\/select>");
-	document.write("						<div id=\"pointFixedColorLegend\" class=\"legend\"><\/div>");
+
+	document.write("						<div id=\"pointFixedColorLegend\"><\/div>");
+//	document.write("						<div id=\"pointFixedColorLegend\" class=\"legend\"><\/div>");
+	
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 

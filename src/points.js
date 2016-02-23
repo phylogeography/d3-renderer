@@ -280,7 +280,35 @@ updatePointColors = function(scale, colorAttribute) {
 		return (color);
 	});
 
-}// END: updatePointColor
+}// END: updatePointColors
+
+
+updatePointFixedColorLegend = function(scale) {
+	
+	var width = 150;
+	var height = 265;
+	
+	var margin = {
+		left : 20,
+		top : 20
+	};
+	
+	$('#pointFixedColorLegend').html('');
+	var svg = d3.select("#pointFixedColorLegend").append('svg').attr("width", width).attr("height", height);
+	
+	var pointFixedColorLegend = d3.legend.color()
+			  .scale(scale)
+			     .shape('circle')
+		.shapeRadius(5)
+		.shapePadding(10)
+		    .cells(5)
+		  .orient('vertical')
+	
+	svg.append("g")
+	  .attr("class", "pointFixedColorLegend")
+	.attr("transform", "translate(" + (margin.left) + "," + (margin.top) + ")") .call(pointFixedColorLegend);
+	
+}//END: updatePointFixedColorLegend
 
 setupPointFixedColorPanel = function(attributes) {
 
@@ -302,13 +330,6 @@ setupPointFixedColorPanel = function(attributes) {
 	// select the default
 	pointFixedColorSelect.selectedIndex = pointDefaultColorIndex;
 
-	colorlegend.colorlegend("#pointFixedColorLegend", scale, "ordinal", {
-		title : "",
-		boxHeight : 20,
-		boxWidth : 6,
-		vertical : true
-	});
-
 	// point fixed color listener
 	d3
 			.select(pointFixedColorSelect)
@@ -324,6 +345,9 @@ setupPointFixedColorPanel = function(attributes) {
 						.ease("linear") //
 						.attr("fill", color);
 
+						// setup legend
+						updatePointFixedColorLegend(scale);	
+						
 					});
 
 }// END: setupFixedColorPanel
@@ -349,8 +373,6 @@ setupPointColorAttributePanel = function(attributes) {
 		pointColorAttributeSelect.appendChild(element);
 
 	}// END: i loop
-
-	// TODO: legends in svg (?)
 
 	// point color attribute listener
 	d3
@@ -535,7 +557,7 @@ setupPointRadiusAttributePanel = function(attributes) {
 							var range = Array.apply(0, Array(data.length)).map(function (x, y) { return y + 1; });
 							scale = d3.scale.ordinal().domain(data).range(range);
 
-							updatePointRadiusLegend(scale, global.ORDINAL);
+							updatePointRadiusLegend(scale );
 							
 						} else if (attribute.scale == global.LINEAR) {
 
@@ -543,7 +565,7 @@ setupPointRadiusAttributePanel = function(attributes) {
 							scale = d3.scale.linear().domain(data).range(
 									[ min_point_radius, max_point_radius ]);
 
-							updatePointRadiusLegend(scale, global.LINEAR);
+							updatePointRadiusLegend(scale );
 							
 						} else {
 							console
@@ -576,9 +598,8 @@ setupPointRadiusAttributePanel = function(attributes) {
 	
 }// END: setupPointAreaAttributePanel
 
-updatePointRadiusLegend = function(scale, type) {
+updatePointRadiusLegend = function(scale) {
 
-	
 	var width = 150;
 	var height = 200;
 	
@@ -589,8 +610,6 @@ updatePointRadiusLegend = function(scale, type) {
 	
 	$('#pointRadiusLegend').html('');
 	var svg = d3.select("#pointRadiusLegend").append('svg').attr("width", width).attr("height", height);
-	
-	
 	
 	var pointRadiusLegend = d3.legend.size()
 	  .scale(scale)
