@@ -5,18 +5,27 @@
 // ---MODULE IMPORTS---//
 require("script!kodama");
 var d3 = require('d3');
+require("script!./d3-legend.js");
+
 
 var utils = require('./utils.js');
 var global = require('./global.js');
 var colorlegend = require('./colorlegend.js');
 
-//import("./jquery.simple-color.js");
+// import("./jquery.simple-color.js");
 require("imports?$=jquery!./jquery.simple-color.js");
 
-
-//require("./jquery.simple-color.js");
-
 // ---MODULE VARIABLES---//
+
+var pointsLayer;
+
+var pointDefaultColorIndex = 6;
+var pointStartColor = global.pairedSimpleColors[0];
+var pointEndColor = global.pairedSimpleColors[global.pairedSimpleColors.length - 1];
+
+var point_fixed_radius = 2;
+var min_point_radius = 1;
+var max_point_radius = 7;
 
 d3.kodama
 		.themeRegistry(
@@ -45,12 +54,6 @@ d3.kodama
 						'color' : 'rgb(234, 224, 184)'
 					}
 				});
-
-var pointsLayer;
-
-var pointDefaultColorIndex = 6;
-var pointStartColor = global.pairedSimpleColors[0];
-var pointEndColor = global.pairedSimpleColors[global.pairedSimpleColors.length - 1];
 
 // ---MODULE EXPORTS---//
 
@@ -154,30 +157,33 @@ exports.generatePointsLayer = function(nodes, nodeAttributes) {
 	}) //
 	.call(d3.kodama.tooltip().format(function(d, i) {
 
+		// TODO: display attibute values used for visualisation
+
 		return {
 			title : d.attributes.nodeName,
-			items : [ {
-				title : 'Antigenic1',
-				value : (d.attributes.antigenic1).toFixed(2)
-			}, //
-			{
-				title : 'Antigenic2',
-				value : (d.attributes.antigenic2).toFixed(2)
-			}, {
-				title : 'Antigenic3',
-				value : (d.attributes.antigenic3).toFixed(2)
-			},//
-
-			{
-				title : 'Lineage',
-				value : d.attributes.lineage
-			}
+			items : [
+			// {
+			// title : 'Antigenic1',
+			// value : (d.attributes.antigenic1).toFixed(2)
+			// }, //
+			// {
+			// title : 'Antigenic2',
+			// value : (d.attributes.antigenic2).toFixed(2)
+			// }, {
+			// title : 'Antigenic3',
+			// value : (d.attributes.antigenic3).toFixed(2)
+			// },//
+			//
+			// {
+			// title : 'Lineage',
+			// value : d.attributes.lineage
+			// }
 
 			]
 		};
 
-	}) //
-	.theme('nodesTheme'));
+	}).theme('nodesTheme') //
+	);
 
 	// dump attribute values into DOM
 	points[0].forEach(function(d, i) {
@@ -193,28 +199,71 @@ exports.generatePointsLayer = function(nodes, nodeAttributes) {
 			}
 		}// END: properties loop
 	});
-	
+
 }// END: generatePointsLayer
 
-updatePointColorLegend = function(scale, type) {
+exports.setupPanels = function(attributes) {
+
+	setupPointFixedColorPanel(attributes);
+	setupPointColorAttributePanel(attributes);
+	setupPointFixedRadiusPanel(attributes);
+	setupPointRadiusAttributePanel(attributes);
 	
-//	var scale = d3.scale.linear().domain(data).range(
-//			[ pointStartColor, pointEndColor ]);
+}// END: setupPanels
+
+exports.updatePointsLayer = function(value) {
+
+	// ---select points yet to be displayed---//
+
+	pointsLayer.selectAll(".point") //
+	.filter(
+			function(d) {
+				var point = this;
+				var startDate = utils
+						.formDate(point.attributes.startTime.value).getTime();
+
+				return (value < startDate);
+			}) //
+	.transition() //
+	.ease("linear") //
+	.attr("visibility", "hidden").attr("opacity", 0);
+
+	// ---select point displayed now---//
+
+	pointsLayer.selectAll(".point") //
+	.filter(
+			function(d) {
+				var point = this;
+				var startDate = utils
+						.formDate(point.attributes.startTime.value).getTime();
+
+				return (value >= startDate);
+			}) //
+	.transition() //
+	.ease("linear") //
+	.attr("visibility", "visible") //
+	.attr("opacity", 1);
+
+}// END: updatePointsLayer
+
+// ---MODULE PRIVATE FUNCTIONS---//
+
+updatePointColorLegend = function(scale, type) {
 
 	$('#pointColorLegend').html('');
+	
 	colorlegend.colorlegend("#pointColorLegend", scale, type, {
 		title : "",
 		boxHeight : 20,
 		boxWidth : 6,
 		vertical : true
 	});
-	
-//	return (scale);
-}//END: updateColorScale
 
+	// return (scale);
+}// END: updateColorScale
 
 updatePointColors = function(scale, colorAttribute) {
-	
+
 	pointsLayer.selectAll(".point").transition() //
 	.ease("linear") //
 	.attr("fill", function() {
@@ -230,12 +279,10 @@ updatePointColors = function(scale, colorAttribute) {
 
 		return (color);
 	});
-	
-}//ENDL updatePointColor
 
-exports.setupPanels = function(attributes) {
+}// END: updatePointColor
 
-	// ---POINT FIXED COLOR---//
+setupPointFixedColorPanel = function(attributes) {
 
 	var pointFixedColorSelect = document.getElementById("pointFixedColor");
 	var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
@@ -279,10 +326,13 @@ exports.setupPanels = function(attributes) {
 
 					});
 
-	// ---POINT COLOR ATTRIBUTE---//
-	
+}// END: setupFixedColorPanel
+
+setupPointColorAttributePanel = function(attributes) {
+
 	// attribute
-	var pointColorAttributeSelect = document.getElementById("pointColorAttribute");
+	var pointColorAttributeSelect = document
+			.getElementById("pointColorAttribute");
 
 	for (var i = 0; i < attributes.length; i++) {
 
@@ -299,145 +349,246 @@ exports.setupPanels = function(attributes) {
 		pointColorAttributeSelect.appendChild(element);
 
 	}// END: i loop
-	
-	
+
+	// TODO: legends in svg (?)
+
 	// point color attribute listener
 	d3
 			.select(pointColorAttributeSelect)
 			.on(
 					'change',
 					function() {
-	
+
 						var colorAttribute = pointColorAttributeSelect.options[pointColorAttributeSelect.selectedIndex].text;
-						var attribute = utils.getObject(attributes, "id", colorAttribute);
+						var attribute = utils.getObject(attributes, "id",
+								colorAttribute);
 
 						var data;
 						var scale;
-						
+
 						$('#pointStartColor').html('');
 						$('#pointEndColor').html('');
-						
+
 						if (attribute.scale == global.ORDINAL) {
 
 							data = attribute.domain;
-							scale = d3.scale.ordinal().range(global.ordinalColors).domain(data);
+							scale = d3.scale.ordinal().range(
+									global.ordinalColors).domain(data);
 
 							updatePointColorLegend(scale, global.ORDINAL);
 
-						} else if(attribute.scale == global.LINEAR) {
+						} else if (attribute.scale == global.LINEAR) {
 
 							data = attribute.range;
-							
+
 							scale = d3.scale.linear().domain(data).range(
 									[ pointStartColor, pointEndColor ]);
 
 							updatePointColorLegend(scale, global.LINEAR);
-							
+
 							// start color
 							$('#pointStartColor').html("<h4>Start color<\/h4>");
-							$('#pointStartColor').append("<input class=\"pointStartColor\" \/>");
-							
-							$('.pointStartColor').simpleColor({
-								cellWidth : 13,
-								cellHeight : 13,
-								columns : 4,
-								displayColorCode : true,
-								colors : utils.getSimpleColors(global.pairedSimpleColors),
+							$('#pointStartColor').append(
+									"<input class=\"pointStartColor\" \/>");
 
-								onSelect : function(hex, element) {
+							$('.pointStartColor')
+									.simpleColor(
+											{
+												cellWidth : 13,
+												cellHeight : 13,
+												columns : 4,
+												displayColorCode : true,
+												colors : utils
+														.getSimpleColors(global.pairedSimpleColors),
 
-									pointStartColor = "#" + hex;
-									scale.range(
-											[ pointStartColor, pointEndColor ]);
-									updatePointColorLegend(scale, global.LINEAR);
-									
-									// TODO: triger repaint
-									updatePointColors(scale, colorAttribute);
-									
-								}//END: onSelect
-							});
-							
+												onSelect : function(hex,
+														element) {
+
+													pointStartColor = "#" + hex;
+													scale.range([
+															pointStartColor,
+															pointEndColor ]);
+													updatePointColorLegend(
+															scale,
+															global.LINEAR);
+
+													// trigger repaint
+													updatePointColors(scale,
+															colorAttribute);
+
+												}// END: onSelect
+											});
+
 							$('.pointStartColor').setColor(pointStartColor);
-							
-							
-							
+
 							// end color
 							$('#pointEndColor').html("<h4>End color<\/h4>");
-							$('#pointEndColor').append("<input class=\"pointEndColor\" \/>");
-							
-							$('.pointEndColor').simpleColor({
-								cellWidth : 13,
-								cellHeight : 13,
-								columns : 4,
-								colors : utils.getSimpleColors(global.pairedSimpleColors),
-								displayColorCode : true,
-								onSelect : function(hex, element) {
+							$('#pointEndColor').append(
+									"<input class=\"pointEndColor\" \/>");
 
-									pointEndColor = "#" + hex;
-									scale.range(
-											[ pointStartColor, pointEndColor ]);
-									updatePointColorLegend(scale, global.LINEAR);
-									
-									// TODO: triger repaint
-									updatePointColors(scale, colorAttribute);
-								}
-							});
-							
+							$('.pointEndColor')
+									.simpleColor(
+											{
+												cellWidth : 13,
+												cellHeight : 13,
+												columns : 4,
+												colors : utils
+														.getSimpleColors(global.pairedSimpleColors),
+												displayColorCode : true,
+												onSelect : function(hex,
+														element) {
+
+													pointEndColor = "#" + hex;
+													scale.range([
+															pointStartColor,
+															pointEndColor ]);
+													updatePointColorLegend(
+															scale,
+															global.LINEAR);
+
+													// trigger repaint
+													updatePointColors(scale,
+															colorAttribute);
+												}
+											});
+
 							$('.pointEndColor').setColor(pointEndColor);
+
+						} else {
+							console
+									.log("Error occured when resolving scale type!");
+						}
+
+						// trigger repaint
+						updatePointColors(scale, colorAttribute);
+
+					});
+
+} // END: setupPointColorAttributePanel
+
+setupPointFixedRadiusPanel = function(attributes) {
+
+	var step = 1;
+	
+	var pointFixedRadiusSlider = d3.slider().axis(d3.svg.axis().orient("top").ticks( (max_point_radius -min_point_radius)/step  ))
+			.min(min_point_radius).max(max_point_radius).step(1)
+			.value(point_fixed_radius);
+
+	d3.select('#pointFixedRadiusSlider').call(pointFixedRadiusSlider);
+
+	// point fixed area listener
+	pointFixedRadiusSlider.on("slide", function(evt, value) {
+
+		point_fixed_radius = value;
+
+		pointsLayer.selectAll(".point")//
+		.transition()//
+		.ease("linear") //
+		.attr("r", point_fixed_radius);
+
+	});
+
+}// END: setupPointFixedAreaPanel
+
+
+setupPointRadiusAttributePanel = function(attributes) {
+
+	
+	var pointRadiusAttributeSelect = document.getElementById("pointRadiusAttribute");
+
+	for (var i = 0; i < attributes.length; i++) {
+
+		var option = attributes[i].id;
+		// skip points with count attribute
+		if (option == global.COUNT) {
+			continue;
+		}
+
+		var element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		pointRadiusAttributeSelect.appendChild(element);
+
+	}// END: i loop
+	
+
+		// point area attribute listener
+	d3
+			.select(pointRadiusAttributeSelect)
+			.on(
+					'change',
+					function() {
+
+						var radiusAttribute = pointRadiusAttributeSelect.options[pointRadiusAttributeSelect.selectedIndex].text;
+						var attribute = utils.getObject(attributes, "id",
+								radiusAttribute);
+
+						var data;
+						var scale;
+
+						if (attribute.scale == global.ORDINAL) {
+
+							data = attribute.domain;
+							
+							// smart range
+							var range = Array.apply(0, Array(data.length)).map(function (x, y) { return y + 1; });
+							scale = d3.scale.ordinal().domain(data).range(range);
+
+							updatePointRadiusLegend(scale, global.ORDINAL);
+							
+						} else if (attribute.scale == global.LINEAR) {
+
+							data = attribute.range;
+							scale = d3.scale.linear().domain(data).range(
+									[ min_point_radius, max_point_radius ]);
+
+							updatePointRadiusLegend(scale, global.LINEAR);
 							
 						} else {
-							console.log("Error occured when resolving scale type!");
+							console
+									.log("Error occured when resolving point radius scale type!");
 						}
-						
-						
-						
-						
-						updatePointColors(scale, colorAttribute);
-						
-						
-						
-						
-						
-						
-						
-						
+
+						pointsLayer
+								.selectAll(".point")
+								.transition()
+								.ease("linear")
+								.attr(
+										"r",
+										function(d) {
+
+											var attributeValue = d.attributes[radiusAttribute];
+											var radius = scale(attributeValue);
+
+											if (attributeValue == null) {
+												console
+														.log("null point radius attribute value found");
+												radius = 0.0;
+											}
+
+											return (radius);
+										});
 					});
 	
-}// END: setupPanels
+	
+	
+	
+}// END: setupPointAreaAttributePanel
 
-exports.updatePointsLayer = function(value) {
+updatePointRadiusLegend = function(scale, type) {
 
-	// ---select points yet to be displayed---//
-
-	pointsLayer.selectAll(".point") //
-	.filter(
-			function(d) {
-				var point = this;
-				var startDate = utils
-						.formDate(point.attributes.startTime.value).getTime();
-
-				return (value < startDate);
-			}) //
-	.transition() //
-	.ease("linear") //
-	.attr("visibility", "hidden").attr("opacity", 0);
-
-	// ---select point displayed now---//
-
-	pointsLayer.selectAll(".point") //
-	.filter(
-			function(d) {
-				var point = this;
-				var startDate = utils
-						.formDate(point.attributes.startTime.value).getTime();
-
-				return (value >= startDate);
-			}) //
-	.transition() //
-	.ease("linear") //
-	.attr("visibility", "visible") //
-	.attr("opacity", 1);
-
-}// END: updatePointsLayer
-
-// ---FUNCTIONS---//
+	$('#pointRadiusLegend').html('');
+	var svg = d3.select("#pointRadiusLegend").append('svg');
+	
+	var legendSize = d3.legend.size()
+	  .scale(scale)
+	  .shape('circle')
+	  .shapePadding(15)
+	  .labelOffset(20)
+	  .orient('vertical');
+//	  .title(capitalizeFirstLetter(sizeAttribute.id));
+	
+	svg.call(legendSize);
+	
+}//END: updatePointRadiusLegend

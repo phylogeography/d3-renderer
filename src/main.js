@@ -89,7 +89,7 @@ function createHtml() {
 
 
 	document.write("				<div class=\"panelcollapsed\">");
-	document.write("					<h2>Point color<\/h2>");
+	document.write("					<h2>Point fixed color<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 	document.write("						<select id=\"pointFixedColor\">");
 	document.write("						<\/select>");
@@ -98,7 +98,7 @@ function createHtml() {
 	document.write("				<\/div>");
 
 	
-	document.write("				<div class=\"panel\">");
+	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Point color attribute<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 
@@ -118,42 +118,41 @@ function createHtml() {
 //	document.write("							<input class='pointEndColor' \/>");
 	document.write("						<\/div>");
 	
+	document.write("					<\/div>");
+	document.write("				<\/div>");
+
 	
-	
+	document.write("				<div class=\"panelcollapsed\">");
+	document.write("					<h2>Point fixed radius<\/h2>");
+	document.write("					<div class=\"panelcontent\">");
+
+	document.write("						<div class=\"wrapper\">");
+	document.write("							<div id=\"pointFixedRadiusSlider\"><\/div>");
+	document.write("						<\/div>");
+
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
 	
 	
-//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Point area<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("");
-//	document.write("						<div class=\"wrapper\">");
-//	document.write("							<div id=\"pointFixedAreaSlider\"><\/div>");
-//	document.write("						<\/div>");
-//	document.write("						<!-- END: wrapper-->");
-//	document.write("");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
-//	document.write("				<!-- END: panel-->");
-//	document.write("");
-//	document.write("");
-//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Point area attribute<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("						<select id=\"pointAreaAttribute\">");
-//	document.write("						<\/select>");
-//	document.write("						<!-- <div id=\"pointAreaLegend\" class=\"legend\"><\/div> -->");
-//	document.write("");
+	
+	document.write("				<div class=\"panel\">");
+	document.write("					<h2>Point radius attribute<\/h2>");
+	document.write("					<div class=\"panelcontent\">");
+	document.write("						<select id=\"pointRadiusAttribute\">");
+	document.write("						<\/select>");
+	
+	document.write("						  <div id=\"pointRadiusLegend\"  ><\/div>  ");
+
 //	document.write("						<div class=\"wrapper\">");
 //	document.write("							<h4>Adjust<\/h4>");
 //	document.write("							<div id=\"pointAreaMultiplierSlider\"><\/div>");
 //	document.write("						<\/div>");
-//	document.write("");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
-//	document.write("				<!-- END: panel-->");
+
+	document.write("					<\/div>");
+	document.write("				<\/div>");
+	
+	
 //	document.write("				<div class=\"panelcollapsed\">");
 //	document.write("					<h2>Line color<\/h2>");
 //	document.write("					<div class=\"panelcontent\">");
