@@ -578,10 +578,21 @@ setupPointRadiusAttributePanel = function(attributes) {
 
 updatePointRadiusLegend = function(scale, type) {
 
-	$('#pointRadiusLegend').html('');
-	var svg = d3.select("#pointRadiusLegend").append('svg');
 	
-	var legendSize = d3.legend.size()
+	var width = 150;
+	var height = 200;
+	
+	var margin = {
+		left : 20,
+		top : 20
+	};
+	
+	$('#pointRadiusLegend').html('');
+	var svg = d3.select("#pointRadiusLegend").append('svg').attr("width", width).attr("height", height);
+	
+	
+	
+	var pointRadiusLegend = d3.legend.size()
 	  .scale(scale)
 	  .shape('circle')
 	  .shapePadding(15)
@@ -589,6 +600,8 @@ updatePointRadiusLegend = function(scale, type) {
 	  .orient('vertical');
 //	  .title(capitalizeFirstLetter(sizeAttribute.id));
 	
-	svg.call(legendSize);
+	svg.append("g")
+	  .attr("class", "pointRadiusLegend")
+	.attr("transform", "translate(" + (margin.left) + "," + (margin.top) + ")") .call(pointRadiusLegend);
 	
 }//END: updatePointRadiusLegend
