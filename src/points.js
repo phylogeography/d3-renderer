@@ -10,7 +10,7 @@ require("script!./d3-legend.js");
 
 var utils = require('./utils.js');
 var global = require('./global.js');
-var colorlegend = require('./colorlegend.js');
+//var colorlegend = require('./colorlegend.js');
 
 // import("./jquery.simple-color.js");
 require("imports?$=jquery!./jquery.simple-color.js");
@@ -228,7 +228,7 @@ exports.updatePointsLayer = function(value) {
 	.ease("linear") //
 	.attr("visibility", "hidden").attr("opacity", 0);
 
-	// ---select point displayed now---//
+	// ---select points displayed now---//
 
 	pointsLayer.selectAll(".point") //
 	.filter(
@@ -248,18 +248,32 @@ exports.updatePointsLayer = function(value) {
 
 // ---MODULE PRIVATE FUNCTIONS---//
 
-updatePointColorLegend = function(scale, type) {
+updatePointColorLegend = function(scale) {
 
-	$('#pointColorLegend').html('');
+	var width = 150;
+	var height = 110;
 	
-	colorlegend.colorlegend("#pointColorLegend", scale, type, {
-		title : "",
-		boxHeight : 20,
-		boxWidth : 6,
-		vertical : true
-	});
+	var margin = {
+		left : 20,
+		top : 20
+	};
+	
+	$('#pointColorLegend').html('');
+	var svg = d3.select("#pointColorLegend").append('svg').attr("width", width).attr("height", height);
+	
+	var pointColorLegend = d3.legend.color()
+			  .scale(scale)
+			     .shape('circle')
+		.shapeRadius(5)
+		.shapePadding(10)
+		    .cells(5)
+		  .orient('vertical')
+	
+	svg.append("g")
+	  .attr("class", "pointColorLegend")
+	.attr("transform", "translate(" + (margin.left) + "," + (margin.top) + ")") .call(pointColorLegend);
 
-	// return (scale);
+
 }// END: updateColorScale
 
 updatePointColors = function(scale, colorAttribute) {
@@ -318,8 +332,8 @@ setupPointFixedColorPanel = function(attributes) {
 
 	for (var i = 0; i < global.fixedColors.length; i++) {
 
-		option = global.fixedColors[i];
-		element = document.createElement("option");
+		var option = global.fixedColors[i];
+		var element = document.createElement("option");
 		element.textContent = option;
 		element.value = option;
 
@@ -397,7 +411,7 @@ setupPointColorAttributePanel = function(attributes) {
 							scale = d3.scale.ordinal().range(
 									global.ordinalColors).domain(data);
 
-							updatePointColorLegend(scale, global.ORDINAL);
+							updatePointColorLegend(scale );
 
 						} else if (attribute.scale == global.LINEAR) {
 
@@ -406,7 +420,7 @@ setupPointColorAttributePanel = function(attributes) {
 							scale = d3.scale.linear().domain(data).range(
 									[ pointStartColor, pointEndColor ]);
 
-							updatePointColorLegend(scale, global.LINEAR);
+							updatePointColorLegend(scale );
 
 							// start color
 							$('#pointStartColor').html("<h4>Start color<\/h4>");
@@ -431,12 +445,10 @@ setupPointColorAttributePanel = function(attributes) {
 															pointStartColor,
 															pointEndColor ]);
 													updatePointColorLegend(
-															scale,
-															global.LINEAR);
+															scale );
 
 													// trigger repaint
-													updatePointColors(scale,
-															colorAttribute);
+													updatePointColors(scale );
 
 												}// END: onSelect
 											});
@@ -465,8 +477,7 @@ setupPointColorAttributePanel = function(attributes) {
 															pointStartColor,
 															pointEndColor ]);
 													updatePointColorLegend(
-															scale,
-															global.LINEAR);
+															scale );
 
 													// trigger repaint
 													updatePointColors(scale,

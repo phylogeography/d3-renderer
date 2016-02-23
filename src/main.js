@@ -109,7 +109,9 @@ function createHtml() {
 	document.write("						<h4>Attribute<\/h4>");
 	document.write("						<select id=\"pointColorAttribute\">");
 	document.write("						<\/select>");
-	document.write("						<div id=\"pointColorLegend\" class=\"legend\"><\/div>");
+	
+	document.write("						<div id=\"pointColorLegend\"><\/div>");
+//	document.write("						<div id=\"pointColorLegend\" class=\"legend\"><\/div>");
 	
 	document.write("						<div id=\"pointStartColor\">");
 //	document.write("							<h4>Start color<\/h4>");
@@ -139,7 +141,7 @@ function createHtml() {
 	
 	
 	
-	document.write("				<div class=\"panel\">");
+	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Point radius attribute<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 	document.write("						<select id=\"pointRadiusAttribute\">");
@@ -156,41 +158,62 @@ function createHtml() {
 	document.write("				<\/div>");
 	
 	
-//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Line color<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("						<select id=\"lineFixedColor\">");
-//	document.write("						<\/select>");
-//	document.write("						<div id=\"lineFixedColorLegend\" class=\"legend\"><\/div>");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
-//	document.write("				<!-- END: panel-->");
-//	document.write("");
-//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Line color attribute<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("");
-//	document.write("						<div>");
+	document.write("				<div class=\"panelcollapsed\">");
+	document.write("					<h2>Line fixed color<\/h2>");
+	document.write("					<div class=\"panelcontent\">");
+	document.write("						<select id=\"lineFixedColor\">");
+	document.write("						<\/select>");
+	
+	document.write("						<div id=\"lineFixedColorLegend\"><\/div>");
+	
+	document.write("					<\/div>");
+	document.write("				<\/div>");
+
+	
+	
+		document.write("				<div class=\"panelcollapsed\">");
+	document.write("					<h2>Line color attribute<\/h2>");
+	document.write("					<div class=\"panelcontent\">");
+
+	document.write("						<h4>Attribute<\/h4>");
+	document.write("						<select id=\"lineColorAttribute\">");
+	document.write("						<\/select>");
+
+	document.write("						<div id=\"lineColorLegend\"><\/div>");
+
+	
+	document.write("						<div id=\"lineStartColor\">");
 //	document.write("							<h4>Start color<\/h4>");
 //	document.write("							<input class='lineStartColor' \/>");
-//	document.write("						<\/div>");
-//	document.write("");
-//	document.write("						<div>");
+	document.write("						<\/div>");
+
+	document.write("						<div id=\"lineEndColor\">");
 //	document.write("							<h4>End color<\/h4>");
 //	document.write("							<input class='lineEndColor' \/>");
-//	document.write("						<\/div>");
-//	document.write("");
-//	document.write("						<h4>Attribute<\/h4>");
-//	document.write("						<select id=\"lineColorAttribute\">");
-//	document.write("						<\/select>");
-//	document.write("");
-//	document.write("						<div id=\"lineColorLegend\" class=\"legend\"><\/div>");
-//	document.write("");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
-//	document.write("				<!-- END: panel-->");
-//	document.write("");
-//	document.write("                <div class=\"panelcollapsed\">");
+	document.write("						<\/div>");
+
+
+	document.write("					<\/div>");
+	document.write("				<\/div>");
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//	document.write("                <div class=\"panelcollapsed\">");
 //	document.write("                    <h2>Line opacity<\/h2>");
 //	document.write("                    <div class=\"panelcontent\">");
 //	document.write("                        <div class=\"wrapper\">");
@@ -440,8 +463,9 @@ function render() {
 	lines.generateLinesLayer(branches, nodes, nodeAttributes);
 	points.generatePointsLayer(nodes, nodeAttributes);
 
-	
+	// TODO: if has 
 	points.setupPanels(nodeAttributes);
+	lines.setupPanels(nodeAttributes);
 	
 }// END: render
 

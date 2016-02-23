@@ -10,8 +10,12 @@ var global = require('./global.js');
 
 // ---MODULE VARIABLES---//
 
-var linesLayer;
+var lineDefaultColorIndex = 12;
+var lineStartColor = global.pairedSimpleColors[0];
+var lineEndColor = global.pairedSimpleColors[global.pairedSimpleColors.length - 1];
 var lineWidth = 2;
+
+var linesLayer;
 
 // ---MODULE EXPORTS---//
 
@@ -147,7 +151,284 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 		return (opacityscale(+d.attributes.height));
 	});
 
+	// dump attribute values into DOM
+	lines[0].forEach(function(d, i) {
+
+		var thisLine = d3.select(d);
+		var properties = branches[i].attributes;
+
+		for ( var property in properties) {
+			if (properties.hasOwnProperty(property)) {
+
+				thisLine.attr(property, properties[property]);
+
+			}
+		}// END: properties loop
+	});
+
 }// END: generateLinesLayer
+
+exports.setupPanels = function(attributes) {
+
+	setupLineFixedColorPanel(attributes);
+	setupLineColorAttributePanel(attributes);
+	setupLineFixedOpacityPanel(attributes);
+	setupLineFixedCurvaturePanel(attributes);
+	setupLineFixedWidthPanel(attributes);
+	setupLineCutoffPanel(attributes);
+
+}// END: setupPanels
+
+function setupLineFixedColorPanel(attributes) {
+
+	var lineFixedColorSelect = document.getElementById("lineFixedColor");
+	var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
+			global.fixedColors);
+
+	for (var i = 0; i < global.fixedColors.length; i++) {
+
+		var option = global.fixedColors[i];
+		var element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		lineFixedColorSelect.appendChild(element);
+
+	}// END: i loop
+
+	// select the default
+	lineFixedColorSelect.selectedIndex = lineDefaultColorIndex;
+
+	// line fixed color listener
+	d3
+			.select(lineFixedColorSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorSelect = lineFixedColorSelect.options[lineFixedColorSelect.selectedIndex].text;
+						var color = scale(colorSelect);
+
+						linesLayer.selectAll(".line") //
+						.transition() //
+						.ease("linear") //
+						.attr("stroke", color);
+
+						// setup legend
+						updateLineFixedColorLegend(scale);
+
+					});
+
+}// END: setupLineFixedColorPanel
+
+updateLineFixedColorLegend = function(scale) {
+
+	var width = 150;
+	var height = 230;
+
+	var margin = {
+		left : 20,
+		top : 20
+	};
+
+	$('#lineFixedColorLegend').html('');
+	var svg = d3.select("#lineFixedColorLegend").append('svg').attr("width",
+			width).attr("height", height);
+
+	var lineFixedColorLegend = d3.legend.color().scale(scale).shape('line')
+			.shapeWidth(20).shapePadding(15).cells(5).orient('vertical')
+
+	svg.append("g").attr("class", "lineFixedColorLegend").attr("transform",
+			"translate(" + (margin.left) + "," + (margin.top) + ")").call(
+			lineFixedColorLegend);
+
+}// END: updateLineFixedColorLegend
+
+function setupLineColorAttributePanel(attributes) {
+
+	var lineColorAttributeSelect = document
+			.getElementById("lineColorAttribute");
+
+	for (var i = 0; i < attributes.length; i++) {
+
+		var option = attributes[i].id;
+		var element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		lineColorAttributeSelect.appendChild(element);
+	}// END: i loop
+
+	// line color attribute listener
+	d3
+			.select(lineColorAttributeSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorAttribute = lineColorAttributeSelect.options[lineColorAttributeSelect.selectedIndex].text;
+						var attribute = utils.getObject(attributes, "id",
+								colorAttribute);
+
+						var data;
+						var scale;
+
+						$('#lineStartColor').html('');
+						$('#lineEndColor').html('');
+
+						if (attribute.scale == global.ORDINAL) {
+
+							data = attribute.domain;
+							scale = d3.scale.ordinal().range(
+									global.ordinalColors).domain(data);
+
+							updateLineColorLegend(scale);
+
+						} else if (attribute.scale == global.LINEAR) {
+
+							data = attribute.range;
+							scale = d3.scale.linear().domain(data).range(
+									[ lineStartColor, lineEndColor ]);
+
+							updateLineColorLegend(scale);
+
+							// start color
+							$('#lineStartColor').html("<h4>Start color<\/h4>");
+							$('#lineStartColor').append(
+									"<input class=\"lineStartColor\" \/>");
+
+							$('.lineStartColor')
+									.simpleColor(
+											{
+												cellWidth : 13,
+												cellHeight : 13,
+												columns : 4,
+												displayColorCode : true,
+												colors : utils
+														.getSimpleColors(global.pairedSimpleColors),
+
+												onSelect : function(hex,
+														element) {
+
+													lineStartColor = "#" + hex;
+													scale.range([
+															lineStartColor,
+															lineEndColor ]);
+
+													updateLineColorLegend(scale);
+
+													// trigger repaint
+													updateLineColors(scale,
+															colorAttribute);
+
+												}// END: onSelect
+											});
+
+							$('.lineStartColor').setColor(lineStartColor);
+
+							// end color
+							$('#lineEndColor').html("<h4>End color<\/h4>");
+							$('#lineEndColor').append(
+									"<input class=\"lineEndColor\" \/>");
+
+							$('.lineEndColor')
+									.simpleColor(
+											{
+												cellWidth : 13,
+												cellHeight : 13,
+												columns : 4,
+												colors : utils
+														.getSimpleColors(global.pairedSimpleColors),
+												displayColorCode : true,
+												onSelect : function(hex,
+														element) {
+
+													lineEndColor = "#" + hex;
+													scale.range([
+															lineStartColor,
+															lineEndColor ]);
+
+													updateLineColorLegend(scale);
+
+													// trigger repaint
+													updateLineColors(scale,
+															colorAttribute);
+												}// END: onSelect
+											});
+
+							$('.lineEndColor').setColor(lineEndColor);
+
+						} else {
+							console
+									.log("Error occured when resolving scale type!");
+						}
+
+						// trigger repaint
+						updateLineColors(scale, colorAttribute);
+
+					});
+
+}// END: setupLineColorAttributePanel
+
+function updateLineColorLegend(scale) {
+
+	var width = 150;
+	var height = 110;
+
+	var margin = {
+		left : 20,
+		top : 20
+	};
+
+	$('#lineColorLegend').html('');
+	var svg = d3.select("#lineColorLegend").append('svg').attr("width", width)
+			.attr("height", height);
+
+	var lineColorLegend = d3.legend.color().scale(scale).shape('line')
+			.shapeWidth(20).shapePadding(15).cells(5).orient('vertical');
+
+	svg.append("g").attr("class", "lineColorLegend").attr("transform",
+			"translate(" + (margin.left) + "," + (margin.top) + ")").call(
+			lineColorLegend);
+
+}// END:updateLineColorLegend
+
+function updateLineColors(scale, colorAttribute) {
+
+	linesLayer.selectAll(".line") //
+	.transition() //
+	.ease("linear") //
+	.attr("stroke", function() {
+
+		var line = d3.select(this);
+		var attributeValue = line.attr(colorAttribute);
+		var color = scale(attributeValue);
+
+		if (attributeValue == null) {
+			console.log("null attribute value found for line color attribute");
+			color = "#000";
+		}
+
+		return (color);
+	});
+
+}// END: updateLineColors
+
+function setupLineFixedOpacityPanel(attributes) {
+
+}// END: setupLineFixedOpacityPanel
+
+function setupLineFixedCurvaturePanel(attributes) {
+
+}// END: setupLineFixedCurvaturePanel
+
+function setupLineFixedWidthPanel(attributes) {
+
+}// END: setupLineFixedWidthPanel
+
+function setupLineCutoffPanel(attributes) {
+
+}// END: setupLineCutoffPanel
 
 exports.updateLinesLayer = function(value) {
 
