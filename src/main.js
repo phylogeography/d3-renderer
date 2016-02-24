@@ -519,6 +519,12 @@ function render() {
 
 function setupPanels() {
 	
+	setupSaveSVGButton();
+	setupZoomButtons();
+	
+}//END: setupPanels
+
+function setupSaveSVGButton() {
 	var saveSVGButton = document.getElementById("saveSVG");
 	d3.select(saveSVGButton).on('click', function() {
 
@@ -532,7 +538,52 @@ function setupPanels() {
 
 	});
 	
-}//END: setupPanels
+}//END:setupSaveSVGButton
+
+function setupZoomButtons() {
+	
+	d3.selectAll("button[data-zoom]").on("click", clicked);
+	
+}//END:setupZoomButtons
+
+function clicked() {
+	svg.call(zoom.event);
+
+	var center0 = zoom.center();
+	var translate0 = zoom.translate();
+	var coordinates0 = coordinates(center0);
+
+	// console.log(zoom.scale());
+
+	zoom.scale(zoom.scale() * Math.pow(1.5, +this.getAttribute("data-zoom")));
+
+	if (zoom.scale() < global.minScaleExtent) {
+		zoom.scale(global.minScaleExtent);
+	}
+
+	if (zoom.scale() > global.maxScaleExtent) {
+		zoom.scale(global.maxScaleExtent);
+	}
+
+	// Translate back to the center.
+	var center1 = point(coordinates0);
+	zoom.translate([ translate0[0] + center0[0] - center1[0],
+			translate0[1] + center0[1] - center1[1] ]);
+
+	svg.transition().duration(750).call(zoom.event);
+}
+
+function coordinates(point) {
+	var scale = zoom.scale(), translate = zoom.translate();
+	return [ (point[0] - translate[0]) / scale,
+			(point[1] - translate[1]) / scale ];
+}
+
+function point(coordinates) {
+	var scale = zoom.scale(), translate = zoom.translate();
+	return [ coordinates[0] * scale + translate[0],
+			coordinates[1] * scale + translate[1] ];
+}
 
 // ---CALLS---//
 
