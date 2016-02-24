@@ -16,8 +16,6 @@ var exports = module.exports = {};
 
 exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 
-//	(domain swapped because of reverse coordinate order)
-	
 	var xlim = utils.getObject(pointAttributes, "id",
 			axisAttributes.xCoordinate).range;
 	var ylim = utils.getObject(pointAttributes, "id",
@@ -34,7 +32,7 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 	var projectionScale = (hscale < vscale) ? hscale : vscale;
 	projectionScale = projectionScale * 150;
 
-	// x axis (domain swapped because of reverse coordinate order)
+	// x axis  
 	var xScale = d3.scale.linear().domain(xlim).nice().range(
 			[ 0, global.width ]);
 
@@ -58,12 +56,12 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 		'stroke-width' : '0.5px'
 	}).text(utils.capitalizeFirstLetter(axisAttributes.xCoordinate));
 
-	// remove them 0's
+	// remove the first tick
 	global.g.selectAll(".tick").filter(function(d) {
 		return d === xScale.domain()[0];
 	}).remove();
 
-	// y axis (domain is swapped because of reverse coordinate order)
+	// y axis 
 	var yScale = d3.scale.linear().domain(ylim).nice().range(
 			[ global.height, 0 ]);
 

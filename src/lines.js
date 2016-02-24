@@ -30,19 +30,19 @@ var exports = module.exports = {};
 
 exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 
-	var colorAttribute = utils.getObject(branchAttributes, "id", "lineage");
-
-	var h3cols = [ "#D6D6E2", "#65658F", "#59A5BF", "#ECE5BD", "#D2C161",
-			"#CAE2EB" ];
-	var h1cols = [ "#CD322E", "#D6D6E2", "#2481BA", "#89A24C", "#835B9C" ]; // =
-	// colorbrewer.Dark2[8]
-	var colorscale = d3.scale.ordinal().range(h1cols).domain(
-			colorAttribute.domain);
-
-	var opacityAttribute = utils.getObject(branchAttributes, "id", "height");
-
-	var opacityscale = d3.scale.linear().domain(opacityAttribute.range).range(
-			[ 0.5, 1 ]);
+//	var colorAttribute = utils.getObject(branchAttributes, "id", "lineage");
+//
+//	var h3cols = [ "#D6D6E2", "#65658F", "#59A5BF", "#ECE5BD", "#D2C161",
+//			"#CAE2EB" ];
+//	var h1cols = [ "#CD322E", "#D6D6E2", "#2481BA", "#89A24C", "#835B9C" ]; // =
+//	// colorbrewer.Dark2[8]
+//	var colorscale = d3.scale.ordinal().range(h1cols).domain(
+//			colorAttribute.domain);
+//
+//	var opacityAttribute = utils.getObject(branchAttributes, "id", "height");
+//
+//	var opacityscale = d3.scale.linear().domain(opacityAttribute.range).range(
+//			[ 0.5, 1 ]);
 
 	linesLayer = global.g.append("g").attr("class", "linesLayer");
 
@@ -106,14 +106,14 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 				var endLatitude = endCoordinate.xCoordinate;
 				var endLongitude = endCoordinate.yCoordinate;
 
-				var sourceXY = projection([ startLongitude, startLatitude ]);
-				var targetXY = projection([ endLongitude, endLatitude ]);
+				var sourceXY = projection([  startLatitude, startLongitude ]);
+				var targetXY = projection([ endLatitude, endLongitude ]);
 
-				var sourceX = sourceXY[0]; // lat
-				var sourceY = sourceXY[1]; // long
+				var sourceX = sourceXY[1]; // lat
+				var sourceY = sourceXY[0]; // long
 
-				var targetX = targetXY[0];
-				var targetY = targetXY[1];
+				var targetX = targetXY[1];
+				var targetY = targetXY[0];
 
 				var dx = targetX - sourceX;
 				var dy = targetY - sourceY;
@@ -133,14 +133,7 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 	.attr("fill", "none") //
 	.attr("stroke-width", lineWidth + "px") //
 	.attr("stroke-linejoin", "round") //
-	.attr("stroke", function(d) {
-
-		if (typeof (d.attributes.lineage) == "undefined") {
-			return ("grey");
-		}
-
-		return (colorscale(d.attributes.lineage));
-	}) //
+	.attr("stroke", global.fixedColors[lineDefaultColorIndex]) //
 	.attr("startTime", function(d) {
 		return (d.startTime);
 	}) //
@@ -153,10 +146,7 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 		return (totalLength + " " + totalLength);
 	}) //
 	.attr("stroke-dashoffset", 0) //
-	.attr("opacity", function(d) {
-
-		return (opacityscale(+d.attributes.height));
-	});
+	.attr("opacity", lineOpacity);
 
 	// dump attribute values into DOM
 	lines[0].forEach(function(d, i) {

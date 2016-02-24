@@ -22,7 +22,7 @@ var pointDefaultColorIndex = 6;
 var pointStartColor = global.pairedSimpleColors[0];
 var pointEndColor = global.pairedSimpleColors[global.pairedSimpleColors.length - 1];
 
-var pointRadius = 7;
+var pointRadius = 2;
 var min_point_radius = 1;
 var max_point_radius = 7;
 

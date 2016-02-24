@@ -452,11 +452,11 @@ function render() {
 
 	var axisAttributes = json.axisAttributes;
 	var nodeAttributes = json.pointAttributes;
-	// var lineAttributes = json.lineAttributes;
+	 var lineAttributes = json.lineAttributes;
 
 	time.initializeTimeSlider(timeLine);
 	topo.generateEmptyTopoLayer(nodeAttributes, axisAttributes);
-//	lines.generateLinesLayer(branches, nodes, nodeAttributes);
+	lines.generateLinesLayer(branches, nodes, lineAttributes);
 	points.generatePointsLayer(nodes, nodeAttributes);
 
 	// TODO: if has 
