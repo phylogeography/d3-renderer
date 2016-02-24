@@ -18,8 +18,9 @@ var topoLayer;
 var mapDefaultColorIndex = 6;
 var mapStartColor = global.pairedSimpleColors[0];
 var mapEndColor = global.pairedSimpleColors[global.pairedSimpleColors.length - 1];
-var mapFillOpacity = 0.5;
-
+var mapFixedOpacity = 0.5;
+var min_map_opacity = 0.1;
+var max_map_opacity = 1;
 
 // ---MODULE EXPORTS---//
 
@@ -27,9 +28,9 @@ var exports = module.exports = {};
 
 exports.generateTopoLayer = function(geojson) {
 
-//	 equatorLayer = g.append("g");
+	// equatorLayer = g.append("g");
 	topoLayer = global.g.append("g");
-	
+
 	var basicScale = (global.width / 2 / Math.PI);
 
 	// first guess for the projection
@@ -46,10 +47,11 @@ exports.generateTopoLayer = function(geojson) {
 	// determine the bounds
 	var bounds = path.bounds(geojson);
 	var hscale = projectionScale * global.width / (bounds[1][0] - bounds[0][0]);
-	var vscale = projectionScale * global.height / (bounds[1][1] - bounds[0][1]);
+	var vscale = projectionScale * global.height
+			/ (bounds[1][1] - bounds[0][1]);
 	projectionScale = (hscale < vscale) ? hscale : vscale;
 	var offset = [ global.width - (bounds[0][0] + bounds[1][0]) / 2,
-	               global.height - (bounds[0][1] + bounds[1][1]) / 2 ];
+			global.height - (bounds[0][1] + bounds[1][1]) / 2 ];
 
 	// new projection
 	global.projection = d3.geo.mercator().center(center).scale(projectionScale)
@@ -71,31 +73,31 @@ exports.generateTopoLayer = function(geojson) {
 	path = path.projection(global.projection);
 
 	// add graticule
-//	svg.append("path").datum(graticule).attr("class", "graticule").attr("d",
-//			path);
-//
-//	// apply inline style
-//	svg.selectAll('.graticule').style({
-//		'stroke' : '#bbb',
-//		'fill' : 'none',
-//		'stroke-width' : '.5px',
-//		'stroke-opacity' : '.5'
-//	});
-//
-//	// add equator
-//	equatorLayer.append("path").datum(
-//			{
-//				type : "LineString",
-//				coordinates : [ [ -180, 0 ], [ -90, 0 ], [ 0, 0 ], [ 90, 0 ],
-//						[ 180, 0 ] ]
-//			}).attr("class", "equator").attr("d", path);
-//
-//	// apply inline style
-//	equatorLayer.selectAll('.equator').style({
-//		'stroke' : '#ccc',
-//		'fill' : 'none',
-//		'stroke-width' : '1px',
-//	});
+	// svg.append("path").datum(graticule).attr("class", "graticule").attr("d",
+	// path);
+	//
+	// // apply inline style
+	// svg.selectAll('.graticule').style({
+	// 'stroke' : '#bbb',
+	// 'fill' : 'none',
+	// 'stroke-width' : '.5px',
+	// 'stroke-opacity' : '.5'
+	// });
+	//
+	// // add equator
+	// equatorLayer.append("path").datum(
+	// {
+	// type : "LineString",
+	// coordinates : [ [ -180, 0 ], [ -90, 0 ], [ 0, 0 ], [ 90, 0 ],
+	// [ 180, 0 ] ]
+	// }).attr("class", "equator").attr("d", path);
+	//
+	// // apply inline style
+	// equatorLayer.selectAll('.equator').style({
+	// 'stroke' : '#ccc',
+	// 'fill' : 'none',
+	// 'stroke-width' : '1px',
+	// });
 
 	var features = geojson.features;
 	var topo = topoLayer.selectAll("path").data(features).enter()
@@ -104,7 +106,7 @@ exports.generateTopoLayer = function(geojson) {
 			.attr('d', path) //
 			.attr("fill", global.fixedColors[mapDefaultColorIndex]) //
 			.attr("stroke", "black") //
-			.attr("fill-opacity", mapFillOpacity) //
+			.attr("fill-opacity", mapFixedOpacity) //
 			.style("stroke-width", .5);
 
 	// dump attribute values into DOM
@@ -254,20 +256,108 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 
 }// END: generateEmptyLayer
 
-
 exports.setupPanels = function(attributes) {
 
 	setupTopoLayerCheckbox();
 	setupTopoFixedColorPanel();
 	setupTopoColorAttributePanel(attributes);
-	
-	
-}//END: setupPanels
+	setupTopoFixedOpacityPanel();
+	setupTopoBackgroundPanel();
 
-//---FUNCTIONS---//
+}// END: setupPanels
+
+// ---FUNCTIONS---//
+
+setupTopoBackgroundPanel = function() {
+
+	var mapBackgroundSelect = document.getElementById("mapbackground");
+
+	var domain = [ "white", "black", "grey", "light blue" ];
+	var scale = utils.alternatingColorScale().domain(domain).range(
+			[ "#ffffff", "#000000", "#ddd", "#8cc5ff" ]);
+
+	for (var i = 0; i < domain.length; i++) {
+
+		var option = domain[i];
+		var element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		mapBackgroundSelect.appendChild(element);
+
+	}// END: i loop
+
+	// map background listener
+	d3
+			.select(mapBackgroundSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorSelect = mapBackgroundSelect.options[mapBackgroundSelect.selectedIndex].text;
+						var color = scale(colorSelect);
+						d3.select('.container').style("background", color);
+
+						// setup legend
+						updateMapBackgroundLegend(scale);
+
+					});
+
+}// END:setupTopoBackgroundPanel
+
+updateMapBackgroundLegend = function(scale) {
+
+	var width = 150;
+	var height = 250;
+
+	var margin = {
+		left : 20,
+		top : 20
+	};
+
+	$('#mapBackgroundLegend').html('');
+	var svg = d3.select("#mapBackgroundLegend").append('svg').attr("width",
+			width).attr("height", height);
+
+	var mapBackgroundLegend = d3.legend.color().scale(scale).shape('rect')
+			.shapeHeight(10).shapeWidth(10).shapePadding(10).cells(5).orient(
+					'vertical')
+
+	svg.append("g").attr("class", "mapBackgroundLegend").attr("transform",
+			"translate(" + (margin.left) + "," + (margin.top) + ")").call(
+			mapBackgroundLegend);
+
+}// END:updateMapBackgroundLegend
+
+setupTopoFixedOpacityPanel = function() {
+
+	var step = 0.1;
+
+	var mapFixedOpacitySlider = d3.slider().axis(
+			d3.svg.axis().orient("top").ticks(
+					(max_map_opacity - min_map_opacity) / step)).min(
+			min_map_opacity).max(max_map_opacity).step(0.1).value(
+			mapFixedOpacity);
+
+	d3.select('#mapFixedOpacitySlider').call(mapFixedOpacitySlider);
+
+	// map fixed opacity listener
+	mapFixedOpacitySlider.on("slide", function(evt, value) {
+
+		mapFixedOpacity = value;
+
+		// fill-opacity / stroke-opacity / opacity
+		topoLayer.selectAll(".topo") //
+		.transition() //
+		.ease("linear") //
+		.attr("fill-opacity", mapFixedOpacity);
+
+	});
+
+}// END:setupTopoFixedOpacityPanel
 
 setupTopoColorAttributePanel = function(attributes) {
-	
+
 	// attribute
 	var mapColorAttributeSelect = document.getElementById("mapColorAttribute");
 
@@ -303,11 +393,11 @@ setupTopoColorAttributePanel = function(attributes) {
 						if (attribute.scale == global.ORDINAL) {
 
 							data = attribute.domain;
-							scale = d3.scale.ordinal().range(global.ordinalColors)
-									.domain(data);
+							scale = d3.scale.ordinal().range(
+									global.ordinalColors).domain(data);
 
 							updateMapColorLegend(scale);
-							
+
 						} else if (attribute.scale == LINEAR) {
 
 							data = attribute.range;
@@ -315,7 +405,7 @@ setupTopoColorAttributePanel = function(attributes) {
 									[ mapStartColor, mapEndColor ]);
 
 							updateMapColorLegend(scale);
-							
+
 							// start color
 							$('#mapStartColor').html("<h4>Start color<\/h4>");
 							$('#mapStartColor').append(
@@ -335,7 +425,7 @@ setupTopoColorAttributePanel = function(attributes) {
 														element) {
 
 													mapStartColor = "#" + hex;
-													
+
 													scale.range([
 															mapStartColor,
 															mapEndColor ]);
@@ -369,7 +459,7 @@ setupTopoColorAttributePanel = function(attributes) {
 														element) {
 
 													mapEndColor = "#" + hex;
-													
+
 													scale.range([
 															mapStartColor,
 															mapEndColor ]);
@@ -383,27 +473,23 @@ setupTopoColorAttributePanel = function(attributes) {
 											});
 
 							$('.mapEndColor').setColor(mapEndColor);
-							
+
 						} else {
-							
+
 							console
-							.log("Error occured when resolving scale type!");
-							
+									.log("Error occured when resolving scale type!");
+
 						}
 
 						// trigger repaint
 						updateMapColors(scale, colorAttribute);
-						
 
 					});
-	
-	
-	
-}//END: setupTopoColorAttributePanel
 
+}// END: setupTopoColorAttributePanel
 
 updateMapColorLegend = function(scale) {
-	
+
 	var width = 150;
 	var height = 250;
 
@@ -417,17 +503,17 @@ updateMapColorLegend = function(scale) {
 			.attr("height", height);
 
 	var mapColorLegend = d3.legend.color().scale(scale).shape('rect')
-	.shapeHeight(10).shapeWidth(10).shapePadding(5).cells(5).orient('vertical')
+			.shapeHeight(10).shapeWidth(10).shapePadding(5).cells(5).orient(
+					'vertical')
 
 	svg.append("g").attr("class", "mapColorLegend").attr("transform",
 			"translate(" + (margin.left) + "," + (margin.top) + ")").call(
-					mapColorLegend);
-	
-	
-}//END:updateMapColorLegend
+			mapColorLegend);
+
+}// END:updateMapColorLegend
 
 updateMapColors = function(scale, colorAttribute) {
-	
+
 	d3.selectAll(".topo") //
 	.transition() //
 	.ease("linear") //
@@ -439,13 +525,14 @@ updateMapColors = function(scale, colorAttribute) {
 
 		return (color);
 	});
-	
-}//END:updateMapColors
+
+}// END:updateMapColors
 
 setupTopoFixedColorPanel = function() {
-	
+
 	var mapFixedColorSelect = document.getElementById("mapFixedColor");
-	var scale = utils.alternatingColorScale().domain(global.fixedColors).range(global.fixedColors);
+	var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
+			global.fixedColors);
 
 	for (var i = 0; i < global.fixedColors.length; i++) {
 
@@ -460,7 +547,7 @@ setupTopoFixedColorPanel = function() {
 
 	// select the default
 	mapFixedColorSelect.selectedIndex = mapDefaultColorIndex;
-	
+
 	// map fixed color listener
 	d3
 			.select(mapFixedColorSelect)
@@ -478,13 +565,13 @@ setupTopoFixedColorPanel = function() {
 
 						// setup legend
 						updateMapFixedColorLegend(scale);
-						
+
 					});
-	
-}//END: setupTopoFixedColorPanel
+
+}// END: setupTopoFixedColorPanel
 
 updateMapFixedColorLegend = function(scale) {
-	
+
 	var width = 150;
 	var height = 230;
 
@@ -498,21 +585,20 @@ updateMapFixedColorLegend = function(scale) {
 			width).attr("height", height);
 
 	var mapFixedColorLegend = d3.legend.color().scale(scale).shape('rect')
-			.shapeHeight(10).shapeWidth(10).shapePadding(5).cells(5).orient('vertical')
+			.shapeHeight(10).shapeWidth(10).shapePadding(5).cells(5).orient(
+					'vertical')
 
 	svg.append("g").attr("class", "mapFixedColorLegend").attr("transform",
 			"translate(" + (margin.left) + "," + (margin.top) + ")").call(
-					mapFixedColorLegend);
-	
-}//END: updateMapFixedColorLegend
+			mapFixedColorLegend);
+
+}// END: updateMapFixedColorLegend
 
 setupTopoLayerCheckbox = function() {
-	
-	$('#layerVisibility')
-	.append(
+
+	$('#layerVisibility').append(
 			"<input type=\"checkbox\" id=\"mapLayerCheckbox\"> Map layer<br>");
-	
-	
+
 	var mapLayerCheckbox = document.getElementById("mapLayerCheckbox");
 	// default state is checked
 	mapLayerCheckbox.checked = true;
@@ -523,9 +609,6 @@ setupTopoLayerCheckbox = function() {
 		topoLayer.selectAll("path").style("visibility", visibility);
 
 	});
-	
-	
-	
-	
-}//END: setupTopoLayerCheckbox
+
+}// END: setupTopoLayerCheckbox
 

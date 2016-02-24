@@ -2,7 +2,7 @@
  * @fbielejec
  */
 
-// ---MODULE IMPORTS---//
+//---MODULE IMPORTS---//
 require("./main.css");
 var collapsible = require("./collapsible.js");
 var d3 = require('d3');
@@ -13,17 +13,17 @@ var points = require('./points.js');
 var lines = require('./lines.js');
 var areas = require('./areas.js');
 
-// ---HTML---//
+//---HTML---//
 
 createHtml();
 collapsible.setUpPanels();
 
-// ---MODULE VARIABLES---//
+//---MODULE VARIABLES---//
 
 var zoom = d3.behavior.zoom().scaleExtent(
 		[ global.minScaleExtent, global.maxScaleExtent ]).center(
-		[ global.width / 2, global.height / 2 ]).size(
-		[ global.width, global.height ]).on("zoom", move);
+				[ global.width / 2, global.height / 2 ]).size(
+						[ global.width, global.height ]).on("zoom", move);
 
 var svg = d3.select(".container").append('svg') //
 .attr("width", global.width + global.margin.left + global.margin.right) //
@@ -36,21 +36,20 @@ var MAP = "map";
 var TREE = "tree";
 var COUNTS = "counts";
 
-
-// ---FUNCTIONS---//
+//---FUNCTIONS---//
 
 function createHtml() {
-   
+
 	// TODO: delegate relevant bits to modules, setupPanel methods
-	
+
 	document.write("<div class=\"all\" style=\"display: block;\">");
 
-	
 	document.write("		<div id=\"controls\">");
 	document.write("			<h2>");
 	document.write("				Current date: <span id=\"currentDate\"> 0 <\/span>");
 	document.write("			<\/h2>");
-	document.write("			<!-- 			<div id=\"wrapper\" style=\"display: block;\"> -->");
+	document
+	.write("			<!-- 			<div id=\"wrapper\" style=\"display: block;\"> -->");
 	document.write("			<div>");
 	document.write("				<div id=\"playPause\"><\/div>");
 	document.write("				<div id=\"timeSlider\"><\/div>");
@@ -58,20 +57,19 @@ function createHtml() {
 	document.write("		<\/div>");
 
 	//---SELECTORS AND CONTAINER---//
-	
-	document.write("		<div class=\"selectorsANDcontainer\" style=\"display: block;\">");
+
+	document
+	.write("		<div class=\"selectorsANDcontainer\" style=\"display: block;\">");
 
 	//---SELECTORS---//
-	
+
 	document.write("			<div class=\"selectors\" style=\"display: block;\">");
-	
 
 	document.write("				<div class=\"buttons\">");
 	document.write("					<button data-zoom=\"+1\">Zoom In<\/button>");
 	document.write("					<button data-zoom=\"-1\">Zoom Out<\/button>");
 	document.write("				<\/div>");
- 
-	
+
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Export<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
@@ -79,16 +77,14 @@ function createHtml() {
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Toggle layer visibility<\/h2>");
 	document.write("					<div id=\"layerVisibility\" class=\"panelcontent\">");
-	
-//	document.write("						<input type=\"checkbox\" id=\"labelsLayerCheckbox\"> Labels layer<br>");
-	
+
+	//	document.write("						<input type=\"checkbox\" id=\"labelsLayerCheckbox\"> Labels layer<br>");
+
 	document.write("					<\/div>");
 	document.write("				<\/div>");
-
 
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Point fixed color<\/h2>");
@@ -97,31 +93,29 @@ function createHtml() {
 	document.write("						<\/select>");
 
 	document.write("						<div id=\"pointFixedColorLegend\"><\/div>");
-	
+
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-	
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Point color attribute<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 
 	document.write("						<div id=\"pointStartColor\">");
 	document.write("						<\/div>");
-//	
+	//	
 	document.write("						<div id=\"pointEndColor\">");
 	document.write("						<\/div>");
-	
+
 	document.write("						<h4>Attribute<\/h4>");
 	document.write("						<select id=\"pointColorAttribute\">");
 	document.write("						<\/select>");
-	
+
 	document.write("						<div id=\"pointColorLegend\"><\/div>");
-	
+
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-	
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Point fixed radius<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
@@ -133,40 +127,34 @@ function createHtml() {
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-	
-	
-	
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Point radius attribute<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 	document.write("						<select id=\"pointRadiusAttribute\">");
 	document.write("						<\/select>");
-	
+
 	document.write("						  <div id=\"pointRadiusLegend\"  ><\/div>  ");
 
-//	document.write("						<div class=\"wrapper\">");
-//	document.write("							<h4>Adjust<\/h4>");
-//	document.write("							<div id=\"pointAreaMultiplierSlider\"><\/div>");
-//	document.write("						<\/div>");
+	//	document.write("						<div class=\"wrapper\">");
+	//	document.write("							<h4>Adjust<\/h4>");
+	//	document.write("							<div id=\"pointAreaMultiplierSlider\"><\/div>");
+	//	document.write("						<\/div>");
 
 	document.write("					<\/div>");
 	document.write("				<\/div>");
-	
-	
+
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Line fixed color<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 	document.write("						<select id=\"lineFixedColor\">");
 	document.write("						<\/select>");
-	
+
 	document.write("						<div id=\"lineFixedColorLegend\"><\/div>");
-	
+
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-	
-	
-		document.write("				<div class=\"panelcollapsed\">");
+	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Line color attribute<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 
@@ -175,7 +163,7 @@ function createHtml() {
 
 	document.write("						<div id=\"lineEndColor\">");
 	document.write("						<\/div>");
-	
+
 	document.write("						<h4>Attribute<\/h4>");
 	document.write("						<select id=\"lineColorAttribute\">");
 	document.write("						<\/select>");
@@ -185,36 +173,30 @@ function createHtml() {
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-	
-	
-		document.write("                <div class=\"panelcollapsed\">");
+	document.write("                <div class=\"panelcollapsed\">");
 	document.write("                    <h2>Line opacity<\/h2>");
 	document.write("                    <div class=\"panelcontent\">");
-	
+
 	document.write("                        <div class=\"wrapper\">");
-	document.write("                            <div id=\"lineFixedOpacitySlider\"><\/div>");
+	document
+	.write("                            <div id=\"lineFixedOpacitySlider\"><\/div>");
 	document.write("                        <\/div>");
 
 	document.write("                    <\/div>");
 	document.write("                <\/div>");
 
-	
-	
-	
 	//TODO : curvature
 	//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Line curvature<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("");
-//	document.write("						<div class=\"wrapper\">");
-//	document.write("							<div id=\"maxCurvatureSlider\"><\/div>");
-//	document.write("						<\/div>");
-//	document.write("");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
+	//	document.write("					<h2>Line curvature<\/h2>");
+	//	document.write("					<div class=\"panelcontent\">");
+	//	document.write("");
+	//	document.write("						<div class=\"wrapper\">");
+	//	document.write("							<div id=\"maxCurvatureSlider\"><\/div>");
+	//	document.write("						<\/div>");
+	//	document.write("");
+	//	document.write("					<\/div>");
+	//	document.write("				<\/div>");
 
-	
-	
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Line width<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
@@ -225,19 +207,18 @@ function createHtml() {
 
 	document.write("					<\/div>");
 	document.write("				<\/div>");
-	
-	
+
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Line cut-off<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
-	
+
 	document.write("						<select id=\"lineCutoffAttribute\">");
 	document.write("						<\/select>");
 
 	document.write("						<\/br>");
 	document.write("						<\/br>");
 	document.write("						<\/br>");
-	
+
 	document.write("						<div class=\"wrapper\">");
 	document.write("							<div id=\"lineCutoffSlider\"><\/div>");
 	document.write("						<\/div>");
@@ -245,34 +226,30 @@ function createHtml() {
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-	
-	
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Polygon fixed color<\/h2>");
-	
+
 	document.write("					<div class=\"panelcontent\">");
 	document.write("						<select id=\"areaFixedColor\">");
 	document.write("						<\/select>");
-	
+
 	document.write("						<div id=\"areaFixedColorLegend\"><\/div>");
-	
+
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-	
-	
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Polygon color attribute<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 
 	document.write("						<div id='areaStartColor'>");
-//	document.write("							<h4>Start color<\/h4>");
-//	document.write("							<input class='areaStartColor' \/>");
+	//	document.write("							<h4>Start color<\/h4>");
+	//	document.write("							<input class='areaStartColor' \/>");
 	document.write("						<\/div>");
 
 	document.write("						<div id='areaEndColor'>");
-//	document.write("							<h4>End color<\/h4>");
-//	document.write("							<input class='areaEndColor' \/>");
+	//	document.write("							<h4>End color<\/h4>");
+	//	document.write("							<input class='areaEndColor' \/>");
 	document.write("						<\/div>");
 
 	document.write("						<h4>Attribute<\/h4>");
@@ -284,7 +261,6 @@ function createHtml() {
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-	
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Polygon opacity<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
@@ -296,36 +272,31 @@ function createHtml() {
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-	
-	
 	//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Circular polygon color<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("						<select id=\"countFixedColor\">");
-//	document.write("						<\/select>");
-//	document.write("						<div id=\"countFixedColorLegend\" class=\"legend\"><\/div>");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
-//	document.write("				<!-- END: panel-->");
-//	document.write("");
-//	document.write("");
-//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Circular polygon opacity<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("");
-//	document.write("						<div class=\"wrapper\">");
-//	document.write("							<div id=\"countFixedOpacitySlider\"><\/div>");
-//	document.write("						<\/div>");
-//	document.write("						<!-- END: wrapper-->");
-//	document.write("");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
-//	document.write("				<!-- END: panel-->");
-//	document.write("");
-	
-	
-	
-	
+	//	document.write("					<h2>Circular polygon color<\/h2>");
+	//	document.write("					<div class=\"panelcontent\">");
+	//	document.write("						<select id=\"countFixedColor\">");
+	//	document.write("						<\/select>");
+	//	document.write("						<div id=\"countFixedColorLegend\" class=\"legend\"><\/div>");
+	//	document.write("					<\/div>");
+	//	document.write("				<\/div>");
+	//	document.write("				<!-- END: panel-->");
+	//	document.write("");
+	//	document.write("");
+	//	document.write("				<div class=\"panelcollapsed\">");
+	//	document.write("					<h2>Circular polygon opacity<\/h2>");
+	//	document.write("					<div class=\"panelcontent\">");
+	//	document.write("");
+	//	document.write("						<div class=\"wrapper\">");
+	//	document.write("							<div id=\"countFixedOpacitySlider\"><\/div>");
+	//	document.write("						<\/div>");
+	//	document.write("						<!-- END: wrapper-->");
+	//	document.write("");
+	//	document.write("					<\/div>");
+	//	document.write("				<\/div>");
+	//	document.write("				<!-- END: panel-->");
+	//	document.write("");
+
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Map fill<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
@@ -333,24 +304,22 @@ function createHtml() {
 	document.write("						<\/select>");
 
 	document.write("						<div id=\"mapFixedColorLegend\" ><\/div>");
-	
+
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-	
-	
-		document.write("				<div class=\"panelcollapsed\">");
+	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Map color attribute<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 
 	document.write("						<div id='mapStartColor'>");
-//	document.write("							<h4>Start color<\/h4>");
-//	document.write("							<input class='mapStartFill' \/>");
+	//	document.write("							<h4>Start color<\/h4>");
+	//	document.write("							<input class='mapStartFill' \/>");
 	document.write("						<\/div>");
 
 	document.write("						<div id='mapEndColor'>");
-//	document.write("							<h4>End color<\/h4>");
-//	document.write("							<input class='mapEndFill' \/>");
+	//	document.write("							<h4>End color<\/h4>");
+	//	document.write("							<input class='mapEndFill' \/>");
 	document.write("						<\/div>");
 
 	document.write("						<h4>Attribute<\/h4>");
@@ -363,53 +332,50 @@ function createHtml() {
 	document.write("				<\/div>");
 
 	
-	
-	//	document.write("");
-//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Map fill opacity<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("");
-//	document.write("						<div class=\"wrapper\">");
-//	document.write("							<div id=\"mapFixedOpacitySlider\"><\/div>");
-//	document.write("						<\/div>");
-//	document.write("						<!-- END: wrapper-->");
-//	document.write("");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
-//	document.write("				<!-- END: panel-->");
-//	document.write("");
-//	document.write("");
-//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Background color<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("						<select id=\"mapbackground\">");
-//	document.write("						<\/select>");
-//	document.write("						<div id=\"mapBackgroundLegend\" class=\"legend\"><\/div>");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
-//	document.write("				<!-- END: panel-->");
-//	document.write("");
-//	document.write("");
-//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Label color<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("						<select id=\"labelcolor\">");
-//	document.write("						<\/select>");
-//	document.write("						<div id=\"labelColorLegend\" class=\"legend\"><\/div>");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
-//	document.write("				<!-- END: panel-->");
-	document.write("");
+		document.write("				<div class=\"panelcollapsed\">");
+		document.write("					<h2>Map fill opacity<\/h2>");
+		document.write("					<div class=\"panelcontent\">");
+
+		document.write("						<div class=\"wrapper\">");
+		document.write("							<div id=\"mapFixedOpacitySlider\"><\/div>");
+		document.write("						<\/div>");
+
+		document.write("					<\/div>");
+		document.write("				<\/div>");
+
+			document.write("				<div class=\"panelcollapsed\">");
+		document.write("					<h2>Background color<\/h2>");
+		document.write("					<div class=\"panelcontent\">");
+		
+		document.write("						<select id=\"mapbackground\">");
+		document.write("						<\/select>");
+		
+		document.write("						<div id=\"mapBackgroundLegend\" class=\"legend\"><\/div>");
+		document.write("					<\/div>");
+		document.write("				<\/div>");
+
+		
+		//	document.write("				<div class=\"panelcollapsed\">");
+	//	document.write("					<h2>Label color<\/h2>");
+	//	document.write("					<div class=\"panelcontent\">");
+	//	document.write("						<select id=\"labelcolor\">");
+	//	document.write("						<\/select>");
+	//	document.write("						<div id=\"labelColorLegend\" class=\"legend\"><\/div>");
+	//	document.write("					<\/div>");
+	//	document.write("				<\/div>");
+	//	document.write("				<!-- END: panel-->");
+
 	document.write("			<\/div>");
-	document.write("			<!-- END: selectors-->");
-	document.write("");
+	//---END: SELECTORS ---//
+
 	document.write("			<div class=\"container\"><\/div>");
-	document.write("");
+
 	document.write("		<\/div>");
-	document.write("		<!-- END: selectorsANDcontainer-->");
-	document.write("");
+	//---END: SELECTORS AND CONTAINER---//
+
 	document.write("	<\/div>");
-	
+	//---END: ALL---//
+
 }// END: createDivs
 
 function move() {
@@ -434,8 +400,8 @@ function move() {
 
 }// END: move
 
-// TODO: serve json file statically
-// http://stackoverflow.com/questions/27639005/how-to-copy-static-files-to-build-directory-with-webpack
+//TODO: serve json file statically
+//http://stackoverflow.com/questions/27639005/how-to-copy-static-files-to-build-directory-with-webpack
 
 function render() {
 
@@ -443,17 +409,16 @@ function render() {
 
 	var timeLine = json.timeLine;
 	time.initializeTimeSlider(timeLine);
-	
+
 	var layers = json.layers;
 	var axisAttributes = json.axisAttributes;
 	var nodeAttributes = json.pointAttributes;
-	 var lineAttributes = json.lineAttributes;
-	 var areaAttributes = json.areaAttributes;
-		var mapAttributes = json.mapAttributes;
-	
-	
+	var lineAttributes = json.lineAttributes;
+	var areaAttributes = json.areaAttributes;
+	var mapAttributes = json.mapAttributes;
+
 	//---MAP LAYER
-	
+
 	var mapRendered = false;
 	layers.forEach(function(layer) {
 
@@ -462,65 +427,63 @@ function render() {
 
 			var geojson = layer.geojson;
 			topo.generateTopoLayer(geojson);
-			
+
 			topo.setupPanels(mapAttributes);
-			
+
 			mapRendered = true;
 
 		}//END: MAP check  
 
 	});
-	
-	
-	if(!mapRendered) {
+
+	if (!mapRendered) {
 		topo.generateEmptyTopoLayer(nodeAttributes, axisAttributes);
 	}
-	
+
 	layers.forEach(function(layer) {
 
 		var type = layer.type;
-		if(type == COUNTS) {
-			
+		if (type == COUNTS) {
+
 			// TODO: paint counts
-			
+
 		}//END: COUNTS check 
-			
+
 	});
-	
+
 	layers.forEach(function(layer) {
 
 		var type = layer.type;
-		if(type == TREE) {
-			
+		if (type == TREE) {
+
 			var nodes = layer.points;
 			var branches = layer.lines;
 			var areas_ = layer.areas;
-			
+
 			if (!(typeof areas_ === 'undefined')) {
-			areas.generateAreasLayer(areas_, areaAttributes);
-			areas.setupPanels(areaAttributes);
+				areas.generateAreasLayer(areas_, areaAttributes);
+				areas.setupPanels(areaAttributes);
 			}
-			
+
 			if (!(typeof branches === 'undefined')) {
-			lines.generateLinesLayer(branches, nodes, lineAttributes);
-			lines.setupPanels(lineAttributes);
+				lines.generateLinesLayer(branches, nodes, lineAttributes);
+				lines.setupPanels(lineAttributes);
 			}
-			
+
 			if (!(typeof nodes === 'undefined')) {
-			points.generatePointsLayer(nodes, nodeAttributes);
-			points.setupPanels(nodeAttributes);
+				points.generatePointsLayer(nodes, nodeAttributes);
+				points.setupPanels(nodeAttributes);
 			}
-			
+
 		}//END: TREE check 
-			
+
 	});
-	
+
 	// TODO: locations
-	
+
 }// END: render
 
-// ---RENDERING---//
-
+//---RENDERING---//
 
 render();
 //collapsible.collapseAll();
