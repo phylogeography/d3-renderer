@@ -427,13 +427,15 @@ setupPointColorAttributePanel = function(attributes) {
 														element) {
 
 													pointStartColor = "#" + hex;
+													
 													scale.range([
 															pointStartColor,
 															pointEndColor ]);
 													updatePointColorLegend(scale);
 
 													// trigger repaint
-													updatePointColors(scale);
+													updatePointColors(scale,
+															colorAttribute);
 
 												}// END: onSelect
 											});
@@ -458,6 +460,7 @@ setupPointColorAttributePanel = function(attributes) {
 														element) {
 
 													pointEndColor = "#" + hex;
+													
 													scale.range([
 															pointStartColor,
 															pointEndColor ]);

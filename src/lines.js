@@ -169,11 +169,11 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 exports.setupPanels = function(attributes) {
 
 	setupLinesLayerCheckbox();
-	setupLineFixedColorPanel(attributes);
+	setupLineFixedColorPanel();
 	setupLineColorAttributePanel(attributes);
-	setupLineFixedOpacityPanel(attributes);
-	setupLineFixedCurvaturePanel(attributes);
-	setupLineFixedWidthPanel(attributes);
+	setupLineFixedOpacityPanel();
+	setupLineFixedCurvaturePanel();
+	setupLineFixedWidthPanel();
 	setupLineCutoffPanel(attributes);
 
 }// END: setupPanels
@@ -206,7 +206,7 @@ function setupLinesLayerCheckbox() {
 }//END: setupLinesVisibility
 
 
-function setupLineFixedColorPanel(attributes) {
+function setupLineFixedColorPanel() {
 
 	var lineFixedColorSelect = document.getElementById("lineFixedColor");
 	var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
@@ -441,7 +441,7 @@ function updateLineColors(scale, colorAttribute) {
 
 }// END: updateLineColors
 
-function setupLineFixedOpacityPanel(attributes) {
+function setupLineFixedOpacityPanel() {
 
 	var step = 0.1
 	var lineFixedOpacitySlider = d3.slider().axis(
@@ -467,11 +467,11 @@ function setupLineFixedOpacityPanel(attributes) {
 
 }// END: setupLineFixedOpacityPanel
 
-function setupLineFixedCurvaturePanel(attributes) {
+function setupLineFixedCurvaturePanel() {
 	// TODO
 }// END: setupLineFixedCurvaturePanel
 
-function setupLineFixedWidthPanel(attributes) {
+function setupLineFixedWidthPanel() {
 
 	var lineWidthSlider = d3.slider().axis(d3.svg.axis().orient("top"))
 			.min(0.5).max(5.0).step(0.5).value(lineWidth);

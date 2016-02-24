@@ -276,32 +276,32 @@ function createHtml() {
 
 	
 	
-	//	document.write("");
-//	document.write("");
-//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Polygon color attribute<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("");
-//	document.write("						<div>");
+	document.write("				<div class=\"panelcollapsed\">");
+	document.write("					<h2>Polygon color attribute<\/h2>");
+	document.write("					<div class=\"panelcontent\">");
+
+	document.write("						<div id='areaStartColor'>");
 //	document.write("							<h4>Start color<\/h4>");
 //	document.write("							<input class='areaStartColor' \/>");
-//	document.write("						<\/div>");
-//	document.write("");
-//	document.write("						<div>");
+	document.write("						<\/div>");
+
+	document.write("						<div id='areaEndColor'>");
 //	document.write("							<h4>End color<\/h4>");
 //	document.write("							<input class='areaEndColor' \/>");
-//	document.write("						<\/div>");
-//	document.write("");
-//	document.write("						<h4>Attribute<\/h4>");
-//	document.write("						<select id=\"areaColorAttribute\">");
-//	document.write("						<\/select>");
-//	document.write("");
-//	document.write("						<div id=\"areaColorLegend\" class=\"legend\"><\/div>");
-//	document.write("");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
-//	document.write("				<!-- END: panel-->");
-//	document.write("");
+	document.write("						<\/div>");
+
+	document.write("						<h4>Attribute<\/h4>");
+	document.write("						<select id=\"areaColorAttribute\">");
+	document.write("						<\/select>");
+
+	document.write("						<div id=\"areaColorLegend\" ><\/div>");
+
+	document.write("					<\/div>");
+	document.write("				<\/div>");
+
+	
+	
+	
 //	document.write("				<div class=\"panelcollapsed\">");
 //	document.write("					<h2>Polygon opacity<\/h2>");
 //	document.write("					<div class=\"panelcontent\">");
