@@ -5,8 +5,11 @@
 // ---MODULE IMPORTS---//
 // require("script!kodama");
 var d3 = require('d3');
+require("script!./d3-legend.js");
 var utils = require('./utils.js');
 var global = require('./global.js');
+require("imports?$=jquery!./jquery.simple-color.js");
+
 
 // ---MODULE VARIABLES---//
 
@@ -29,20 +32,6 @@ var linesLayer;
 var exports = module.exports = {};
 
 exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
-
-//	var colorAttribute = utils.getObject(branchAttributes, "id", "lineage");
-//
-//	var h3cols = [ "#D6D6E2", "#65658F", "#59A5BF", "#ECE5BD", "#D2C161",
-//			"#CAE2EB" ];
-//	var h1cols = [ "#CD322E", "#D6D6E2", "#2481BA", "#89A24C", "#835B9C" ]; // =
-//	// colorbrewer.Dark2[8]
-//	var colorscale = d3.scale.ordinal().range(h1cols).domain(
-//			colorAttribute.domain);
-//
-//	var opacityAttribute = utils.getObject(branchAttributes, "id", "height");
-//
-//	var opacityscale = d3.scale.linear().domain(opacityAttribute.range).range(
-//			[ 0.5, 1 ]);
 
 	linesLayer = global.g.append("g").attr("class", "linesLayer");
 

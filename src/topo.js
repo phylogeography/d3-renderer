@@ -5,15 +5,21 @@
 // ---MODULE IMPORTS---//
 require('./topo.css');
 var d3 = require('d3');
+require("script!./d3-legend.js");
 var utils = require('./utils.js');
 var global = require('./global.js');
+
+require("imports?$=jquery!./jquery.simple-color.js");
 
 // ---MODULE VARIABLES---//
 
 var topoLayer;
 
 var mapDefaultColorIndex = 6;
+var mapStartColor = global.pairedSimpleColors[0];
+var mapEndColor = global.pairedSimpleColors[global.pairedSimpleColors.length - 1];
 var mapFillOpacity = 0.5;
+
 
 // ---MODULE EXPORTS---//
 
@@ -248,4 +254,278 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 
 }// END: generateEmptyLayer
 
-// ---FUNCTIONS---//
+
+exports.setupPanels = function(attributes) {
+
+	setupTopoLayerCheckbox();
+	setupTopoFixedColorPanel();
+	setupTopoColorAttributePanel(attributes);
+	
+	
+}//END: setupPanels
+
+//---FUNCTIONS---//
+
+setupTopoColorAttributePanel = function(attributes) {
+	
+	// attribute
+	var mapColorAttributeSelect = document.getElementById("mapColorAttribute");
+
+	for (var i = 0; i < attributes.length; i++) {
+
+		var option = attributes[i].id;
+		var element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		mapColorAttributeSelect.appendChild(element);
+
+	}// END: i loop
+
+	// map color listener
+	d3
+			.select(mapColorAttributeSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorAttribute = mapColorAttributeSelect.options[mapColorAttributeSelect.selectedIndex].text;
+
+						var attribute = utils.getObject(attributes, "id",
+								colorAttribute);
+
+						var data;
+						var scale;
+
+						$('#mapStartColor').html('');
+						$('#mapEndColor').html('');
+
+						if (attribute.scale == global.ORDINAL) {
+
+							data = attribute.domain;
+							scale = d3.scale.ordinal().range(global.ordinalColors)
+									.domain(data);
+
+							updateMapColorLegend(scale);
+							
+						} else if (attribute.scale == LINEAR) {
+
+							data = attribute.range;
+							scale = d3.scale.linear().domain(data).range(
+									[ mapStartColor, mapEndColor ]);
+
+							updateMapColorLegend(scale);
+							
+							// start color
+							$('#mapStartColor').html("<h4>Start color<\/h4>");
+							$('#mapStartColor').append(
+									"<input class=\"mapStartColor\" \/>");
+
+							$('.mapStartColor')
+									.simpleColor(
+											{
+												cellWidth : 13,
+												cellHeight : 13,
+												columns : 4,
+												displayColorCode : true,
+												colors : utils
+														.getSimpleColors(global.pairedSimpleColors),
+
+												onSelect : function(hex,
+														element) {
+
+													mapStartColor = "#" + hex;
+													
+													scale.range([
+															mapStartColor,
+															mapEndColor ]);
+
+													updateMapColorLegend(scale);
+
+													// trigger repaint
+													updateMapColors(scale,
+															colorAttribute);
+
+												}// END: onSelect
+											});
+
+							$('.mapStartColor').setColor(mapStartColor);
+
+							// end color
+							$('#mapEndColor').html("<h4>End color<\/h4>");
+							$('#mapEndColor').append(
+									"<input class=\"mapEndColor\" \/>");
+
+							$('.mapEndColor')
+									.simpleColor(
+											{
+												cellWidth : 13,
+												cellHeight : 13,
+												columns : 4,
+												colors : utils
+														.getSimpleColors(global.pairedSimpleColors),
+												displayColorCode : true,
+												onSelect : function(hex,
+														element) {
+
+													mapEndColor = "#" + hex;
+													
+													scale.range([
+															mapStartColor,
+															mapEndColor ]);
+
+													updateMapColorLegend(scale);
+
+													// trigger repaint
+													updateMapColors(scale,
+															colorAttribute);
+												}// END: onSelect
+											});
+
+							$('.mapEndColor').setColor(mapEndColor);
+							
+						} else {
+							
+							console
+							.log("Error occured when resolving scale type!");
+							
+						}
+
+						// trigger repaint
+						updateMapColors(scale, colorAttribute);
+						
+
+					});
+	
+	
+	
+}//END: setupTopoColorAttributePanel
+
+
+updateMapColorLegend = function(scale) {
+	
+	var width = 150;
+	var height = 250;
+
+	var margin = {
+		left : 20,
+		top : 20
+	};
+
+	$('#mapColorLegend').html('');
+	var svg = d3.select("#mapColorLegend").append('svg').attr("width", width)
+			.attr("height", height);
+
+	var mapColorLegend = d3.legend.color().scale(scale).shape('rect')
+	.shapeHeight(10).shapeWidth(10).shapePadding(5).cells(5).orient('vertical')
+
+	svg.append("g").attr("class", "mapColorLegend").attr("transform",
+			"translate(" + (margin.left) + "," + (margin.top) + ")").call(
+					mapColorLegend);
+	
+	
+}//END:updateMapColorLegend
+
+updateMapColors = function(scale, colorAttribute) {
+	
+	d3.selectAll(".topo") //
+	.transition() //
+	.ease("linear") //
+	.attr("fill", function() {
+
+		var topo = d3.select(this);
+		var attributeValue = topo.attr(colorAttribute);
+		var color = scale(attributeValue);
+
+		return (color);
+	});
+	
+}//END:updateMapColors
+
+setupTopoFixedColorPanel = function() {
+	
+	var mapFixedColorSelect = document.getElementById("mapFixedColor");
+	var scale = utils.alternatingColorScale().domain(global.fixedColors).range(global.fixedColors);
+
+	for (var i = 0; i < global.fixedColors.length; i++) {
+
+		var option = global.fixedColors[i];
+		var element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		mapFixedColorSelect.appendChild(element);
+
+	}// END: i loop
+
+	// select the default
+	mapFixedColorSelect.selectedIndex = mapDefaultColorIndex;
+	
+	// map fixed color listener
+	d3
+			.select(mapFixedColorSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorSelect = mapFixedColorSelect.options[mapFixedColorSelect.selectedIndex].text;
+						var color = scale(colorSelect);
+
+						d3.selectAll(".topo") //
+						.transition() //
+						.ease("linear") //
+						.attr("fill", color);
+
+						// setup legend
+						updateMapFixedColorLegend(scale);
+						
+					});
+	
+}//END: setupTopoFixedColorPanel
+
+updateMapFixedColorLegend = function(scale) {
+	
+	var width = 150;
+	var height = 230;
+
+	var margin = {
+		left : 20,
+		top : 20
+	};
+
+	$('#mapFixedColorLegend').html('');
+	var svg = d3.select("#mapFixedColorLegend").append('svg').attr("width",
+			width).attr("height", height);
+
+	var mapFixedColorLegend = d3.legend.color().scale(scale).shape('rect')
+			.shapeHeight(10).shapeWidth(10).shapePadding(5).cells(5).orient('vertical')
+
+	svg.append("g").attr("class", "mapFixedColorLegend").attr("transform",
+			"translate(" + (margin.left) + "," + (margin.top) + ")").call(
+					mapFixedColorLegend);
+	
+}//END: updateMapFixedColorLegend
+
+setupTopoLayerCheckbox = function() {
+	
+	$('#layerVisibility')
+	.append(
+			"<input type=\"checkbox\" id=\"mapLayerCheckbox\"> Map layer<br>");
+	
+	
+	var mapLayerCheckbox = document.getElementById("mapLayerCheckbox");
+	// default state is checked
+	mapLayerCheckbox.checked = true;
+
+	d3.select(mapLayerCheckbox).on("change", function() {
+
+		var visibility = this.checked ? "visible" : "hidden";
+		topoLayer.selectAll("path").style("visibility", visibility);
+
+	});
+	
+	
+	
+	
+}//END: setupTopoLayerCheckbox
+

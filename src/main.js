@@ -85,7 +85,6 @@ function createHtml() {
 	document.write("					<div id=\"layerVisibility\" class=\"panelcontent\">");
 	
 //	document.write("						<input type=\"checkbox\" id=\"labelsLayerCheckbox\"> Labels layer<br>");
-//	document.write("						<input type=\"checkbox\" id=\"mapLayerCheckbox\"> Map layer<br>");
 	
 	document.write("					<\/div>");
 	document.write("				<\/div>");
@@ -323,42 +322,49 @@ function createHtml() {
 //	document.write("				<\/div>");
 //	document.write("				<!-- END: panel-->");
 //	document.write("");
-//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Map fill<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("						<select id=\"mapFixedFill\">");
-//	document.write("						<\/select>");
-//	document.write("						<div id=\"mapFixedFillLegend\" class=\"legend\"><\/div>");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
-//	document.write("				<!-- END: panel-->");
-//	document.write("");
-//	document.write("");
-//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Map fill attribute<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("");
-//	document.write("						<div>");
+	
+	
+	
+	
+	document.write("				<div class=\"panelcollapsed\">");
+	document.write("					<h2>Map fill<\/h2>");
+	document.write("					<div class=\"panelcontent\">");
+	document.write("						<select id=\"mapFixedColor\">");
+	document.write("						<\/select>");
+
+	document.write("						<div id=\"mapFixedColorLegend\" ><\/div>");
+	
+	document.write("					<\/div>");
+	document.write("				<\/div>");
+
+	
+	
+		document.write("				<div class=\"panelcollapsed\">");
+	document.write("					<h2>Map color attribute<\/h2>");
+	document.write("					<div class=\"panelcontent\">");
+
+	document.write("						<div id='mapStartColor'>");
 //	document.write("							<h4>Start color<\/h4>");
 //	document.write("							<input class='mapStartFill' \/>");
-//	document.write("						<\/div>");
-//	document.write("");
-//	document.write("						<div>");
+	document.write("						<\/div>");
+
+	document.write("						<div id='mapEndColor'>");
 //	document.write("							<h4>End color<\/h4>");
 //	document.write("							<input class='mapEndFill' \/>");
-//	document.write("						<\/div>");
-//	document.write("");
-//	document.write("						<h4>Attribute<\/h4>");
-//	document.write("						<select id=\"mapFillAttribute\">");
-//	document.write("						<\/select>");
-//	document.write("");
-//	document.write("						<div id=\"mapFillLegend\" class=\"legend\"><\/div>");
-//	document.write("");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
-//	document.write("				<!-- END: panel-->");
-//	document.write("");
-//	document.write("");
+	document.write("						<\/div>");
+
+	document.write("						<h4>Attribute<\/h4>");
+	document.write("						<select id=\"mapColorAttribute\">");
+	document.write("						<\/select>");
+
+	document.write("						<div id=\"mapColorLegend\"><\/div>");
+
+	document.write("					<\/div>");
+	document.write("				<\/div>");
+
+	
+	
+	//	document.write("");
 //	document.write("				<div class=\"panelcollapsed\">");
 //	document.write("					<h2>Map fill opacity<\/h2>");
 //	document.write("					<div class=\"panelcontent\">");
@@ -443,7 +449,7 @@ function render() {
 	var nodeAttributes = json.pointAttributes;
 	 var lineAttributes = json.lineAttributes;
 	 var areaAttributes = json.areaAttributes;
-	
+		var mapAttributes = json.mapAttributes;
 	
 	
 	//---MAP LAYER
@@ -456,6 +462,9 @@ function render() {
 
 			var geojson = layer.geojson;
 			topo.generateTopoLayer(geojson);
+			
+			topo.setupPanels(mapAttributes);
+			
 			mapRendered = true;
 
 		}//END: MAP check  
@@ -506,29 +515,7 @@ function render() {
 			
 	});
 	
-	
-	
-//	var nodes = json.layers[0].points;
-//	var branches = json.layers[0].lines;
-//	var areas_ = json.layers[0].areas;
-//	
-//	var axisAttributes = json.axisAttributes;
-//	var nodeAttributes = json.pointAttributes;
-//	 var lineAttributes = json.lineAttributes;
-//	 var areaAttributes = json.areaAttributes;
-//	 
-//		// TODO: if has 
-////	time.initializeTimeSlider(timeLine);
-//	topo.generateEmptyTopoLayer(nodeAttributes, axisAttributes);
-//	areas.generateAreasLayer(areas_, areaAttributes);
-//	lines.generateLinesLayer(branches, nodes, lineAttributes);
-//	points.generatePointsLayer(nodes, nodeAttributes);
-//
-//	
-//	// TODO: if has 
-//	points.setupPanels(nodeAttributes);
-//	lines.setupPanels(lineAttributes);
-//	areas.setupPanels(areaAttributes);
+	// TODO: locations
 	
 }// END: render
 
