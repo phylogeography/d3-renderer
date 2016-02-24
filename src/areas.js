@@ -19,6 +19,8 @@ var areaDefaultColorIndex = 1;
 var areaStartColor = global.pairedSimpleColors[0];
 var areaEndColor = global.pairedSimpleColors[global.pairedSimpleColors.length - 1];
 var polygonOpacity = 0.3;
+var min_polygon_opacity = 0.1;
+var max_polygon_opacity = 1;
 
 // ---MODULE EXPORTS---//
 
@@ -122,8 +124,37 @@ exports.setupPanels = function(attributes) {
 	setupAreasLayerCheckbox();
 	setupAreaFixedColorPanel();
 	setupAreaColorAttributePanel(attributes);
-
+	setupAreaFixedOpacityPanel();
+	
 }// END: setupPanels
+
+setupAreaFixedOpacityPanel = function() {
+	
+	var step = 0.1;
+	
+	var areaFixedOpacitySlider = d3.slider().axis(d3.svg.axis().orient("top").ticks(
+			(max_polygon_opacity - min_polygon_opacity) / step))
+	.min(min_polygon_opacity).max(max_polygon_opacity).step(step).value(polygonOpacity);
+
+d3.select('#areaFixedOpacitySlider').call(areaFixedOpacitySlider);
+
+// map fixed opacity listener
+areaFixedOpacitySlider.on("slide", function(evt, value) {
+
+	polygonOpacity = value;
+
+// fill-opacity / stroke-opacity / opacity
+areasLayer.selectAll(".area") //
+.transition() //
+.ease("linear") //
+.attr("fill-opacity", polygonOpacity);
+
+});
+	
+	
+	
+	
+}//END: setupAreaFixedOpacityPanel
 
 setupAreaColorAttributePanel = function(attributes) {
 
@@ -277,8 +308,12 @@ updateAreaColorLegend = function(scale) {
 	var svg = d3.select("#areaColorLegend").append('svg').attr("width", width)
 			.attr("height", height);
 
-	var areaColorLegend = d3.legend.color().scale(scale).shape('circle')
-			.shapeRadius(5).shapePadding(10).cells(5).orient('vertical')
+	// polygonal shape
+	var stringShape = "M1,2 8,2 10,9 3,11z";
+
+	var areaColorLegend = d3.legend.color().scale(scale)//
+	.shape("path", stringShape).shapeRadius(5).shapePadding(10).cells(5)
+			.orient('vertical');
 
 	svg.append("g").attr("class", "areaColorLegend").attr("transform",
 			"translate(" + (margin.left) + "," + (margin.top) + ")").call(

@@ -2,17 +2,121 @@
  * @fbielejec
  */
 
-//---MODULE IMPORTS---//
+// ---MODULE IMPORTS---//
 require('./topo.css');
 var d3 = require('d3');
 var utils = require('./utils.js');
 var global = require('./global.js');
 
-//---MODULE VARIABLES---//
+// ---MODULE VARIABLES---//
 
-//---MODULE EXPORTS---//
+var topoLayer;
+
+var mapDefaultColorIndex = 6;
+var mapFillOpacity = 0.5;
+
+// ---MODULE EXPORTS---//
 
 var exports = module.exports = {};
+
+exports.generateTopoLayer = function(geojson) {
+
+//	 equatorLayer = g.append("g");
+	topoLayer = global.g.append("g");
+	
+	var basicScale = (global.width / 2 / Math.PI);
+
+	// first guess for the projection
+	var center = d3.geo.centroid(geojson);
+
+	var projectionScale = basicScale;
+	var offset = [ global.width / 2, global.height / 2 ];
+
+	global.projection = d3.geo.mercator().scale(projectionScale).center(center)
+			.translate(offset);
+
+	var path = d3.geo.path().projection(global.projection);
+
+	// determine the bounds
+	var bounds = path.bounds(geojson);
+	var hscale = projectionScale * global.width / (bounds[1][0] - bounds[0][0]);
+	var vscale = projectionScale * global.height / (bounds[1][1] - bounds[0][1]);
+	projectionScale = (hscale < vscale) ? hscale : vscale;
+	var offset = [ global.width - (bounds[0][0] + bounds[1][0]) / 2,
+	               global.height - (bounds[0][1] + bounds[1][1]) / 2 ];
+
+	// new projection
+	global.projection = d3.geo.mercator().center(center).scale(projectionScale)
+			.translate(offset);
+
+	// if it failed stick to basics
+	if (projectionScale < basicScale) {
+
+		projectionScale = (global.width / 2 / Math.PI);
+		var offset = [ (global.width / 2), (global.height / 2) ];
+
+		global.projection = d3.geo.mercator() //
+		.scale(projectionScale) //
+		.translate(offset);
+
+	}
+
+	// new path
+	path = path.projection(global.projection);
+
+	// add graticule
+//	svg.append("path").datum(graticule).attr("class", "graticule").attr("d",
+//			path);
+//
+//	// apply inline style
+//	svg.selectAll('.graticule').style({
+//		'stroke' : '#bbb',
+//		'fill' : 'none',
+//		'stroke-width' : '.5px',
+//		'stroke-opacity' : '.5'
+//	});
+//
+//	// add equator
+//	equatorLayer.append("path").datum(
+//			{
+//				type : "LineString",
+//				coordinates : [ [ -180, 0 ], [ -90, 0 ], [ 0, 0 ], [ 90, 0 ],
+//						[ 180, 0 ] ]
+//			}).attr("class", "equator").attr("d", path);
+//
+//	// apply inline style
+//	equatorLayer.selectAll('.equator').style({
+//		'stroke' : '#ccc',
+//		'fill' : 'none',
+//		'stroke-width' : '1px',
+//	});
+
+	var features = geojson.features;
+	var topo = topoLayer.selectAll("path").data(features).enter()
+			.append("path") //
+			.attr("class", "topo") //
+			.attr('d', path) //
+			.attr("fill", global.fixedColors[mapDefaultColorIndex]) //
+			.attr("stroke", "black") //
+			.attr("fill-opacity", mapFillOpacity) //
+			.style("stroke-width", .5);
+
+	// dump attribute values into DOM
+	topo[0].forEach(function(d, i) {
+
+		var thisTopo = d3.select(d);
+		var properties = geojson.features[i].properties;
+
+		for ( var property in properties) {
+			if (properties.hasOwnProperty(property)) {
+
+				thisTopo.attr(property, properties[property]);
+
+			}
+		}// END: properties loop
+	});
+
+}// END: generateTopoLayer
 
 exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 
@@ -144,4 +248,4 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 
 }// END: generateEmptyLayer
 
-//---FUNCTIONS---//
+// ---FUNCTIONS---//

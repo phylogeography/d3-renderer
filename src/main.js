@@ -32,7 +32,10 @@ var svg = d3.select(".container").append('svg') //
 
 global.g = svg.append("g");
 
-// areasLayer = g.append("g").attr("class", "areasLayer");
+var MAP = "map";
+var TREE = "tree";
+var COUNTS = "counts";
+
 
 // ---FUNCTIONS---//
 
@@ -81,12 +84,7 @@ function createHtml() {
 	document.write("					<h2>Toggle layer visibility<\/h2>");
 	document.write("					<div id=\"layerVisibility\" class=\"panelcontent\">");
 	
-//	document.write("                        <input type=\"checkbox\" id=\"pointsLayerCheckbox\"> Points layer<br>");
 //	document.write("						<input type=\"checkbox\" id=\"labelsLayerCheckbox\"> Labels layer<br>");
-
-//	document.write("						<input type=\"checkbox\" id=\"linesLayerCheckbox\"> Lines layer<br>");
-	
-//	document.write("						<input type=\"checkbox\" id=\"areasLayerCheckbox\"> Polygons layer<br>");
 //	document.write("						<input type=\"checkbox\" id=\"mapLayerCheckbox\"> Map layer<br>");
 	
 	document.write("					<\/div>");
@@ -100,7 +98,6 @@ function createHtml() {
 	document.write("						<\/select>");
 
 	document.write("						<div id=\"pointFixedColorLegend\"><\/div>");
-//	document.write("						<div id=\"pointFixedColorLegend\" class=\"legend\"><\/div>");
 	
 	document.write("					<\/div>");
 	document.write("				<\/div>");
@@ -110,23 +107,17 @@ function createHtml() {
 	document.write("					<h2>Point color attribute<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 
+	document.write("						<div id=\"pointStartColor\">");
+	document.write("						<\/div>");
+//	
+	document.write("						<div id=\"pointEndColor\">");
+	document.write("						<\/div>");
 	
 	document.write("						<h4>Attribute<\/h4>");
 	document.write("						<select id=\"pointColorAttribute\">");
 	document.write("						<\/select>");
 	
 	document.write("						<div id=\"pointColorLegend\"><\/div>");
-//	document.write("						<div id=\"pointColorLegend\" class=\"legend\"><\/div>");
-	
-	document.write("						<div id=\"pointStartColor\">");
-//	document.write("							<h4>Start color<\/h4>");
-//	document.write("							<input class='pointStartColor' \/>");
-	document.write("						<\/div>");
-//	
-	document.write("						<div id=\"pointEndColor\">");
-//	document.write("							<h4>End color<\/h4>");
-//	document.write("							<input class='pointEndColor' \/>");
-	document.write("						<\/div>");
 	
 	document.write("					<\/div>");
 	document.write("				<\/div>");
@@ -180,22 +171,17 @@ function createHtml() {
 	document.write("					<h2>Line color attribute<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 
+	document.write("						<div id=\"lineStartColor\">");
+	document.write("						<\/div>");
+
+	document.write("						<div id=\"lineEndColor\">");
+	document.write("						<\/div>");
+	
 	document.write("						<h4>Attribute<\/h4>");
 	document.write("						<select id=\"lineColorAttribute\">");
 	document.write("						<\/select>");
 
 	document.write("						<div id=\"lineColorLegend\"><\/div>");
-
-	
-	document.write("						<div id=\"lineStartColor\">");
-//	document.write("							<h4>Start color<\/h4>");
-//	document.write("							<input class='lineStartColor' \/>");
-	document.write("						<\/div>");
-
-	document.write("						<div id=\"lineEndColor\">");
-//	document.write("							<h4>End color<\/h4>");
-//	document.write("							<input class='lineEndColor' \/>");
-	document.write("						<\/div>");
 
 	document.write("					<\/div>");
 	document.write("				<\/div>");
@@ -300,22 +286,20 @@ function createHtml() {
 	document.write("				<\/div>");
 
 	
+	document.write("				<div class=\"panelcollapsed\">");
+	document.write("					<h2>Polygon opacity<\/h2>");
+	document.write("					<div class=\"panelcontent\">");
+
+	document.write("						<div class=\"wrapper\">");
+	document.write("							<div id=\"areaFixedOpacitySlider\"><\/div>");
+	document.write("						<\/div>");
+
+	document.write("					<\/div>");
+	document.write("				<\/div>");
+
 	
 	
-//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Polygon opacity<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("");
-//	document.write("						<div class=\"wrapper\">");
-//	document.write("							<div id=\"areaFixedOpacitySlider\"><\/div>");
-//	document.write("						<\/div>");
-//	document.write("						<!-- END: wrapper-->");
-//	document.write("");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
-//	document.write("				<!-- END: panel-->");
-//	document.write("");
-//	document.write("				<div class=\"panelcollapsed\">");
+	//	document.write("				<div class=\"panelcollapsed\">");
 //	document.write("					<h2>Circular polygon color<\/h2>");
 //	document.write("					<div class=\"panelcontent\">");
 //	document.write("						<select id=\"countFixedColor\">");
@@ -449,30 +433,102 @@ function move() {
 
 function render() {
 
-	var json = require("./H3N2.json");
+	var json = require("./language_nomap.json");
 
 	var timeLine = json.timeLine;
-	var nodes = json.layers[0].points;
-	var branches = json.layers[0].lines;
-	var areas_ = json.layers[0].areas;
+	time.initializeTimeSlider(timeLine);
 	
+	var layers = json.layers;
 	var axisAttributes = json.axisAttributes;
 	var nodeAttributes = json.pointAttributes;
 	 var lineAttributes = json.lineAttributes;
 	 var areaAttributes = json.areaAttributes;
-	 
-		// TODO: if has 
-	time.initializeTimeSlider(timeLine);
-	topo.generateEmptyTopoLayer(nodeAttributes, axisAttributes);
-	areas.generateAreasLayer(areas_, areaAttributes);
-	lines.generateLinesLayer(branches, nodes, lineAttributes);
-	points.generatePointsLayer(nodes, nodeAttributes);
-
 	
-	// TODO: if has 
-	points.setupPanels(nodeAttributes);
-	lines.setupPanels(lineAttributes);
-	areas.setupPanels(areaAttributes);
+	
+	
+	//---MAP LAYER
+	
+	var mapRendered = false;
+	layers.forEach(function(layer) {
+
+		var type = layer.type;
+		if (type == MAP) {
+
+			var geojson = layer.geojson;
+			topo.generateTopoLayer(geojson);
+			mapRendered = true;
+
+		}//END: MAP check  
+
+	});
+	
+	
+	if(!mapRendered) {
+		topo.generateEmptyTopoLayer(nodeAttributes, axisAttributes);
+	}
+	
+	layers.forEach(function(layer) {
+
+		var type = layer.type;
+		if(type == COUNTS) {
+			
+			// TODO: paint counts
+			
+		}//END: COUNTS check 
+			
+	});
+	
+	layers.forEach(function(layer) {
+
+		var type = layer.type;
+		if(type == TREE) {
+			
+			var nodes = layer.points;
+			var branches = layer.lines;
+			var areas_ = layer.areas;
+			
+			if (!(typeof areas_ === 'undefined')) {
+			areas.generateAreasLayer(areas_, areaAttributes);
+			areas.setupPanels(areaAttributes);
+			}
+			
+			if (!(typeof branches === 'undefined')) {
+			lines.generateLinesLayer(branches, nodes, lineAttributes);
+			lines.setupPanels(lineAttributes);
+			}
+			
+			if (!(typeof nodes === 'undefined')) {
+			points.generatePointsLayer(nodes, nodeAttributes);
+			points.setupPanels(nodeAttributes);
+			}
+			
+		}//END: TREE check 
+			
+	});
+	
+	
+	
+//	var nodes = json.layers[0].points;
+//	var branches = json.layers[0].lines;
+//	var areas_ = json.layers[0].areas;
+//	
+//	var axisAttributes = json.axisAttributes;
+//	var nodeAttributes = json.pointAttributes;
+//	 var lineAttributes = json.lineAttributes;
+//	 var areaAttributes = json.areaAttributes;
+//	 
+//		// TODO: if has 
+////	time.initializeTimeSlider(timeLine);
+//	topo.generateEmptyTopoLayer(nodeAttributes, axisAttributes);
+//	areas.generateAreasLayer(areas_, areaAttributes);
+//	lines.generateLinesLayer(branches, nodes, lineAttributes);
+//	points.generatePointsLayer(nodes, nodeAttributes);
+//
+//	
+//	// TODO: if has 
+//	points.setupPanels(nodeAttributes);
+//	lines.setupPanels(lineAttributes);
+//	areas.setupPanels(areaAttributes);
 	
 }// END: render
 
