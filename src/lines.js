@@ -100,17 +100,39 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 
 				}
 
-				var startLatitude = startCoordinate.xCoordinate;
-				var startLongitude = startCoordinate.yCoordinate;
+//				var startLatitude = startCoordinate.xCoordinate;
+//				var startLongitude = startCoordinate.yCoordinate;
+//
+//				var endLatitude = endCoordinate.xCoordinate;
+//				var endLongitude = endCoordinate.yCoordinate;
+//
+//				var sourceXY = projection([  startLatitude, startLongitude ]);
+//				var targetXY = projection([ endLatitude, endLongitude ]);
+//
+//				var sourceX = sourceXY[1]; // lat
+//				var sourceY = sourceXY[0]; // long
+//
+//				var targetX = targetXY[1];
+//				var targetY = targetXY[0];
+//
+//				var dx = targetX - sourceX;
+//				var dy = targetY - sourceY;
+//				var dr = 0;
+//
+//				var bearing = "M" + sourceX + "," + sourceY + "A" + dr + ","
+//						+ dr + " 0 0,1 " + targetX + "," + targetY;
 
-				var endLatitude = endCoordinate.xCoordinate;
-				var endLongitude = endCoordinate.yCoordinate;
+				var startLatitude = startCoordinate.yCoordinate;
+				var startLongitude = startCoordinate.xCoordinate;
 
-				var sourceXY = projection([  startLatitude, startLongitude ]);
-				var targetXY = projection([ endLatitude, endLongitude ]);
+				var endLatitude = endCoordinate.yCoordinate;
+				var endLongitude = endCoordinate.xCoordinate;
 
-				var sourceX = sourceXY[1]; // lat
-				var sourceY = sourceXY[0]; // long
+				var sourceXY = projection([ startLongitude, startLatitude ]);
+				var targetXY = projection([ endLongitude, endLatitude ]);
+
+				var sourceX = sourceXY[1]; // 
+				var sourceY = sourceXY[0]; // 
 
 				var targetX = targetXY[1];
 				var targetY = targetXY[0];
@@ -119,14 +141,9 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 				var dy = targetY - sourceY;
 				var dr = 0;
 
-				// line['targetX'] = targetX;
-				// line['targetY'] = targetY;
-				// line['sourceX'] = sourceX;
-				// line['sourceY'] = sourceY;
-
 				var bearing = "M" + sourceX + "," + sourceY + "A" + dr + ","
 						+ dr + " 0 0,1 " + targetX + "," + targetY;
-
+				
 				return (bearing);
 
 			}) //
