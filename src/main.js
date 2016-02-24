@@ -14,6 +14,7 @@ var points = require('./points.js');
 var lines = require('./lines.js');
 var areas = require('./areas.js');
 var counts = require('./counts.js');
+var locations = require('./locations.js');
 
 // ---HTML---//
 
@@ -276,32 +277,38 @@ function createHtml() {
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
+	
 	// document.write(" <div class=\"panelcollapsed\">");
-	// document.write(" <h2>Circular polygon color<\/h2>");
+	// document.write(" <h2>Label color<\/h2>");
 	// document.write(" <div class=\"panelcontent\">");
-	// document.write(" <select id=\"countFixedColor\">");
+	// document.write(" <select id=\"labelcolor\">");
 	// document.write(" <\/select>");
-	// document.write(" <div id=\"countFixedColorLegend\"
-	// class=\"legend\"><\/div>");
+	// document.write(" <div id=\"labelColorLegend\"><\/div>");
 	// document.write(" <\/div>");
 	// document.write(" <\/div>");
-	// document.write(" <!-- END: panel-->");
-	// document.write("");
-	// document.write("");
-	// document.write(" <div class=\"panelcollapsed\">");
-	// document.write(" <h2>Circular polygon opacity<\/h2>");
-	// document.write(" <div class=\"panelcontent\">");
-	// document.write("");
-	// document.write(" <div class=\"wrapper\">");
-	// document.write(" <div id=\"countFixedOpacitySlider\"><\/div>");
-	// document.write(" <\/div>");
-	// document.write(" <!-- END: wrapper-->");
-	// document.write("");
-	// document.write(" <\/div>");
-	// document.write(" <\/div>");
-	// document.write(" <!-- END: panel-->");
-	// document.write("");
+	
+	
+	document.write(" <div class=\"panelcollapsed\">");
+	document.write(" <h2>Counts fixed color<\/h2>");
+	document.write(" <div class=\"panelcontent\">");
+	document.write(" <select id=\"countFixedColor\">");
+	document.write(" <\/select>");
+	document
+			.write(" <div id=\"countFixedColorLegend\"><\/div>");
+	document.write(" <\/div>");
+	document.write(" <\/div>");
 
+	 document.write(" <div class=\"panelcollapsed\">");
+	 document.write(" <h2>Circular polygon opacity<\/h2>");
+	 document.write(" <div class=\"panelcontent\">");
+	 document.write(" <div class=\"wrapper\">");
+	 document.write(" <div id=\"countFixedOpacitySlider\"><\/div>");
+	 document.write(" <\/div>");
+	 document.write(" <\/div>");
+	 document.write(" <\/div>");
+
+	 
+	 
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Map fill<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
@@ -359,15 +366,6 @@ function createHtml() {
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-	// document.write(" <div class=\"panelcollapsed\">");
-	// document.write(" <h2>Label color<\/h2>");
-	// document.write(" <div class=\"panelcontent\">");
-	// document.write(" <select id=\"labelcolor\">");
-	// document.write(" <\/select>");
-	// document.write(" <div id=\"labelColorLegend\" class=\"legend\"><\/div>");
-	// document.write(" <\/div>");
-	// document.write(" <\/div>");
-	// document.write(" <!-- END: panel-->");
 
 	document.write("			<\/div>");
 	// ---END: SELECTORS ---//
@@ -399,11 +397,10 @@ function move() {
 
 	// fit the paths to the zoom level
 	// d3.selectAll(".country").attr("stroke-width", 1.0 / s);
-	// d3.selectAll(".line").attr("stroke-width", lineWidth / s);
+//	 d3.selectAll(".line").attr("stroke-width", lines.lineWidth / s);
 	// d3.selectAll(".point").attr("stroke-width", 1.0 / s);
 
 }// END: move
-
 
 function render() {
 
@@ -424,7 +421,8 @@ function render() {
 	var lineAttributes = json.lineAttributes;
 	var areaAttributes = json.areaAttributes;
 	var mapAttributes = json.mapAttributes;
-
+	var locations_ = json.locations;
+	
 	// ---MAP LAYER
 
 	var mapRendered = false;
@@ -455,14 +453,15 @@ function render() {
 
 			var countAttribute = utils.getObject(nodeAttributes, "id", COUNT);
 			var counts_ = layer.points;
-			
-			if(counts_.length > 0) {
-			    counts.generateCountsLayer(counts_, countAttribute);
-			    global.hasCounts = true;
+
+			if (counts_.length > 0) {
+				counts.generateCountsLayer(counts_, countAttribute);
+				counts.setupPanels(countAttribute);
+				global.hasCounts = true;
 			} else {
 				global.hasCounts = false;
 			}
-			
+
 		}// END: COUNTS check
 
 	});
@@ -504,8 +503,15 @@ function render() {
 
 	});
 
-	// TODO: locations
-
+	if (!(typeof locations_ === 'undefined')) {
+	
+		locations.generateLocationsLayer(locations_);
+		locations.generateLabels(locations_);
+		
+	}
+	
+	
+	
 }// END: render
 
 // ---RENDERING---//

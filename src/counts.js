@@ -15,6 +15,8 @@ var global = require('./global.js');
 var countsLayer;
 var countDefaultColorIndex = 1;
 var countOpacity = 0.3;
+var min_count_opacity = 0.3;
+var max_count_opacity = 1;
 
 d3.kodama
 		.themeRegistry(
@@ -185,4 +187,126 @@ exports.updateCountsLayer = function(value) {
 	.attr("visibility", "visible");
 
 }// END: updateCountsLayer
+
+exports.setupPanels = function(attributes) {
+
+	setupCountsLayerCheckbox();
+	setupCountsFixedColorPanel();
+	setupCountsFixedOpacityPanel();
+}// END: setupPanels
+
+function setupCountsFixedOpacityPanel() {
+
+	var step = 0.1;
+	
+	var countFixedOpacitySlider = d3.slider().axis(d3.svg.axis().orient("top").ticks(
+			(max_count_opacity - min_count_opacity) / step))
+			.min(0.0).max(1.0).step(0.1).value(countOpacity);
+
+	d3.select('#countFixedOpacitySlider').call(countFixedOpacitySlider);
+
+	// map fixed opacity listener
+	countFixedOpacitySlider.on("slide", function(evt, value) {
+
+		countOpacity = value;
+
+		// fill-opacity / stroke-opacity / opacity
+		countsLayer.selectAll(".count") //
+		.transition() //
+		.ease("linear") //
+		.attr("fill-opacity", countOpacity);
+
+	});
+
+}// END: setupCountsFixedOpacityPanel
+
+function setupCountsFixedColorPanel() {
+
+	var countFixedColorSelect = document.getElementById("countFixedColor");
+	var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
+			global.fixedColors);
+
+	for (var i = 0; i < global.fixedColors.length; i++) {
+
+		var option = global.fixedColors[i];
+		var element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		countFixedColorSelect.appendChild(element);
+
+	}// END: i loop
+
+	// select the default
+	countFixedColorSelect.selectedIndex = countDefaultColorIndex;
+
+	// counts fixed color listener
+	d3
+			.select(countFixedColorSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorSelect = countFixedColorSelect.options[countFixedColorSelect.selectedIndex].text;
+						var color = scale(colorSelect);
+
+						countsLayer.selectAll(".count") //
+						.transition() //
+						.ease("linear") //
+						.attr("fill", color);
+
+						// setup legend
+						updateCountFixedColorLegend(scale);
+
+					});
+
+}// END: setupCountsFixedColorPanel
+
+function updateCountFixedColorLegend(scale) {
+
+	var width = 150;
+	var height = 265;
+
+	var margin = {
+		left : 20,
+		top : 20
+	};
+
+	$('#countFixedColorLegend').html('');
+	var svg = d3.select("#countFixedColorLegend").append('svg').attr("width",
+			width).attr("height", height);
+
+	var countFixedColorLegend = d3.legend.color().scale(scale).shape('circle')
+			.shapeRadius(5).shapePadding(10).cells(5).orient('vertical')
+
+	svg.append("g").attr("class", "countFixedColorLegend").attr("transform",
+			"translate(" + (margin.left) + "," + (margin.top) + ")").call(
+			countFixedColorLegend);
+
+}// END:updateCountFixedColorLegend
+
+function setupCountsLayerCheckbox() {
+
+	$('#layerVisibility')
+			.append(
+					"<input type=\"checkbox\" id=\"countsLayerCheckbox\"> Counts layer<br>");
+
+	var countsLayerCheckbox = document.getElementById("countsLayerCheckbox");
+	// default state is checked
+	countsLayerCheckbox.checked = true;
+
+	d3.select(countsLayerCheckbox).on("change", function() {
+
+		if (this.checked) {
+			// remove style, then visibility is driven by the time-based
+			// selections
+			countsLayer.selectAll("circle").style("visibility", null);
+		} else {
+			// style is superior to attribute, make them hidden
+			countsLayer.selectAll("circle").style("visibility", "hidden");
+		}
+
+	});
+
+}// END:setupCountsLayerCheckbox
 
