@@ -370,7 +370,7 @@ function createHtml() {
 	document.write("			<\/div>");
 	// ---END: SELECTORS ---//
 
-	document.write("			<div class=\"container\"><\/div>");
+	document.write("			<div class=\"container\" id=\"container\"><\/div>");
 
 	document.write("		<\/div>");
 	// ---END: SELECTORS AND CONTAINER---//
@@ -514,12 +514,29 @@ function render() {
 		global.hasLocations = false;
 	}
 	
-	
-	
 }// END: render
 
-// ---RENDERING---//
 
+function setupPanels() {
+	
+	var saveSVGButton = document.getElementById("saveSVG");
+	d3.select(saveSVGButton).on('click', function() {
+
+		var tmp = document.getElementById("container");
+		var svg = tmp.getElementsByTagName("svg")[0];
+
+		// Extract the data as SVG text string
+		var svg_xml = (new XMLSerializer).serializeToString(svg);
+
+		window.open().document.write(svg_xml);
+
+	});
+	
+}//END: setupPanels
+
+// ---CALLS---//
+
+setupPanels();
 render();
 // collapsible.collapseAll();
 
