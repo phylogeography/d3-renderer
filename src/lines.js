@@ -100,28 +100,6 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 
 				}
 
-//				var startLatitude = startCoordinate.xCoordinate;
-//				var startLongitude = startCoordinate.yCoordinate;
-//
-//				var endLatitude = endCoordinate.xCoordinate;
-//				var endLongitude = endCoordinate.yCoordinate;
-//
-//				var sourceXY = projection([  startLatitude, startLongitude ]);
-//				var targetXY = projection([ endLatitude, endLongitude ]);
-//
-//				var sourceX = sourceXY[1]; // lat
-//				var sourceY = sourceXY[0]; // long
-//
-//				var targetX = targetXY[1];
-//				var targetY = targetXY[0];
-//
-//				var dx = targetX - sourceX;
-//				var dy = targetY - sourceY;
-//				var dr = 0;
-//
-//				var bearing = "M" + sourceX + "," + sourceY + "A" + dr + ","
-//						+ dr + " 0 0,1 " + targetX + "," + targetY;
-
 				var startLatitude = startCoordinate.yCoordinate;
 				var startLongitude = startCoordinate.xCoordinate;
 

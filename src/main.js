@@ -456,7 +456,7 @@ function render() {
 
 	time.initializeTimeSlider(timeLine);
 	topo.generateEmptyTopoLayer(nodeAttributes, axisAttributes);
-	lines.generateLinesLayer(branches, nodes, lineAttributes);
+//	lines.generateLinesLayer(branches, nodes, lineAttributes);
 	points.generatePointsLayer(nodes, nodeAttributes);
 
 	// TODO: if has 

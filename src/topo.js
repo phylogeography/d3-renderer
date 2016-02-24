@@ -16,19 +16,33 @@ var exports = module.exports = {};
 
 exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 
+	 console.log("generateEmptyLayer");
+	
 	var xlim = utils.getObject(pointAttributes, "id",
 			axisAttributes.xCoordinate).range;
 	var ylim = utils.getObject(pointAttributes, "id",
 			axisAttributes.yCoordinate).range;
 	// ylim = [ ylim[0] - 2, ylim[1] + 2 ];
 
-	var bounds = [ xlim, ylim ];
+    console.log("width: " + global.width);
+    console.log("height: " + global.height);
+
+	console.log("xlim: " + xlim);
+	console.log("ylim: " + ylim);
+	
+	// reversed because coordinates come as lat (y), long (x)
+	var bounds = [ ylim, xlim ];
 
 	// maxX = xlim[0];
-
+    console.log("bounds: " + bounds);
+	
+	
 	var hscale = global.height / (bounds[0][1] - bounds[0][0]);
 	var vscale = global.width / (bounds[1][1] - bounds[1][0]);
 
+    console.log("hscale: " + hscale);
+    console.log("vscale: " + vscale);
+	
 	var projectionScale = (hscale < vscale) ? hscale : vscale;
 	projectionScale = projectionScale * 150;
 
@@ -88,41 +102,46 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 
 	// define null projection
 	var zeroProjection = d3.geo.projection(function(x, y) {
+//		return [ x, y ];
 		return [ x, y ];
-//		return [ y, x ];
 	});
 
-//	var currentXDifference = zeroProjection([ 1, 1 ])[0]
-//			- zeroProjection([ 0, 0 ])[0];
-//	var currentYDifference = zeroProjection([ 1, 1 ])[1]
-//			- zeroProjection([ 0, 0 ])[1];
+    //test projection
+    console.log("test projection [0,0]: " + zeroProjection([0,0]));
+    console.log("test projection [0,1]: " + zeroProjection([0,1]));
+    console.log("test projection [1,0]: " + zeroProjection([1,0]));
+    console.log("test projection [1,1]: " + zeroProjection([1,1]));
 
-	var currentYDifference = zeroProjection([ 1, 1 ])[0]
-	- zeroProjection([ 0, 0 ])[0];
-var currentXDifference = zeroProjection([ 1, 1 ])[1]
-	- zeroProjection([ 0, 0 ])[1];
-	
-	
-	projectionScale = global.minScaleExtent * projectionScale / currentXDifference;
+    var currentXDifference = zeroProjection([1,1])[0] - zeroProjection([0,0])[0];
+    var currentYDifference = zeroProjection([1,1])[1] - zeroProjection([0,0])[1];
+    console.log("current X difference: " + currentXDifference);
+    console.log("current Y difference: " + currentYDifference);
+
+	projectionScale = global.minScaleExtent * projectionScale
+			/ currentXDifference;
 
 	// TODO: make global
 	projection = zeroProjection.scale(projectionScale);
 
-	currentYDifference = zeroProjection([ 1, 1 ])[0]
+	currentXDifference = zeroProjection([ 1, 1 ])[0]
 			- zeroProjection([ 0, 0 ])[0];
-	currentXDifference = zeroProjection([ 1, 1 ])[1]
+	currentYDifference = zeroProjection([ 1, 1 ])[1]
 			- zeroProjection([ 0, 0 ])[1];
 
+    console.log("current X difference: " + currentXDifference);
+    console.log("current Y difference: " + currentYDifference);
+	
 	projection = zeroProjection.translate(
+
 			[
-					global.width / 2 + (bounds[1][0] + bounds[1][1]) / 2
-							* currentXDifference,
-							
-					global.height / 2 + (bounds[0][0] + bounds[0][1]) / 2
-							* currentYDifference ]).scale(projectionScale
-									
-							
-							);
+global.width/2 + (bounds[1][0] + bounds[1][1]) / 2*currentYDifference,
+global.height/2 + (bounds[0][0] + bounds[0][1]) / 2*currentXDifference
+]
+
+	)
+	.scale(projectionScale
+
+	);
 
 }// END: generateEmptyLayer
 

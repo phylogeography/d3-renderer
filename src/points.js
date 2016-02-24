@@ -22,7 +22,7 @@ var pointDefaultColorIndex = 6;
 var pointStartColor = global.pairedSimpleColors[0];
 var pointEndColor = global.pairedSimpleColors[global.pairedSimpleColors.length - 1];
 
-var pointRadius = 2;
+var pointRadius = 7;
 var min_point_radius = 1;
 var max_point_radius = 7;
 
@@ -93,8 +93,9 @@ exports.generatePointsLayer = function(nodes, nodeAttributes) {
 				var location = d.location;
 				if (typeof location != 'undefined') {
 
-					xy = projection([ location.coordinate.xCoordinate,
-										location.coordinate.yCoordinate ]);
+					xy = projection([ location.coordinate.xCoordinate, // long
+										location.coordinate.yCoordinate // lat
+										]);
 					
 //					xy = projection([ location.coordinate.yCoordinate,
 //							location.coordinate.xCoordinate ]);
@@ -104,12 +105,13 @@ exports.generatePointsLayer = function(nodes, nodeAttributes) {
 //					xy = projection([ d.coordinate.yCoordinate,
 //							d.coordinate.xCoordinate ]);
 
-					xy = projection([ d.coordinate.xCoordinate,
-										d.coordinate.yCoordinate ]);
+					xy = projection([ d.coordinate.xCoordinate, // long
+										d.coordinate.yCoordinate // lat 
+										]);
 					
 				}
 
-				var cx = xy[1]; // long
+				var cx = xy[0]; // long
 				return (cx);
 			}) //
 	.attr(
@@ -136,7 +138,7 @@ exports.generatePointsLayer = function(nodes, nodeAttributes) {
 					
 				}
 
-				var cy = xy[0]; // lat
+				var cy = xy[1]; // lat
 				return (cy);
 			}) //
 	.attr("r", pointRadius) //
