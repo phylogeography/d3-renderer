@@ -9,10 +9,11 @@ var d3 = require('d3');
 require("script!./d3.slider.js");
 require("./d3.slider.css");
 var utils = require('./utils.js');
-// var global = require('./global');
+ var global = require('./global');
 var points = require('./points.js');
 var lines = require('./lines.js');
 var areas = require('./areas.js');
+var counts = require('./counts.js');
 
 // ---MODULE VARIABLES---//
 
@@ -159,12 +160,25 @@ function update(value) {
 
     //---POINTS---//
 	
+	if(global.hasPoints) {
 	points.updatePointsLayer(value);
+	}
 	
 	// ---LINES---//
+	
+	if(global.hasLines) {
 	lines.updateLinesLayer(value);
+	}
+	
 	
 	// --- AREAS--//
+	if(global.hasAreas) {
 	areas.updateAreasLayer(value);
+	}
+	
+	// --- COUNTS--//
+	if(global.hasCounts) {
+	counts.updateCountsLayer(value);
+	}
 	
 }// END: update

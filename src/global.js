@@ -8,6 +8,21 @@ var colorbrewer = require("colorbrewer");
 
 var exports = module.exports = {};
 
+var hasTime = true;
+exports.hasTime = hasTime;
+
+var hasPoints = true;
+exports.hasPoints = hasPoints;
+
+var hasLines = true;
+exports.hasLines = hasLines;
+
+var hasAreas = true;
+exports.hasAreas = hasAreas;
+
+var hasCounts = true;
+exports.hasCounts = hasCounts;
+
 var COUNT = "count";
 exports.COUNT = COUNT;
 

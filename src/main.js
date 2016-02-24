@@ -2,28 +2,30 @@
  * @fbielejec
  */
 
-//---MODULE IMPORTS---//
+// ---MODULE IMPORTS---//
 require("./main.css");
 var collapsible = require("./collapsible.js");
 var d3 = require('d3');
 var global = require('./global.js');
+var utils = require('./utils.js');
 var time = require("./time.js");
 var topo = require('./topo.js');
 var points = require('./points.js');
 var lines = require('./lines.js');
 var areas = require('./areas.js');
+var counts = require('./counts.js');
 
-//---HTML---//
+// ---HTML---//
 
 createHtml();
 collapsible.setUpPanels();
 
-//---MODULE VARIABLES---//
+// ---MODULE VARIABLES---//
 
 var zoom = d3.behavior.zoom().scaleExtent(
 		[ global.minScaleExtent, global.maxScaleExtent ]).center(
-				[ global.width / 2, global.height / 2 ]).size(
-						[ global.width, global.height ]).on("zoom", move);
+		[ global.width / 2, global.height / 2 ]).size(
+		[ global.width, global.height ]).on("zoom", move);
 
 var svg = d3.select(".container").append('svg') //
 .attr("width", global.width + global.margin.left + global.margin.right) //
@@ -35,8 +37,9 @@ global.g = svg.append("g");
 var MAP = "map";
 var TREE = "tree";
 var COUNTS = "counts";
+var COUNT = "count";
 
-//---FUNCTIONS---//
+// ---FUNCTIONS---//
 
 function createHtml() {
 
@@ -49,19 +52,19 @@ function createHtml() {
 	document.write("				Current date: <span id=\"currentDate\"> 0 <\/span>");
 	document.write("			<\/h2>");
 	document
-	.write("			<!-- 			<div id=\"wrapper\" style=\"display: block;\"> -->");
+			.write("			<!-- 			<div id=\"wrapper\" style=\"display: block;\"> -->");
 	document.write("			<div>");
 	document.write("				<div id=\"playPause\"><\/div>");
 	document.write("				<div id=\"timeSlider\"><\/div>");
 	document.write("			<\/div>");
 	document.write("		<\/div>");
 
-	//---SELECTORS AND CONTAINER---//
+	// ---SELECTORS AND CONTAINER---//
 
 	document
-	.write("		<div class=\"selectorsANDcontainer\" style=\"display: block;\">");
+			.write("		<div class=\"selectorsANDcontainer\" style=\"display: block;\">");
 
-	//---SELECTORS---//
+	// ---SELECTORS---//
 
 	document.write("			<div class=\"selectors\" style=\"display: block;\">");
 
@@ -81,7 +84,8 @@ function createHtml() {
 	document.write("					<h2>Toggle layer visibility<\/h2>");
 	document.write("					<div id=\"layerVisibility\" class=\"panelcontent\">");
 
-	//	document.write("						<input type=\"checkbox\" id=\"labelsLayerCheckbox\"> Labels layer<br>");
+	// document.write(" <input type=\"checkbox\" id=\"labelsLayerCheckbox\">
+	// Labels layer<br>");
 
 	document.write("					<\/div>");
 	document.write("				<\/div>");
@@ -135,10 +139,10 @@ function createHtml() {
 
 	document.write("						  <div id=\"pointRadiusLegend\"  ><\/div>  ");
 
-	//	document.write("						<div class=\"wrapper\">");
-	//	document.write("							<h4>Adjust<\/h4>");
-	//	document.write("							<div id=\"pointAreaMultiplierSlider\"><\/div>");
-	//	document.write("						<\/div>");
+	// document.write(" <div class=\"wrapper\">");
+	// document.write(" <h4>Adjust<\/h4>");
+	// document.write(" <div id=\"pointAreaMultiplierSlider\"><\/div>");
+	// document.write(" <\/div>");
 
 	document.write("					<\/div>");
 	document.write("				<\/div>");
@@ -179,23 +183,23 @@ function createHtml() {
 
 	document.write("                        <div class=\"wrapper\">");
 	document
-	.write("                            <div id=\"lineFixedOpacitySlider\"><\/div>");
+			.write("                            <div id=\"lineFixedOpacitySlider\"><\/div>");
 	document.write("                        <\/div>");
 
 	document.write("                    <\/div>");
 	document.write("                <\/div>");
 
-	//TODO : curvature
-	//	document.write("				<div class=\"panelcollapsed\">");
-	//	document.write("					<h2>Line curvature<\/h2>");
-	//	document.write("					<div class=\"panelcontent\">");
-	//	document.write("");
-	//	document.write("						<div class=\"wrapper\">");
-	//	document.write("							<div id=\"maxCurvatureSlider\"><\/div>");
-	//	document.write("						<\/div>");
-	//	document.write("");
-	//	document.write("					<\/div>");
-	//	document.write("				<\/div>");
+	// TODO : curvature
+	// document.write(" <div class=\"panelcollapsed\">");
+	// document.write(" <h2>Line curvature<\/h2>");
+	// document.write(" <div class=\"panelcontent\">");
+	// document.write("");
+	// document.write(" <div class=\"wrapper\">");
+	// document.write(" <div id=\"maxCurvatureSlider\"><\/div>");
+	// document.write(" <\/div>");
+	// document.write("");
+	// document.write(" <\/div>");
+	// document.write(" <\/div>");
 
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Line width<\/h2>");
@@ -243,13 +247,13 @@ function createHtml() {
 	document.write("					<div class=\"panelcontent\">");
 
 	document.write("						<div id='areaStartColor'>");
-	//	document.write("							<h4>Start color<\/h4>");
-	//	document.write("							<input class='areaStartColor' \/>");
+	// document.write(" <h4>Start color<\/h4>");
+	// document.write(" <input class='areaStartColor' \/>");
 	document.write("						<\/div>");
 
 	document.write("						<div id='areaEndColor'>");
-	//	document.write("							<h4>End color<\/h4>");
-	//	document.write("							<input class='areaEndColor' \/>");
+	// document.write(" <h4>End color<\/h4>");
+	// document.write(" <input class='areaEndColor' \/>");
 	document.write("						<\/div>");
 
 	document.write("						<h4>Attribute<\/h4>");
@@ -272,30 +276,31 @@ function createHtml() {
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-	//	document.write("				<div class=\"panelcollapsed\">");
-	//	document.write("					<h2>Circular polygon color<\/h2>");
-	//	document.write("					<div class=\"panelcontent\">");
-	//	document.write("						<select id=\"countFixedColor\">");
-	//	document.write("						<\/select>");
-	//	document.write("						<div id=\"countFixedColorLegend\" class=\"legend\"><\/div>");
-	//	document.write("					<\/div>");
-	//	document.write("				<\/div>");
-	//	document.write("				<!-- END: panel-->");
-	//	document.write("");
-	//	document.write("");
-	//	document.write("				<div class=\"panelcollapsed\">");
-	//	document.write("					<h2>Circular polygon opacity<\/h2>");
-	//	document.write("					<div class=\"panelcontent\">");
-	//	document.write("");
-	//	document.write("						<div class=\"wrapper\">");
-	//	document.write("							<div id=\"countFixedOpacitySlider\"><\/div>");
-	//	document.write("						<\/div>");
-	//	document.write("						<!-- END: wrapper-->");
-	//	document.write("");
-	//	document.write("					<\/div>");
-	//	document.write("				<\/div>");
-	//	document.write("				<!-- END: panel-->");
-	//	document.write("");
+	// document.write(" <div class=\"panelcollapsed\">");
+	// document.write(" <h2>Circular polygon color<\/h2>");
+	// document.write(" <div class=\"panelcontent\">");
+	// document.write(" <select id=\"countFixedColor\">");
+	// document.write(" <\/select>");
+	// document.write(" <div id=\"countFixedColorLegend\"
+	// class=\"legend\"><\/div>");
+	// document.write(" <\/div>");
+	// document.write(" <\/div>");
+	// document.write(" <!-- END: panel-->");
+	// document.write("");
+	// document.write("");
+	// document.write(" <div class=\"panelcollapsed\">");
+	// document.write(" <h2>Circular polygon opacity<\/h2>");
+	// document.write(" <div class=\"panelcontent\">");
+	// document.write("");
+	// document.write(" <div class=\"wrapper\">");
+	// document.write(" <div id=\"countFixedOpacitySlider\"><\/div>");
+	// document.write(" <\/div>");
+	// document.write(" <!-- END: wrapper-->");
+	// document.write("");
+	// document.write(" <\/div>");
+	// document.write(" <\/div>");
+	// document.write(" <!-- END: panel-->");
+	// document.write("");
 
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Map fill<\/h2>");
@@ -313,13 +318,13 @@ function createHtml() {
 	document.write("					<div class=\"panelcontent\">");
 
 	document.write("						<div id='mapStartColor'>");
-	//	document.write("							<h4>Start color<\/h4>");
-	//	document.write("							<input class='mapStartFill' \/>");
+	// document.write(" <h4>Start color<\/h4>");
+	// document.write(" <input class='mapStartFill' \/>");
 	document.write("						<\/div>");
 
 	document.write("						<div id='mapEndColor'>");
-	//	document.write("							<h4>End color<\/h4>");
-	//	document.write("							<input class='mapEndFill' \/>");
+	// document.write(" <h4>End color<\/h4>");
+	// document.write(" <input class='mapEndFill' \/>");
 	document.write("						<\/div>");
 
 	document.write("						<h4>Attribute<\/h4>");
@@ -331,50 +336,49 @@ function createHtml() {
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-	
-		document.write("				<div class=\"panelcollapsed\">");
-		document.write("					<h2>Map fill opacity<\/h2>");
-		document.write("					<div class=\"panelcontent\">");
+	document.write("				<div class=\"panelcollapsed\">");
+	document.write("					<h2>Map fill opacity<\/h2>");
+	document.write("					<div class=\"panelcontent\">");
 
-		document.write("						<div class=\"wrapper\">");
-		document.write("							<div id=\"mapFixedOpacitySlider\"><\/div>");
-		document.write("						<\/div>");
+	document.write("						<div class=\"wrapper\">");
+	document.write("							<div id=\"mapFixedOpacitySlider\"><\/div>");
+	document.write("						<\/div>");
 
-		document.write("					<\/div>");
-		document.write("				<\/div>");
+	document.write("					<\/div>");
+	document.write("				<\/div>");
 
-			document.write("				<div class=\"panelcollapsed\">");
-		document.write("					<h2>Background color<\/h2>");
-		document.write("					<div class=\"panelcontent\">");
-		
-		document.write("						<select id=\"mapbackground\">");
-		document.write("						<\/select>");
-		
-		document.write("						<div id=\"mapBackgroundLegend\" class=\"legend\"><\/div>");
-		document.write("					<\/div>");
-		document.write("				<\/div>");
+	document.write("				<div class=\"panelcollapsed\">");
+	document.write("					<h2>Background color<\/h2>");
+	document.write("					<div class=\"panelcontent\">");
 
-		
-		//	document.write("				<div class=\"panelcollapsed\">");
-	//	document.write("					<h2>Label color<\/h2>");
-	//	document.write("					<div class=\"panelcontent\">");
-	//	document.write("						<select id=\"labelcolor\">");
-	//	document.write("						<\/select>");
-	//	document.write("						<div id=\"labelColorLegend\" class=\"legend\"><\/div>");
-	//	document.write("					<\/div>");
-	//	document.write("				<\/div>");
-	//	document.write("				<!-- END: panel-->");
+	document.write("						<select id=\"mapbackground\">");
+	document.write("						<\/select>");
+
+	document
+			.write("						<div id=\"mapBackgroundLegend\" class=\"legend\"><\/div>");
+	document.write("					<\/div>");
+	document.write("				<\/div>");
+
+	// document.write(" <div class=\"panelcollapsed\">");
+	// document.write(" <h2>Label color<\/h2>");
+	// document.write(" <div class=\"panelcontent\">");
+	// document.write(" <select id=\"labelcolor\">");
+	// document.write(" <\/select>");
+	// document.write(" <div id=\"labelColorLegend\" class=\"legend\"><\/div>");
+	// document.write(" <\/div>");
+	// document.write(" <\/div>");
+	// document.write(" <!-- END: panel-->");
 
 	document.write("			<\/div>");
-	//---END: SELECTORS ---//
+	// ---END: SELECTORS ---//
 
 	document.write("			<div class=\"container\"><\/div>");
 
 	document.write("		<\/div>");
-	//---END: SELECTORS AND CONTAINER---//
+	// ---END: SELECTORS AND CONTAINER---//
 
 	document.write("	<\/div>");
-	//---END: ALL---//
+	// ---END: ALL---//
 
 }// END: createDivs
 
@@ -400,15 +404,19 @@ function move() {
 
 }// END: move
 
-//TODO: serve json file statically
-//http://stackoverflow.com/questions/27639005/how-to-copy-static-files-to-build-directory-with-webpack
 
 function render() {
 
-	var json = require("./language_nomap.json");
+	// TODO: serve json file statically
+	// http://stackoverflow.com/questions/27639005/how-to-copy-static-files-to-build-directory-with-webpack
+	var json = require("./ebov.json");
 
 	var timeLine = json.timeLine;
-	time.initializeTimeSlider(timeLine);
+	if (!(typeof timeLine === 'undefined')) {
+		time.initializeTimeSlider(timeLine);
+	} else {
+		global.hasTime = false;
+	}
 
 	var layers = json.layers;
 	var axisAttributes = json.axisAttributes;
@@ -417,7 +425,7 @@ function render() {
 	var areaAttributes = json.areaAttributes;
 	var mapAttributes = json.mapAttributes;
 
-	//---MAP LAYER
+	// ---MAP LAYER
 
 	var mapRendered = false;
 	layers.forEach(function(layer) {
@@ -432,7 +440,7 @@ function render() {
 
 			mapRendered = true;
 
-		}//END: MAP check  
+		}// END: MAP check
 
 	});
 
@@ -445,9 +453,17 @@ function render() {
 		var type = layer.type;
 		if (type == COUNTS) {
 
-			// TODO: paint counts
-
-		}//END: COUNTS check 
+			var countAttribute = utils.getObject(nodeAttributes, "id", COUNT);
+			var counts_ = layer.points;
+			
+			if(counts_.length > 0) {
+			    counts.generateCountsLayer(counts_, countAttribute);
+			    global.hasCounts = true;
+			} else {
+				global.hasCounts = false;
+			}
+			
+		}// END: COUNTS check
 
 	});
 
@@ -463,19 +479,28 @@ function render() {
 			if (!(typeof areas_ === 'undefined')) {
 				areas.generateAreasLayer(areas_, areaAttributes);
 				areas.setupPanels(areaAttributes);
+				global.hasAreas = true;
+			} else {
+				global.hasAreas = false;
 			}
 
 			if (!(typeof branches === 'undefined')) {
 				lines.generateLinesLayer(branches, nodes, lineAttributes);
 				lines.setupPanels(lineAttributes);
+				global.hasLines = true;
+			} else {
+				global.hasLines = false;
 			}
 
 			if (!(typeof nodes === 'undefined')) {
 				points.generatePointsLayer(nodes, nodeAttributes);
 				points.setupPanels(nodeAttributes);
+				global.hasPoints = true;
+			} else {
+				global.hasPoints = false;
 			}
 
-		}//END: TREE check 
+		}// END: TREE check
 
 	});
 
@@ -483,9 +508,9 @@ function render() {
 
 }// END: render
 
-//---RENDERING---//
+// ---RENDERING---//
 
 render();
-//collapsible.collapseAll();
+// collapsible.collapseAll();
 
 console.log("Done!");
