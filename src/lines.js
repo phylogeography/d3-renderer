@@ -77,7 +77,6 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 				}
 				// line['endCoordinate'] = endCoordinate;
 
-				// line bend
 				// TODO: bezier curves
 				var curvature;
 				var startTime = line.startTime;

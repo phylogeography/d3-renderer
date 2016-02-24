@@ -10,6 +10,11 @@ var global = require('./global.js');
 // ---MODULE VARIABLES---//
 
 var locationsLayer;
+var locationsColors =  [ "#000000", "#ffffff" ]
+var locationsColorIndex = 0;
+
+
+
 
 // ---MODULE EXPORTS---//
 
@@ -43,7 +48,7 @@ exports.generateLocationsLayer = function(locations_) {
 				return (cy);
 			}) //
 			.attr("r", ".1px") //
-			.attr("fill", "black") //
+			.attr("fill", locationsColors[locationsColorIndex]) //
 			.attr("stroke", "black");
 
 }// END: generateLocationsLayer
@@ -87,4 +92,101 @@ exports.generateLabels = function(locations_) {
 
 }// END: generateLocationsLayer
 
-// ---MODULE FUNCTIONS---//
+exports.setupPanels = function() {
+	
+	setupLocationsLayerCheckbox();
+	setupLocationsFixedColorPanel();
+	
+}//END: setupPanels
+
+function setupLocationsLayerCheckbox() {
+
+	$('#layerVisibility')
+	.append(
+			"<input type=\"checkbox\" id=\"locationsLayerCheckbox\"> Locations layer<br>");
+	
+	var locationsLayerCheckbox = document.getElementById("locationsLayerCheckbox");
+	// default state is checked
+	locationsLayerCheckbox.checked = true;
+
+	d3.select(locationsLayerCheckbox).on("change", function() {
+
+		var visibility = this.checked ? "visible" : "hidden";
+		locationsLayer.selectAll("text").style("visibility", visibility);
+		locationsLayer.selectAll("circle").style("visibility", visibility);
+		
+	});
+	
+	
+}//END: setupLocationsLayerCheckbox
+
+function setupLocationsFixedColorPanel() {
+
+	var labelColorSelect = document.getElementById("labelcolor");
+
+	var domain = [ "black", "white" ];
+	var scale = utils.alternatingColorScale().domain(domain).range(
+			locationsColors);
+
+	for (var i = 0; i < domain.length; i++) {
+
+		var option = domain[i];
+		var element = document.createElement("option");
+		element.textContent = option;
+		element.value = option;
+
+		labelColorSelect.appendChild(element);
+
+	}// END: i loop
+	
+	// select the default
+	labelColorSelect.selectedIndex = locationsColorIndex;
+	
+	
+	// label color listener
+	d3
+			.select(labelColorSelect)
+			.on(
+					'change',
+					function() {
+
+						var colorSelect = labelColorSelect.options[labelColorSelect.selectedIndex].text;
+						var color = scale(colorSelect);
+
+						d3.selectAll(".label") //
+						.transition() //
+						.ease("linear") //
+						.attr("fill", color);
+
+						// setup legend
+						updateLocationsFixedColorLegend(scale);
+						
+					});
+	
+	
+}//END: setupLocationsFixedColorPanel
+	
+function updateLocationsFixedColorLegend(scale) {
+
+	var width = 150;
+	var height = 50;
+
+	var margin = {
+		left : 20,
+		top : 20
+	};
+
+	$('#labelColorLegend').html('');
+	var svg = d3.select("#labelColorLegend").append('svg').attr("width",
+			width).attr("height", height);
+
+	var labelColorLegend = d3.legend.color().scale(scale).shape('circle')
+			.shapeRadius(5).shapePadding(10).cells(locationsColors.length).orient('vertical')
+
+	svg.append("g").attr("class", "labelColorLegend").attr("transform",
+			"translate(" + (margin.left) + "," + (margin.top) + ")").call(
+					labelColorLegend);
+	
+	
+}//END:updateLocationsFixedColorLegend
+

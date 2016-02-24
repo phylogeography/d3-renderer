@@ -23,8 +23,11 @@ exports.hasAreas = hasAreas;
 var hasCounts = true;
 exports.hasCounts = hasCounts;
 
-var COUNT = "count";
-exports.COUNT = COUNT;
+var hasLocations = true;
+exports.hasLocations = hasLocations;
+
+//var COUNT = "count";
+//exports.COUNT = COUNT;
 
 var ORDINAL = "ordinal";
 exports.ORDINAL = ORDINAL;
