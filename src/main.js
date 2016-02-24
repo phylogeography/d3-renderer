@@ -11,6 +11,7 @@ var time = require("./time.js");
 var topo = require('./topo.js');
 var points = require('./points.js');
 var lines = require('./lines.js');
+var areas = require('./areas.js');
 
 // ---HTML---//
 
@@ -79,7 +80,6 @@ function createHtml() {
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Toggle layer visibility<\/h2>");
 	document.write("					<div id=\"layerVisibility\" class=\"panelcontent\">");
-	
 	
 //	document.write("                        <input type=\"checkbox\" id=\"pointsLayerCheckbox\"> Points layer<br>");
 //	document.write("						<input type=\"checkbox\" id=\"labelsLayerCheckbox\"> Labels layer<br>");
@@ -262,16 +262,21 @@ function createHtml() {
 
 	
 	
-//	document.write("				<div class=\"panelcollapsed\">");
-//	document.write("					<h2>Polygon color<\/h2>");
-//	document.write("					<div class=\"panelcontent\">");
-//	document.write("						<select id=\"areaFixedColor\">");
-//	document.write("						<\/select>");
-//	document.write("						<div id=\"areaFixedColorLegend\" class=\"legend\"><\/div>");
-//	document.write("					<\/div>");
-//	document.write("				<\/div>");
-//	document.write("				<!-- END: panel-->");
-//	document.write("");
+	document.write("				<div class=\"panelcollapsed\">");
+	document.write("					<h2>Polygon fixed color<\/h2>");
+	
+	document.write("					<div class=\"panelcontent\">");
+	document.write("						<select id=\"areaFixedColor\">");
+	document.write("						<\/select>");
+	
+	document.write("						<div id=\"areaFixedColorLegend\"><\/div>");
+	
+	document.write("					<\/div>");
+	document.write("				<\/div>");
+
+	
+	
+	//	document.write("");
 //	document.write("");
 //	document.write("				<div class=\"panelcollapsed\">");
 //	document.write("					<h2>Polygon color attribute<\/h2>");
@@ -449,19 +454,25 @@ function render() {
 	var timeLine = json.timeLine;
 	var nodes = json.layers[0].points;
 	var branches = json.layers[0].lines;
-
+	var areas_ = json.layers[0].areas;
+	
 	var axisAttributes = json.axisAttributes;
 	var nodeAttributes = json.pointAttributes;
 	 var lineAttributes = json.lineAttributes;
-
+	 var areaAttributes = json.areaAttributes;
+	 
+		// TODO: if has 
 	time.initializeTimeSlider(timeLine);
 	topo.generateEmptyTopoLayer(nodeAttributes, axisAttributes);
-//	lines.generateLinesLayer(branches, nodes, lineAttributes);
+	areas.generateAreasLayer(areas_, areaAttributes);
+	lines.generateLinesLayer(branches, nodes, lineAttributes);
 	points.generatePointsLayer(nodes, nodeAttributes);
 
+	
 	// TODO: if has 
 	points.setupPanels(nodeAttributes);
-	lines.setupPanels(nodeAttributes);
+	lines.setupPanels(lineAttributes);
+	areas.setupPanels(areaAttributes);
 	
 }// END: render
 

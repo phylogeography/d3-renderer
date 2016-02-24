@@ -59,6 +59,9 @@ exports.pairedSimpleColors = fixedColors;
 var ordinalColors = d3.scale.category20().range();// ordinalColors = colorbrewer.Blues[3] ;
 exports.ordinalColors = fixedColors;
 
+var projection;
+exports.projection = projection;
+
 // var lineAttributes;
 // var pointAttributes;
 //

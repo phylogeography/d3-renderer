@@ -12,7 +12,7 @@ var utils = require('./utils.js');
 // var global = require('./global');
 var points = require('./points.js');
 var lines = require('./lines.js');
-
+var areas = require('./areas.js');
 
 // ---MODULE VARIABLES---//
 
@@ -163,5 +163,8 @@ function update(value) {
 	
 	// ---LINES---//
 	lines.updateLinesLayer(value);
+	
+	// --- AREAS--//
+	areas.updateAreasLayer(value);
 	
 }// END: update

@@ -60,21 +60,6 @@ var exports = module.exports = {};
 
 exports.generatePointsLayer = function(nodes, nodeAttributes) {
 
-	// color
-//	var colorAttribute = utils.getObject(nodeAttributes, "id", "lineage");
-//
-//	var h3cols = [ "#D6D6E2", "#65658F", "#59A5BF", "#ECE5BD", "#D2C161",
-//			"#CAE2EB" ];
-//	var h1cols = [ "#CD322E", "#D6D6E2", "#2481BA", "#89A24C", "#835B9C" ];
-//	var colorscale = d3.scale.ordinal().range(h1cols).domain(
-//			colorAttribute.domain);
-//
-//	// size
-//	var sizeAttribute = utils.getObject(nodeAttributes, "id", "antigenic3");
-//
-//	var sizeScale = d3.scale.linear().domain(sizeAttribute.range).range(
-//			[ 7, 1 ]);
-
 	pointsLayer = global.g.append("g").attr("class", "pointsLayer");
 
 	var points = pointsLayer.selectAll("circle").data(nodes).enter().append(
@@ -85,35 +70,28 @@ exports.generatePointsLayer = function(nodes, nodeAttributes) {
 		return (d.startTime);
 
 	}) //
-	.attr(
-			"cx",
-			function(d) {
+	.attr("cx", function(d) {
 
-				var xy;
-				var location = d.location;
-				if (typeof location != 'undefined') {
+		var xy;
+		var location = d.location;
+		if (typeof location != 'undefined') {
 
-					xy = projection([ location.coordinate.xCoordinate, // long
-										location.coordinate.yCoordinate // lat
-										]);
-					
-//					xy = projection([ location.coordinate.yCoordinate,
-//							location.coordinate.xCoordinate ]);
+			xy = global.projection([ location.coordinate.xCoordinate, // long
+			location.coordinate.yCoordinate // lat
+			]);
 
-				} else {
+		} else {
 
-//					xy = projection([ d.coordinate.yCoordinate,
-//							d.coordinate.xCoordinate ]);
+			xy = global.projection([ d.coordinate.xCoordinate, // long
+			d.coordinate.yCoordinate // lat
+			]);
 
-					xy = projection([ d.coordinate.xCoordinate, // long
-										d.coordinate.yCoordinate // lat 
-										]);
-					
-				}
+		}
 
-				var cx = xy[0]; // long
-				return (cx);
-			}) //
+		var cx = xy[0]; // long
+
+		return (cx);
+	}) //
 	.attr(
 			"cy",
 			function(d) {
@@ -122,23 +100,18 @@ exports.generatePointsLayer = function(nodes, nodeAttributes) {
 				var location = d.location;
 				if (typeof location != 'undefined') {
 
-//					xy = projection([ location.coordinate.yCoordinate,
-//							location.coordinate.xCoordinate ]);
+					xy = global.projection([ location.coordinate.xCoordinate,
+							location.coordinate.yCoordinate ]);
 
-					xy = projection([ location.coordinate.xCoordinate,
-										location.coordinate.yCoordinate ]);
-					
 				} else {
 
-//					xy = projection([ d.coordinate.yCoordinate,
-//							d.coordinate.xCoordinate ]);
+					xy = global.projection([ d.coordinate.xCoordinate,
+							d.coordinate.yCoordinate ]);
 
-					xy = projection([ d.coordinate.xCoordinate,
-										d.coordinate.yCoordinate ]);	
-					
 				}
 
 				var cy = xy[1]; // lat
+
 				return (cy);
 			}) //
 	.attr("r", pointRadius) //
@@ -207,9 +180,9 @@ exports.generatePointsLayer = function(nodes, nodeAttributes) {
 exports.setupPanels = function(attributes) {
 
 	setupPointsLayerCheckbox();
-	setupPointFixedColorPanel(attributes);
+	setupPointFixedColorPanel();
 	setupPointColorAttributePanel(attributes);
-	setupPointFixedRadiusPanel(attributes);
+	setupPointFixedRadiusPanel();
 	setupPointRadiusAttributePanel(attributes);
 
 }// END: setupPanels
@@ -337,7 +310,7 @@ updatePointFixedColorLegend = function(scale) {
 
 }// END: updatePointFixedColorLegend
 
-setupPointFixedColorPanel = function(attributes) {
+setupPointFixedColorPanel = function() {
 
 	var pointFixedColorSelect = document.getElementById("pointFixedColor");
 	var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
@@ -510,7 +483,7 @@ setupPointColorAttributePanel = function(attributes) {
 
 } // END: setupPointColorAttributePanel
 
-setupPointFixedRadiusPanel = function(attributes) {
+setupPointFixedRadiusPanel = function() {
 
 	var step = 1;
 

@@ -89,6 +89,7 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 				// line['endCoordinate'] = endCoordinate;
 
 				// line bend
+				// TODO: bezier curves
 				var curvature;
 				var startTime = line.startTime;
 				if (typeof startTime != "undefined") {
@@ -100,20 +101,25 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 
 				}
 
-				var startLatitude = startCoordinate.yCoordinate;
-				var startLongitude = startCoordinate.xCoordinate;
+				var startY = startCoordinate.yCoordinate;
+				var startX = startCoordinate.xCoordinate;
 
-				var endLatitude = endCoordinate.yCoordinate;
-				var endLongitude = endCoordinate.xCoordinate;
+				var endY = endCoordinate.yCoordinate;
+				var endX = endCoordinate.xCoordinate;
 
-				var sourceXY = projection([ startLongitude, startLatitude ]);
-				var targetXY = projection([ endLongitude, endLatitude ]);
+				var sourceXY = global.projection([ startX, // long
+				                                   startY // lat
+				                                   ]);
+				
+				var targetXY = global.projection([ endX, // long
+				                                   endY // lat
+				                                   ]);
 
-				var sourceX = sourceXY[1]; // 
-				var sourceY = sourceXY[0]; // 
+				var sourceX = sourceXY[0]; // long 
+				var sourceY = sourceXY[1]; // lat
 
-				var targetX = targetXY[1];
-				var targetY = targetXY[0];
+				var targetX = targetXY[0]; // long 
+				var targetY = targetXY[1]; // lat
 
 				var dx = targetX - sourceX;
 				var dy = targetY - sourceY;
