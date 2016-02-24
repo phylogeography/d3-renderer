@@ -4,12 +4,12 @@
 
 // ---MODULE IMPORTS---//
 var d3 = require('d3');
- require("script!./d3-legend.js");
+require("script!./d3-legend.js");
 
 var utils = require('./utils.js');
 var global = require('./global.js');
 
- require("imports?$=jquery!./jquery.simple-color.js");
+require("imports?$=jquery!./jquery.simple-color.js");
 
 // ---MODULE VARIABLES---//
 
@@ -66,7 +66,6 @@ exports.generateAreasLayer = function(areas_, areaAttributes) {
 		area.attr('stroke', null).attr("stroke-width", null) //
 	});
 
-	
 	// dump attribute values into DOM
 	areas[0].forEach(function(d, i) {
 
@@ -81,9 +80,7 @@ exports.generateAreasLayer = function(areas_, areaAttributes) {
 			}
 		}// END: properties loop
 	});
-	
-	
-	
+
 }// END: generateAreasLayer
 
 exports.updateAreasLayer = function(value) {
@@ -125,17 +122,14 @@ exports.setupPanels = function(attributes) {
 	setupAreasLayerCheckbox();
 	setupAreaFixedColorPanel();
 	setupAreaColorAttributePanel(attributes);
-	
-	
-	
-	
-	
+
 }// END: setupPanels
 
 setupAreaColorAttributePanel = function(attributes) {
-	
+
 	// attribute
-	var areaColorAttributeSelect = document.getElementById("areaColorAttribute");
+	var areaColorAttributeSelect = document
+			.getElementById("areaColorAttribute");
 
 	for (var i = 0; i < attributes.length; i++) {
 
@@ -152,7 +146,7 @@ setupAreaColorAttributePanel = function(attributes) {
 		areaColorAttributeSelect.appendChild(element);
 
 	}// END: i loop
-	
+
 	// area color listener
 	d3
 			.select(areaColorAttributeSelect)
@@ -170,13 +164,12 @@ setupAreaColorAttributePanel = function(attributes) {
 
 						$('#areaStartColor').html('');
 						$('#areaEndColor').html('');
-						
-						
+
 						if (attribute.scale == global.ORDINAL) {
 
 							data = attribute.domain;
-							scale = d3.scale.ordinal().range(global.ordinalColors)
-									.domain(data);
+							scale = d3.scale.ordinal().range(
+									global.ordinalColors).domain(data);
 
 							updateAreaColorLegend(scale);
 
@@ -207,11 +200,11 @@ setupAreaColorAttributePanel = function(attributes) {
 														element) {
 
 													areaStartColor = "#" + hex;
-													
+
 													scale.range([
 															areaStartColor,
 															areaEndColor ]);
-													
+
 													updateAreaColorLegend(scale);
 
 													// trigger repaint
@@ -241,11 +234,11 @@ setupAreaColorAttributePanel = function(attributes) {
 														element) {
 
 													areaEndColor = "#" + hex;
-													
+
 													scale.range([
 															areaStartColor,
 															areaEndColor ]);
-													
+
 													updateAreaColorLegend(scale);
 
 													// trigger repaint
@@ -255,26 +248,23 @@ setupAreaColorAttributePanel = function(attributes) {
 											});
 
 							$('.areaEndColor').setColor(areaEndColor);
-							
+
 						} else {
-							
+
 							console
-							.log("Error occured when resolving scale type!");
-							
+									.log("Error occured when resolving scale type!");
+
 						}// END: range/domain check
 
 						// trigger repaint
 						updateAreaColors(scale, colorAttribute);
-						
-						
-					});
-	
-}//END: setupAreaColorAttributePanel
 
+					});
+
+}// END: setupAreaColorAttributePanel
 
 updateAreaColorLegend = function(scale) {
-	
-	
+
 	var width = 150;
 	var height = 110;
 
@@ -292,26 +282,25 @@ updateAreaColorLegend = function(scale) {
 
 	svg.append("g").attr("class", "areaColorLegend").attr("transform",
 			"translate(" + (margin.left) + "," + (margin.top) + ")").call(
-					areaColorLegend);
-	
-	
-}//END: updateAreaColorLegend
+			areaColorLegend);
+
+}// END: updateAreaColorLegend
 
 updateAreaColors = function(scale, colorAttribute) {
-	
+
 	console.log(scale.range());
 	console.log(scale.domain());
 	console.log("ca: " + colorAttribute);
-	
+
 	areasLayer.selectAll(".area").transition() //
 	.ease("linear") //
 	.attr("fill", function() {
 
 		var area = d3.select(this);
 		var attributeValue = area.attr(colorAttribute);
-		
-//		console.log(attributeValue);
-		
+
+		// console.log(attributeValue);
+
 		var color = scale(attributeValue);
 
 		if (attributeValue == null) {
@@ -321,8 +310,8 @@ updateAreaColors = function(scale, colorAttribute) {
 
 		return (color);
 	});
-	
-}//END: updateAreaColors
+
+}// END: updateAreaColors
 
 setupAreaFixedColorPanel = function() {
 
@@ -361,14 +350,13 @@ setupAreaFixedColorPanel = function() {
 
 						// setup legend
 						updateAreaFixedColorLegend(scale);
-						
+
 					});
-	
+
 }// END: setupAreaFixedColorPanel
 
-
 updateAreaFixedColorLegend = function(scale) {
-	
+
 	var width = 150;
 	var height = 265;
 
@@ -381,16 +369,18 @@ updateAreaFixedColorLegend = function(scale) {
 	var svg = d3.select("#areaFixedColorLegend").append('svg').attr("width",
 			width).attr("height", height);
 
-	// TODO: polygonal shape
-	var areaFixedColorLegend = d3.legend.color().scale(scale).shape('circle')
-			.shapeRadius(5).shapePadding(10).cells(5).orient('vertical')
+	// polygonal shape
+	var stringShape = "M1,2 8,2 10,9 3,11z";
+
+	var areaFixedColorLegend = d3.legend.color().scale(scale)//
+	.shape("path", stringShape).shapeRadius(5).shapePadding(10).cells(5)
+			.orient('vertical');
 
 	svg.append("g").attr("class", "areaFixedColorLegend").attr("transform",
 			"translate(" + (margin.left) + "," + (margin.top) + ")").call(
-					areaFixedColorLegend);
-	
-	
-}//END: updateAreaFixedColorLegend
+			areaFixedColorLegend);
+
+}// END: updateAreaFixedColorLegend
 
 setupAreasLayerCheckbox = function() {
 
