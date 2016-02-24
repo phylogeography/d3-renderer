@@ -444,7 +444,7 @@ function move() {
 
 function render() {
 
-	var json = require("./global_swine.H1.json");
+	var json = require("./H3N2.json");
 
 	var timeLine = json.timeLine;
 	var nodes = json.layers[0].points;
@@ -456,7 +456,7 @@ function render() {
 
 	time.initializeTimeSlider(timeLine);
 	topo.generateEmptyTopoLayer(nodeAttributes, axisAttributes);
-	lines.generateLinesLayer(branches, nodes, nodeAttributes);
+//	lines.generateLinesLayer(branches, nodes, nodeAttributes);
 	points.generatePointsLayer(nodes, nodeAttributes);
 
 	// TODO: if has 
