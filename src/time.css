@@ -13,9 +13,9 @@
 	width: 40px;
 	height: 40px;
 	/*  position: absolute; */
-	background: url('./play.png');
+	background: url('./img/play.png');
 }
 
 .playPause.playing {
-	background: url('./pause.png');
+	background: url('./img/pause.png');
 }
