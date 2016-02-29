@@ -411,7 +411,7 @@ function render() {
 
 	// TODO: serve json file statically
 	// http://stackoverflow.com/questions/27639005/how-to-copy-static-files-to-build-directory-with-webpack
-	var json = require("./H3N2.json");
+	var json = require("./ebov.json");
 
 	var timeLine = json.timeLine;
 	if (!(typeof timeLine === 'undefined')) {
@@ -594,6 +594,6 @@ function point(coordinates) {
 
 setupPanels();
 render();
-// collapsible.collapseAll();
+collapsible.collapseAll();
 
 console.log("Done!");

@@ -30,6 +30,11 @@ var pointRadius = 2;
 var min_point_radius = 1;
 var max_point_radius = 7;
 
+var tooltipAttributes = {
+	color : null,
+	radius : null
+}
+
 d3.kodama
 		.themeRegistry(
 				'nodesTheme',
@@ -133,36 +138,9 @@ exports.generatePointsLayer = function(nodes, nodeAttributes) {
 		var point = d3.select(this);
 		point.attr('stroke', "black");
 
-	}) //
-	.call(d3.kodama.tooltip().format(function(d, i) {
+	}) ;
 
-		// TODO: display attibute values used for visualisation
-
-		return {
-			title : d.attributes.nodeName,
-			items : [
-			// {
-			// title : 'Antigenic1',
-			// value : (d.attributes.antigenic1).toFixed(2)
-			// }, //
-			// {
-			// title : 'Antigenic2',
-			// value : (d.attributes.antigenic2).toFixed(2)
-			// }, {
-			// title : 'Antigenic3',
-			// value : (d.attributes.antigenic3).toFixed(2)
-			// },//
-			//
-			// {
-			// title : 'Lineage',
-			// value : d.attributes.lineage
-			// }
-
-			]
-		};
-
-	}).theme('nodesTheme') //
-	);
+   updateTooltips();
 
 	// dump attribute values into DOM
 	points[0].forEach(function(d, i) {
@@ -290,6 +268,46 @@ updatePointColors = function(scale, colorAttribute) {
 	});
 
 }// END: updatePointColors
+
+updateTooltips = function() {
+
+	pointsLayer
+			.selectAll(".point")
+			.call(
+					d3.kodama
+							.tooltip()
+							.format(
+									function(d, i) {
+
+										var tooltipItems = [];
+
+										for ( var tooltipAttribute in tooltipAttributes) { //
+
+											// console.log(tooltipAttributes[tooltipAttribute]);
+
+											if ( tooltipAttributes[tooltipAttribute]) {
+												var element = {};
+												element.title = utils
+														.capitalizeFirstLetter(tooltipAttributes[tooltipAttribute]);
+												element.value = d.attributes[tooltipAttributes[tooltipAttribute]];
+
+	                      //  console.log(tooltipItems);
+												// console.log(element);
+
+												tooltipItems.push(element);
+											}//END: null check
+
+										}//END: attributes loop
+
+										return {
+											title : d.attributes.nodeName,
+											items : tooltipItems
+										};
+
+									}).theme('nodesTheme') //
+			);
+
+}// END: updateTooltips
 
 updatePointFixedColorLegend = function(scale) {
 
@@ -486,6 +504,9 @@ setupPointColorAttributePanel = function(attributes) {
 						// trigger repaint
 						updatePointColors(scale, colorAttribute);
 
+						tooltipAttributes['color'] = colorAttribute;
+						updateTooltips();
+
 					});
 
 } // END: setupPointColorAttributePanel
@@ -513,20 +534,20 @@ setupPointFixedRadiusPanel = function() {
 
 	});
 
-// $('#pointFixedRadiusSlider') .rangeslider({
-// //
-// polyfill: true,
-// // rangeClass: 'rangeslider',
-// //     disabledClass: 'rangeslider--disabled',
-// //     horizontalClass: 'rangeslider--horizontal',
-// //     verticalClass: 'rangeslider--vertical',
-// //     fillClass: 'rangeslider__fill',
-// //     handleClass: 'rangeslider__handle',
-//     onSlideEnd: function(position, value) {
-// console.log(value);
-// 		}
-//
-// });
+	// $('#pointFixedRadiusSlider') .rangeslider({
+	// //
+	// polyfill: true,
+	// // rangeClass: 'rangeslider',
+	// // disabledClass: 'rangeslider--disabled',
+	// // horizontalClass: 'rangeslider--horizontal',
+	// // verticalClass: 'rangeslider--vertical',
+	// // fillClass: 'rangeslider__fill',
+	// // handleClass: 'rangeslider__handle',
+	// onSlideEnd: function(position, value) {
+	// console.log(value);
+	// }
+	//
+	// });
 
 }// END: setupPointFixedAreaPanel
 
@@ -611,7 +632,12 @@ setupPointRadiusAttributePanel = function(attributes) {
 
 											return (radius);
 										});
+
+										tooltipAttributes['radius'] = radiusAttribute;
+										updateTooltips();
+
 					});
+
 
 }// END: setupPointAreaAttributePanel
 

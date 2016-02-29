@@ -14,6 +14,7 @@ require("imports?$=jquery!./jquery.simple-color.js");
 // ---MODULE VARIABLES---//
 
 var topoLayer;
+var equatorLayer ;
 
 var mapDefaultColorIndex = 6;
 var mapStartColor = global.pairedSimpleColors[0];
@@ -25,7 +26,6 @@ var max_map_opacity = 1;
 
 var backgroundColors =	[ "#ffffff", "#000000", "#ddd", "#8cc5ff" ];
 var backgrounDefaultColorIndex = 3; //0
-
 
 // ---MODULE EXPORTS---//
 
@@ -78,7 +78,7 @@ exports.generateTopoLayer = function(geojson) {
 	path = path.projection(global.projection);
 
 	// add graticule
-	// svg.append("path").datum(graticule).attr("class", "graticule").attr("d",
+	// svg.append("path").datum( d3.geo.graticule()).attr("class", "graticule").attr("d",
 	// path);
 	//
 	// // apply inline style
