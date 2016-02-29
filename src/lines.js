@@ -82,10 +82,10 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 				var startTime = line.startTime;
 				if (typeof startTime != "undefined") {
 
-					curvature = 0;// scale(formDate(line.startTime));
+					curvature = 1.0;// scale(formDate(line.startTime));
 
 				} else {
-					curvature = 0;// lineMaxCurvature;
+					curvature = 1.0;// lineMaxCurvature;
 
 				}
 
@@ -111,7 +111,7 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 
 				var dx = targetX - sourceX;
 				var dy = targetY - sourceY;
-				var dr = 0;
+				var dr =  Math.sqrt(dx * dx + dy * dy) * curvature;
 
 				var bearing = "M" + sourceX + "," + sourceY + "A" + dr + ","
 						+ dr + " 0 0,1 " + targetX + "," + targetY;
