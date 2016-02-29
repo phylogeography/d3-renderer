@@ -280,20 +280,12 @@ updateTooltips = function() {
 									function(d, i) {
 
 										var tooltipItems = [];
-
 										for ( var tooltipAttribute in tooltipAttributes) { //
-
-											// console.log(tooltipAttributes[tooltipAttribute]);
 
 											if ( tooltipAttributes[tooltipAttribute]) {
 												var element = {};
-												element.title = utils
-														.capitalizeFirstLetter(tooltipAttributes[tooltipAttribute]);
-												element.value = d.attributes[tooltipAttributes[tooltipAttribute]];
-
-	                      //  console.log(tooltipItems);
-												// console.log(element);
-
+												element.title =  utils.capitalizeFirstLetter( tooltipAttribute) ;
+												element.value = tooltipAttributes[tooltipAttribute] + "=" + d.attributes[tooltipAttributes[tooltipAttribute]];
 												tooltipItems.push(element);
 											}//END: null check
 
@@ -371,6 +363,9 @@ setupPointFixedColorPanel = function() {
 						updatePointFixedColorLegend(scale);
 
 					});
+
+	tooltipAttributes['color'] = null;
+  updateTooltips();
 
 }// END: setupFixedColorPanel
 
@@ -549,6 +544,9 @@ setupPointFixedRadiusPanel = function() {
 	//
 	// });
 
+	tooltipAttributes['radius'] = null;
+	updateTooltips();
+
 }// END: setupPointFixedAreaPanel
 
 setupPointRadiusAttributePanel = function(attributes) {
@@ -637,7 +635,6 @@ setupPointRadiusAttributePanel = function(attributes) {
 										updateTooltips();
 
 					});
-
 
 }// END: setupPointAreaAttributePanel
 
