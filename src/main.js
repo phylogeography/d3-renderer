@@ -108,7 +108,7 @@ function createHtml() {
 
 	document.write("						<div id=\"pointStartColor\">");
 	document.write("						<\/div>");
-	//	
+	//
 	document.write("						<div id=\"pointEndColor\">");
 	document.write("						<\/div>");
 
@@ -125,9 +125,14 @@ function createHtml() {
 	document.write("					<h2>Points fixed radius<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 
-	document.write("						<div class=\"wrapper\">");
-	document.write("							<div id=\"pointFixedRadiusSlider\"><\/div>");
-	document.write("						<\/div>");
+	// document.write("						<div class=\"wrapper\">");
+	// document.write("							<div id=\"pointFixedRadiusSlider\"><\/div>");
+	// document.write("						<\/div>");
+
+	// document.write("						<div class=\"wrapper\">");
+document.write("<input id=\"pointFixedRadiusSlider\" type=\"range\" >");
+// document.write("						<\/div>");
+
 
 	document.write("					<\/div>");
 	document.write("				<\/div>");
@@ -277,7 +282,7 @@ function createHtml() {
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-	
+
 	 document.write(" <div class=\"panelcollapsed\">");
 	 document.write(" <h2>Labels color<\/h2>");
 	 document.write(" <div class=\"panelcontent\">");
@@ -286,8 +291,8 @@ function createHtml() {
 	 document.write(" <div id=\"labelColorLegend\"><\/div>");
 	 document.write(" <\/div>");
 	 document.write(" <\/div>");
-	
-	
+
+
 	document.write(" <div class=\"panelcollapsed\">");
 	document.write(" <h2>Counts fixed color<\/h2>");
 	document.write(" <div class=\"panelcontent\">");
@@ -307,8 +312,8 @@ function createHtml() {
 	 document.write(" <\/div>");
 	 document.write(" <\/div>");
 
-	 
-	 
+
+
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Map color<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
@@ -406,7 +411,7 @@ function render() {
 
 	// TODO: serve json file statically
 	// http://stackoverflow.com/questions/27639005/how-to-copy-static-files-to-build-directory-with-webpack
-	var json = require("./ebov.json");
+	var json = require("./H3N2.json");
 
 	var timeLine = json.timeLine;
 	if (!(typeof timeLine === 'undefined')) {
@@ -422,7 +427,7 @@ function render() {
 	var areaAttributes = json.areaAttributes;
 	var mapAttributes = json.mapAttributes;
 	var locations_ = json.locations;
-	
+
 	// ---MAP LAYER
 
 	var mapRendered = false;
@@ -504,24 +509,24 @@ function render() {
 	});
 
 	if (!(typeof locations_ === 'undefined')) {
-	
+
 		locations.generateLocationsLayer(locations_);
 		locations.generateLabels(locations_);
 		locations.setupPanels( );
 		global.hasLocations = true;
-		
+
 	} else {
 		global.hasLocations = false;
 	}
-	
+
 }// END: render
 
 
 function setupPanels() {
-	
+
 	setupSaveSVGButton();
 	setupZoomButtons();
-	
+
 }//END: setupPanels
 
 function setupSaveSVGButton() {
@@ -537,13 +542,13 @@ function setupSaveSVGButton() {
 		window.open().document.write(svg_xml);
 
 	});
-	
+
 }//END:setupSaveSVGButton
 
 function setupZoomButtons() {
-	
+
 	d3.selectAll("button[data-zoom]").on("click", clicked);
-	
+
 }//END:setupZoomButtons
 
 function clicked() {

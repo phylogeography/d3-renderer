@@ -10,6 +10,11 @@ require("script!./d3-legend.js");
 var utils = require('./utils.js');
 var global = require('./global.js');
 
+// var slider = require('rangeslider.js');
+// require("script!rangeslider.js");
+
+require("imports?$=jquery!rangeslider.js");
+
 // import("./jquery.simple-color.js");
 require("imports?$=jquery!./jquery.simple-color.js");
 
@@ -507,6 +512,21 @@ setupPointFixedRadiusPanel = function() {
 		.attr("r", pointRadius);
 
 	});
+
+// $('#pointFixedRadiusSlider') .rangeslider({
+// //
+// polyfill: true,
+// // rangeClass: 'rangeslider',
+// //     disabledClass: 'rangeslider--disabled',
+// //     horizontalClass: 'rangeslider--horizontal',
+// //     verticalClass: 'rangeslider--vertical',
+// //     fillClass: 'rangeslider__fill',
+// //     handleClass: 'rangeslider__handle',
+//     onSlideEnd: function(position, value) {
+// console.log(value);
+// 		}
+//
+// });
 
 }// END: setupPointFixedAreaPanel
 

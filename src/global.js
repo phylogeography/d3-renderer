@@ -42,17 +42,22 @@ var MAX_INDEX = 1;
 exports.MAX_INDEX = MAX_INDEX;
 
 var margin = {
-	top : 30,
-	right : 50,
+	top : 50,
+	right : 0,
 	bottom : 50,
 	left : 50,
 };
 exports.margin = margin;
 
-var width = 1100 - margin.left - margin.right;
+// TODO
+// console.log("window:");
+// console.log(window.innerWidth);
+// console.log(window.innerHeight);
+
+var width = window.innerWidth - margin.left - margin.right;
 exports.width = width;
 
-var height = 1100 - margin.top - margin.bottom;
+var height = window.innerHeight - margin.top - margin.bottom;
 exports.height = height;
 
 var g;

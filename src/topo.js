@@ -18,9 +18,14 @@ var topoLayer;
 var mapDefaultColorIndex = 6;
 var mapStartColor = global.pairedSimpleColors[0];
 var mapEndColor = global.pairedSimpleColors[global.pairedSimpleColors.length - 1];
+
 var mapFixedOpacity = 0.5;
 var min_map_opacity = 0.1;
 var max_map_opacity = 1;
+
+var backgroundColors =	[ "#ffffff", "#000000", "#ddd", "#8cc5ff" ];
+var backgrounDefaultColorIndex = 3; //0
+
 
 // ---MODULE EXPORTS---//
 
@@ -107,7 +112,7 @@ exports.generateTopoLayer = function(geojson) {
 			.attr("fill", global.fixedColors[mapDefaultColorIndex]) //
 			.attr("stroke", "black") //
 			.attr("fill-opacity", mapFixedOpacity) //
-			.style("stroke-width", .5);
+			.style("stroke-width", 0.5);
 
 	// dump attribute values into DOM
 	topo[0].forEach(function(d, i) {
@@ -124,6 +129,8 @@ exports.generateTopoLayer = function(geojson) {
 		}// END: properties loop
 	});
 
+updateMapBackground(backgroundColors[backgrounDefaultColorIndex]);
+
 }// END: generateTopoLayer
 
 exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
@@ -135,6 +142,7 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 	var ylim = utils.getObject(pointAttributes, "id",
 			axisAttributes.yCoordinate).range;
 	// ylim = [ ylim[0] - 2, ylim[1] + 2 ];
+	// xlim = [ xlim[0] - 2, xlim[1] + 2 ];
 
 	console.log("width: " + global.width);
 	console.log("height: " + global.height);
@@ -254,6 +262,8 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 
 	);
 
+updateMapBackground(backgroundColors[backgrounDefaultColorIndex]);
+
 }// END: generateEmptyLayer
 
 exports.setupPanels = function(attributes) {
@@ -272,13 +282,13 @@ setupTopoBackgroundPanel = function() {
 
 	var mapBackgroundSelect = document.getElementById("mapbackground");
 
-	var domain = [ "white", "black", "grey", "light blue" ];
-	var scale = utils.alternatingColorScale().domain(domain).range(
-			[ "#ffffff", "#000000", "#ddd", "#8cc5ff" ]);
+	// var domain = [ "white", "black", "grey", "light blue" ];
+	var scale = utils.alternatingColorScale().domain(backgroundColors).range(
+			backgroundColors);
 
-	for (var i = 0; i < domain.length; i++) {
+	for (var i = 0; i < backgroundColors.length; i++) {
 
-		var option = domain[i];
+		var option = backgroundColors[i];
 		var element = document.createElement("option");
 		element.textContent = option;
 		element.value = option;
@@ -296,7 +306,9 @@ setupTopoBackgroundPanel = function() {
 
 						var colorSelect = mapBackgroundSelect.options[mapBackgroundSelect.selectedIndex].text;
 						var color = scale(colorSelect);
-						d3.select('.container').style("background", color);
+
+						// d3.select('.container').style("background", color);
+            updateMapBackground(color);
 
 						// setup legend
 						updateMapBackgroundLegend(scale);
@@ -304,6 +316,12 @@ setupTopoBackgroundPanel = function() {
 					});
 
 }// END:setupTopoBackgroundPanel
+
+updateMapBackground = function(color) {
+
+	d3.select('.container').style("background", color);
+
+}//END: updateMapBackground
 
 updateMapBackgroundLegend = function(scale) {
 
@@ -611,4 +629,3 @@ setupTopoLayerCheckbox = function() {
 	});
 
 }// END: setupTopoLayerCheckbox
-
