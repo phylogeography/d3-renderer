@@ -511,41 +511,21 @@ setupPointColorAttributePanel = function(attributes) {
 
 setupPointFixedRadiusPanel = function() {
 
-	var step = 1;
+$('#pointFixedRadiusSlider').html('<input type="range" class="pointFixedRadiusSlider" step="1" min="' + min_point_radius + '" max="' + max_point_radius + '" value="'+pointRadius+'"  />');
+$('#pointFixedRadiusSlider').append('<span>' + pointRadius + '</span>');
 
-	var pointFixedRadiusSlider = d3.slider().axis(
-			d3.svg.axis().orient("top").ticks(
-					(max_point_radius - min_point_radius) / step)).min(
-			min_point_radius).max(max_point_radius).step(1).value(pointRadius);
+$('.pointFixedRadiusSlider').on("change mousemove", function() {
 
-	d3.select('#pointFixedRadiusSlider').call(pointFixedRadiusSlider);
+pointRadius = $(this).val();
 
-	// point fixed area listener
-	pointFixedRadiusSlider.on("slide", function(evt, value) {
+ $(this).next().html(pointRadius);
 
-		pointRadius = value;
-
-		pointsLayer.selectAll(".point")//
-		.transition()//
-		.ease("linear") //
-		.attr("r", pointRadius);
+	pointsLayer.selectAll(".point")//
+	.transition()//
+	.ease("linear") //
+	.attr("r", pointRadius);
 
 	});
-
-	// $('#pointFixedRadiusSlider') .rangeslider({
-	// //
-	// polyfill: true,
-	// // rangeClass: 'rangeslider',
-	// // disabledClass: 'rangeslider--disabled',
-	// // horizontalClass: 'rangeslider--horizontal',
-	// // verticalClass: 'rangeslider--vertical',
-	// // fillClass: 'rangeslider__fill',
-	// // handleClass: 'rangeslider__handle',
-	// onSlideEnd: function(position, value) {
-	// console.log(value);
-	// }
-	//
-	// });
 
 	tooltipAttributes['radius'] = null;
 	updateTooltips();

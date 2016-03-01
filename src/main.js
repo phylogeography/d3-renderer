@@ -20,6 +20,7 @@ var locations = require('./locations.js');
 
 createHtml();
 collapsible.setUpPanels();
+// collapsible.expandAll();
 
 // ---MODULE VARIABLES---//
 
@@ -121,18 +122,14 @@ function createHtml() {
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-	document.write("				<div class=\"panelcollapsed\">");
+	document.write("				<div class=\"panel\">");
 	document.write("					<h2>Points fixed radius<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 
-	// document.write("						<div class=\"wrapper\">");
-	// document.write("							<div id=\"pointFixedRadiusSlider\"><\/div>");
-	// document.write("						<\/div>");
+	document.write("						<div id=\"pointFixedRadiusSlider\">");
+  document.write("						<\/div>");
 
-	// document.write("						<div class=\"wrapper\">");
-document.write("<input id=\"pointFixedRadiusSlider\" type=\"range\" >");
-// document.write("						<\/div>");
-
+	  // document.write("                 <input id=\"pointFixedRadiusSlider\" type=\"range\">");
 
 	document.write("					<\/div>");
 	document.write("				<\/div>");
@@ -196,7 +193,7 @@ document.write("<input id=\"pointFixedRadiusSlider\" type=\"range\" >");
 	document.write("                <\/div>");
 
 	// TODO : curvature
-	document.write(" <div class=\"panel\">");
+	document.write(" <div class=\"panelcollapsed\">");
 	document.write(" <h2>Lines curvature<\/h2>");
 	document.write(" <div class=\"panelcontent\">");
 	document.write("");
@@ -407,20 +404,15 @@ function move() {
 
 }// END: move
 
-  var json;
+  // var json;
 
 function render() {
 
-	// TODO: serve json file statically
-	// http://stackoverflow.com/questions/27639005/how-to-copy-static-files-to-build-directory-with-webpack
-	// var json = require("./ebov.json");
-
-
 	d3.json("ebov.json", function(error, json) {
+
 	  if (error) {
 			return console.warn(error);
 		}
-
 
 	var timeLine = json.timeLine;
 	if (!(typeof timeLine === 'undefined')) {

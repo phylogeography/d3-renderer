@@ -25,7 +25,7 @@ var min_map_opacity = 0.1;
 var max_map_opacity = 1;
 
 var backgroundColors =	[ "#ffffff", "#000000", "#ddd", "#8cc5ff" ];
-var backgrounDefaultColorIndex = 3; //0
+var backgrounDefaultColorIndex = 0; //0
 
 // ---MODULE EXPORTS---//
 
