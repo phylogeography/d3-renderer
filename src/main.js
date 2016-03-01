@@ -20,7 +20,6 @@ var locations = require('./locations.js');
 
 createHtml();
 collapsible.setUpPanels();
-// collapsible.expandAll();
 
 // ---MODULE VARIABLES---//
 
@@ -576,6 +575,6 @@ function point(coordinates) {
 
 setupPanels();
 render();
-// collapsible.collapseAll();
+collapsible.collapseAll();
 
 console.log("Done!");

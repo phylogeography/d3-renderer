@@ -21,6 +21,6 @@ LICENSE
   Point your browser to http://localhost:8080
  * DIST
   npm install
-  webpack
-  Point your browser to dist.index.html
+  npm run build
+  Point your browser to dist/index.html
 

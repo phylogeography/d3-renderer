@@ -5,11 +5,11 @@
 // ---MODULE IMPORTS---//
 require("./time.css");
 var d3 = require('d3');
-// TODO: require form node_modules
+// TODO: require from node_modules
 require("script!./d3.slider.js");
 require("./d3.slider.css");
 var utils = require('./utils.js');
- var global = require('./global');
+var global = require('./global');
 var points = require('./points.js');
 var lines = require('./lines.js');
 var areas = require('./areas.js');
@@ -34,47 +34,15 @@ var processID;
 
 var exports = module.exports = {};
 
-//exports.createHtml = function( document,  all) {
-//	
-//	var controls = document.createElement('DIV');
-//	controls.setAttribute('id', "controls");
-//
-//	var h2 = document.createElement("H2");
-//	var text = document.createTextNode("Current date:");
-//	h2.appendChild(text);
-//
-//	var span = document.createElement('SPAN');
-//	span.setAttribute('id', "currentDate");
-//	h2.appendChild(span);
-//
-//	controls.appendChild(h2);
-//	
-//	var wrapper = document.createElement('DIV');
-//
-//	var playPause = document.createElement('DIV');
-//	playPause.setAttribute('id', "playPause");
-//	wrapper.appendChild(playPause);
-//
-//	var timeSliderDiv = document.createElement('DIV');
-//	timeSliderDiv.setAttribute('id', "timeSlider");
-//	wrapper.appendChild(timeSliderDiv);
-//
-//	controls.appendChild(wrapper);
-//
-////	document.body
-//	all.appendChild(controls);
-//	
-//}//END:createHtml
-
 exports.initializeTimeSlider = function( timeLine) {
 
 	// initialize module variables
 	initializeVariables(timeLine);
-	
+
 	// put slider at the end of timeLine, everything painted
 	timeSlider.value( sliderEndValue);
 	updateDateDisplay(sliderEndValue);
-	
+
 	// time slider listener
 	timeSlider.on('slide', function(evt, value) {
 
@@ -148,37 +116,37 @@ initializeVariables = function(timeLine) {
 }// END: generateTime
 
 function updateDateDisplay(value) {
-		
+
 	var currentDate = timeScale.invert(timeScale(value));
 	currentDateDisplay.text(dateFormat(currentDate));
 
 }// END: updateDateDisplay
 
 function update(value) {
-		
+
 	updateDateDisplay(value);
 
     //---POINTS---//
-	
+
 	if(global.hasPoints) {
 	points.updatePointsLayer(value);
 	}
-	
+
 	// ---LINES---//
-	
+
 	if(global.hasLines) {
 	lines.updateLinesLayer(value);
 	}
-	
-	
+
+
 	// --- AREAS--//
 	if(global.hasAreas) {
 	areas.updateAreasLayer(value);
 	}
-	
+
 	// --- COUNTS--//
 	if(global.hasCounts) {
 	counts.updateCountsLayer(value);
 	}
-	
+
 }// END: update
