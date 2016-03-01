@@ -3,10 +3,11 @@
   "version": "0.0.1",
   "description": "Renderer for spreaD3 JSON files, packed with webpack",
   "license": "BEERWARE",
-  "main": "",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server"
+    "start": "node devServer.js",
+    "build": "webpack"
   },
   "dependencies": {
     "colorbrewer": "^1.0.0",
@@ -15,18 +16,21 @@
     "d3-slider": "git+ssh://git@github.com:MasterMaps/d3-slider.git",
     "d3-svg-legend": "^1.8.0",
     "exports-loader": "^0.6.3",
+    "express": "^4.13.4",
+    "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "html-webpack-plugin": "^1.5.0",
     "imports-loader": "~0.6.5",
     "jquery": "^2.2.0",
     "jquery-simple-color": "git+ssh://git@github.com/recurser/jquery-simple-color.git",
-    "json-loader": "^0.5.4",
     "kodama": "^1.4.3",
     "rangeslider.js": "^2.1.1",
     "script-loader": "git+ssh://git@github.com:webpack/script-loader.git",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
     "webpack": "^1.9.10",
-    "webpack-dev-server": "^1.9.0"
+    "webpack-dev-middleware": "^1.5.1",
+    "webpack-dev-server": "^1.9.0",
+    "webpack-hot-middleware": "^2.8.1"
   }
 }

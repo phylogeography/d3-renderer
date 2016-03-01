@@ -196,16 +196,16 @@ document.write("<input id=\"pointFixedRadiusSlider\" type=\"range\" >");
 	document.write("                <\/div>");
 
 	// TODO : curvature
-	// document.write(" <div class=\"panelcollapsed\">");
-	// document.write(" <h2>Lines curvature<\/h2>");
-	// document.write(" <div class=\"panelcontent\">");
-	// document.write("");
-	// document.write(" <div class=\"wrapper\">");
-	// document.write(" <div id=\"maxCurvatureSlider\"><\/div>");
-	// document.write(" <\/div>");
-	// document.write("");
-	// document.write(" <\/div>");
-	// document.write(" <\/div>");
+	document.write(" <div class=\"panel\">");
+	document.write(" <h2>Lines curvature<\/h2>");
+	document.write(" <div class=\"panelcontent\">");
+	document.write("");
+	document.write(" <div class=\"wrapper\">");
+	document.write(" <div id=\"maxCurvatureSlider\"><\/div>");
+	document.write(" <\/div>");
+	document.write("");
+	document.write(" <\/div>");
+	document.write(" <\/div>");
 
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Lines width<\/h2>");
@@ -407,11 +407,20 @@ function move() {
 
 }// END: move
 
+  var json;
+
 function render() {
 
 	// TODO: serve json file statically
 	// http://stackoverflow.com/questions/27639005/how-to-copy-static-files-to-build-directory-with-webpack
-	var json = require("./ebov.json");
+	// var json = require("./ebov.json");
+
+
+	d3.json("ebov.json", function(error, json) {
+	  if (error) {
+			return console.warn(error);
+		}
+
 
 	var timeLine = json.timeLine;
 	if (!(typeof timeLine === 'undefined')) {
@@ -519,6 +528,8 @@ function render() {
 		global.hasLocations = false;
 	}
 
+	});
+
 }// END: render
 
 
@@ -594,6 +605,6 @@ function point(coordinates) {
 
 setupPanels();
 render();
-collapsible.collapseAll();
+// collapsible.collapseAll();
 
 console.log("Done!");

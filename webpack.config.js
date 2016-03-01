@@ -16,7 +16,7 @@ module.exports = {
 
     output: {
         filename: 'main.js',
-        path: path.resolve('./dist') // BUILD_PATH  
+        path: path.resolve('./dist') // BUILD_PATH
     },
 
 //	devServer : {
@@ -26,15 +26,15 @@ module.exports = {
 //		progress : true,
 //		port : 8080
 //	},
-    
+
     module: {
         loaders: [
-            
+
                   { test: /\.css$/, loader: 'style-loader!css-loader' },
-                  { test: /\.png$/, loader: 'url-loader?limit=10000' },
-                  { test: /\.json$/, loader: 'json-loader' }
+                  { test: /\.png$/, loader: 'url-loader?limit=10000' }
+                 // { test: /\.json$/, loader: 'json-loader' }
 //                  { test: require.resolve("./jquery.simple-color.js"), loader: 'imports?jQuery=jquery,$=jquery' }
-                  
+
         ]
     },
 
@@ -52,7 +52,7 @@ module.exports = {
             $: "jquery",
             jQuery: "jquery"
         })
-        
+
     ]
 
 };

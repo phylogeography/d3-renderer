@@ -10,8 +10,9 @@ var utils = require('./utils.js');
 var global = require('./global.js');
 require("imports?$=jquery!./jquery.simple-color.js");
 
-
 // ---MODULE VARIABLES---//
+var linesLayer;
+var linesLayerCheckbox;
 
 var lineDefaultColorIndex = 12;
 var lineStartColor = global.pairedSimpleColors[0];
@@ -20,12 +21,13 @@ var lineWidth = 2;
 var min_line_width = 0.5;
 var max_line_width = 5;
 
-var lineOpacity = 1.0;
+var lineOpacity = 0.5;
 var min_line_opacity = 0.3;
 var max_line_opacity = 1;
-var linesLayerCheckbox;
 
-var linesLayer;
+var lineCurvature = 0.1;
+var min_line_curvature = 0.0;
+var max_line_curvature = 1.0;
 
 // ---MODULE EXPORTS---//
 
@@ -75,19 +77,16 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 					endCoordinate = endPoint.coordinate;
 
 				}
-				// line['endCoordinate'] = endCoordinate;
 
-				// TODO: bezier curves
 				var curvature;
 				var startTime = line.startTime;
-				if (typeof startTime != "undefined") {
+				// if (typeof startTime != "undefined") {
 
-					curvature = 1.0;// scale(formDate(line.startTime));
+					curvature = lineCurvature;// scale(formDate(line.startTime));
 
-				} else {
-					curvature = 1.0;// lineMaxCurvature;
-
-				}
+				// } else {
+				// 	curvature = min_line_curvature;
+				// }
 
 				var startY = startCoordinate.yCoordinate;
 				var startX = startCoordinate.xCoordinate;
@@ -96,12 +95,12 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 				var endX = endCoordinate.xCoordinate;
 
 				var sourceXY = global.projection([ startX, // long
-				                                   startY // lat
-				                                   ]);
+				startY // lat
+				]);
 
 				var targetXY = global.projection([ endX, // long
-				                                   endY // lat
-				                                   ]);
+				endY // lat
+				]);
 
 				var sourceX = sourceXY[0]; // long
 				var sourceY = sourceXY[1]; // lat
@@ -109,9 +108,15 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 				var targetX = targetXY[0]; // long
 				var targetY = targetXY[1]; // lat
 
+				// store for referencing in curvature listener
+				line['targetX'] = targetX;
+				line['targetY'] = targetY;
+				line['sourceX'] = sourceX;
+				line['sourceY'] = sourceY;
+
 				var dx = targetX - sourceX;
 				var dy = targetY - sourceY;
-				var dr =  Math.sqrt(dx * dx + dy * dy) * curvature;
+				var dr = Math.sqrt(dx * dx + dy * dy) * Math.log(curvature);
 
 				var bearing = "M" + sourceX + "," + sourceY + "A" + dr + ","
 						+ dr + " 0 0,1 " + targetX + "," + targetY;
@@ -166,13 +171,13 @@ exports.setupPanels = function(attributes) {
 
 }// END: setupPanels
 
-
 function setupLinesLayerCheckbox() {
 
-	$('#layerVisibility').append(
-	"<input type=\"checkbox\" id=\"linesLayerCheckbox\"> Lines layer<br>");
+	$('#layerVisibility')
+			.append(
+					"<input type=\"checkbox\" id=\"linesLayerCheckbox\"> Lines layer<br>");
 
-	 linesLayerCheckbox = document.getElementById("linesLayerCheckbox");
+	linesLayerCheckbox = document.getElementById("linesLayerCheckbox");
 	// default state is checked
 	linesLayerCheckbox.checked = true;
 
@@ -189,10 +194,7 @@ function setupLinesLayerCheckbox() {
 
 	});
 
-
-
-}//END: setupLinesVisibility
-
+}// END: setupLinesVisibility
 
 function setupLineFixedColorPanel() {
 
@@ -457,69 +459,65 @@ function setupLineFixedOpacityPanel() {
 
 function setupLineFixedCurvaturePanel() {
 
-	// var maxCurvatureSlider = d3.slider().axis(d3.svg.axis().orient("top")).min(
-	// 			0.0).max(1.0).step(0.1).value(lineMaxCurvature);
-	//
-	// 	d3.select('#maxCurvatureSlider').call(maxCurvatureSlider);
-	//
-	// 	// line curvature listener
-	// 	maxCurvatureSlider.on("slide", function(evt, value) {
-	//
-	// 		lineMaxCurvature = value;
-	// 		var scale = d3.scale.linear().domain(
-	// 				[ sliderStartValue, sliderEndValue ]).range(
-	// 				[ 0, lineMaxCurvature ]);
-	//
-	// 		linesLayer.selectAll(".line").transition().ease("linear") //
-	// 		.attr(
-	// 				"d",
-	// 				function(d) {
-	//
-	// 					var line = d;
-	//
-	// 					// TODO: NaN when negative dates?
-	// 					// console.log(Date.parse(line.startTime));
-	//
-	// 					var curvature = scale(Date.parse(line.startTime));
-	//
-	// 					var westofsource = line.westofsource;
-	// 					var targetX = line.targetX;
-	// 					var targetY = line.targetY;
-	// 					var sourceX = line.sourceX;
-	// 					var sourceY = line.sourceY;
-	//
-	// 					var dx = targetX - sourceX;
-	// 					var dy = targetY - sourceY;
-	// 					var dr = Math.sqrt(dx * dx + dy * dy) * curvature;
-	//
-	// 					var bearing;
-	// 					if (westofsource) {
-	// 						bearing = "M" + targetX + "," + targetY + "A" + dr
-	// 								+ "," + dr + " 0 0,1 " + sourceX + ","
-	// 								+ sourceY;
-	//
-	// 					} else {
-	//
-	// 						bearing = "M" + sourceX + "," + sourceY + "A" + dr
-	// 								+ "," + dr + " 0 0,1 " + targetX + ","
-	// 								+ targetY;
-	//
-	// 					}
-	//
-	// 					return (bearing);
-	//
-	// 				}) //
-	// 		.attr("stroke-dasharray", function(d) {
-	//
-	// 			var totalLength = d3.select(this).node().getTotalLength();
-	// 			return (totalLength + " " + totalLength);
-	//
-	// 		});
-	//
-	// 		// update(currentSliderValue, timeScale,
-	// 		// currentDateDisplay, dateFormat);
-	//
-	// 	});
+var step = 0.1;
+
+	var maxCurvatureSlider = d3.slider().axis(d3.svg.axis().orient("top").ticks(
+			(max_line_curvature - min_line_curvature) / step)).min(
+			min_line_curvature).max(max_line_curvature).step(step).value(
+			lineCurvature);
+
+	d3.select('#maxCurvatureSlider').call(maxCurvatureSlider);
+
+	// line curvature listener
+	maxCurvatureSlider.on("slide", function(evt, value) {
+
+if(value == 0) {
+lineCurvature =0;
+} else if(value == 1) {
+lineCurvature =0.1;
+} else {
+		lineCurvature = (1-value);
+}
+
+		console.log(lineCurvature);
+
+		linesLayer.selectAll(".line").transition().ease("linear") //
+		.attr(
+				"d",
+				function(d) {
+
+					var line = d;
+
+					// console.log(Date.parse(line.startTime));
+
+					// var curvature = lineCurvature;
+
+					var targetX = line.targetX;
+					var targetY = line.targetY;
+					var sourceX = line.sourceX;
+					var sourceY = line.sourceY;
+
+					var dx = targetX - sourceX;
+					var dy = targetY - sourceY;
+					var dr = Math.sqrt(dx * dx + dy * dy) * lineCurvature;
+
+					var bearing = "M" + sourceX + "," + sourceY + "A" + dr + ","
+							+ dr + " 0 0,1 " + targetX + "," + targetY;
+
+					return (bearing);
+
+				}) //
+		.attr("stroke-dasharray", function(d) {
+
+			var totalLength = d3.select(this).node().getTotalLength();
+			return (totalLength + " " + totalLength);
+
+		});
+
+		// update(currentSliderValue, timeScale,
+		// currentDateDisplay, dateFormat);
+
+	});
 
 }// END: setupLineFixedCurvaturePanel
 
@@ -546,7 +544,8 @@ function setupLineCutoffPanel(attributes) {
 
 	// TODO: discrete attributes
 
-	var lineCutoffAttributeSelect = document.getElementById("lineCutoffAttribute");
+	var lineCutoffAttributeSelect = document
+			.getElementById("lineCutoffAttribute");
 
 	for (var i = 0; i < attributes.length; i++) {
 
@@ -560,7 +559,6 @@ function setupLineCutoffPanel(attributes) {
 
 	}// END: i loop
 
-
 	// listener
 	d3
 			.select(lineCutoffAttributeSelect)
@@ -570,7 +568,8 @@ function setupLineCutoffPanel(attributes) {
 
 						// clean-up
 						$('#lineCutoffSlider').html('');
-//						linesLayer.selectAll("path").style("visibility", null);
+						// linesLayer.selectAll("path").style("visibility",
+						// null);
 
 						var cutoffAttribute = lineCutoffAttributeSelect.options[lineCutoffAttributeSelect.selectedIndex].text;
 						var attribute = utils.getObject(attributes, "id",
@@ -580,8 +579,10 @@ function setupLineCutoffPanel(attributes) {
 						// TODO: discrete too
 						if (attribute.scale == global.LINEAR) {
 
-							var minValue = Math.floor(attribute.range[global.MIN_INDEX]);
-							var maxValue = Math.ceil(attribute.range[global.MAX_INDEX]);
+							var minValue = Math
+									.floor(attribute.range[global.MIN_INDEX]);
+							var maxValue = Math
+									.ceil(attribute.range[global.MAX_INDEX]);
 							var step = (maxValue - minValue) / 10;
 
 							var lineCutoffSlider = d3.slider().axis(
@@ -591,36 +592,40 @@ function setupLineCutoffPanel(attributes) {
 							d3.select('#lineCutoffSlider').call(
 									lineCutoffSlider);
 
-							lineCutoffSlider.on("slide", function(evt, value) {
+							lineCutoffSlider
+									.on(
+											"slide",
+											function(evt, value) {
 
-								linesLayer.selectAll("path").style("visibility", function(d) {
+												linesLayer
+														.selectAll("path")
+														.style(
+																"visibility",
+																function(d) {
 
-									var sliderValue = value;
+																	var sliderValue = value;
 
-									var line = d3.select(this);
-									var attributeValue = line.attr(attribute.id);
+																	var line = d3
+																			.select(this);
+																	var attributeValue = line
+																			.attr(attribute.id);
 
-									var visibility = "visible";
+																	var visibility = "visible";
 
-									if(attributeValue < sliderValue || !linesLayerCheckbox.checked) {
-										visibility = "hidden";
-									}
+																	if (attributeValue < sliderValue
+																			|| !linesLayerCheckbox.checked) {
+																		visibility = "hidden";
+																	}
 
-									return (visibility);
-								});
+																	return (visibility);
+																});
 
-							});
+											});
 
-						}//END: scale check
+						}// END: scale check
 
 					}// END: function
 			);
-
-
-
-
-
-
 
 }// END: setupLineCutoffPanel
 
@@ -670,14 +675,7 @@ exports.updateLinesLayer = function(value) {
 							offset = utils.map(timePassed, 0, duration, 0,
 									totalLength);
 
-							// if (d.westofsource) {
-							//
-							// offset = offset + totalLength;
-							//
-							// } else {
-
 							offset = totalLength - offset;
-							// }
 
 						}// END: instantaneous line check
 

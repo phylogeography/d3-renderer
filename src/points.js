@@ -138,9 +138,9 @@ exports.generatePointsLayer = function(nodes, nodeAttributes) {
 		var point = d3.select(this);
 		point.attr('stroke', "black");
 
-	}) ;
+	});
 
-   updateTooltips();
+	updateTooltips();
 
 	// dump attribute values into DOM
 	points[0].forEach(function(d, i) {
@@ -282,14 +282,17 @@ updateTooltips = function() {
 										var tooltipItems = [];
 										for ( var tooltipAttribute in tooltipAttributes) { //
 
-											if ( tooltipAttributes[tooltipAttribute]) {
+											if (tooltipAttributes[tooltipAttribute]) {
 												var element = {};
-												element.title =  utils.capitalizeFirstLetter( tooltipAttribute) ;
-												element.value = tooltipAttributes[tooltipAttribute] + "=" + d.attributes[tooltipAttributes[tooltipAttribute]];
+												element.title = utils
+														.capitalizeFirstLetter(tooltipAttribute);
+												element.value = tooltipAttributes[tooltipAttribute]
+														+ "="
+														+ d.attributes[tooltipAttributes[tooltipAttribute]];
 												tooltipItems.push(element);
-											}//END: null check
+											}// END: null check
 
-										}//END: attributes loop
+										}// END: attributes loop
 
 										return {
 											title : d.attributes.nodeName,
@@ -365,7 +368,7 @@ setupPointFixedColorPanel = function() {
 					});
 
 	tooltipAttributes['color'] = null;
-  updateTooltips();
+	updateTooltips();
 
 }// END: setupFixedColorPanel
 
@@ -631,8 +634,8 @@ setupPointRadiusAttributePanel = function(attributes) {
 											return (radius);
 										});
 
-										tooltipAttributes['radius'] = radiusAttribute;
-										updateTooltips();
+						tooltipAttributes['radius'] = radiusAttribute;
+						updateTooltips();
 
 					});
 

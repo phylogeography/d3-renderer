@@ -79,7 +79,7 @@ var pairedSimpleColors = colorbrewer.Paired[12];
 exports.pairedSimpleColors = fixedColors;
 
 // colors for categorical attributes
-var ordinalColors = d3.scale.category20().range();// ordinalColors = colorbrewer.Blues[3] ;
+var ordinalColors = colorbrewer.Set3[11] ;//d3.scale.category20().range();// ordinalColors = colorbrewer.Blues[3] ;
 exports.ordinalColors = fixedColors;
 
 var projection;

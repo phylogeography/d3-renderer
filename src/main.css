@@ -65,12 +65,8 @@
 }
 
 .wrapper {
-	/*width: auto;*/
-	/*margin: 25px 0;
+	width: 190px;
+	margin: 25px 0;
 	margin-left: 10px;
-	margin-right: 15px;*/
+	margin-right: 15px;
 }
-
-/* .wrapper>div { */
-/* 	margin: 25px 0; */
-/* } */
