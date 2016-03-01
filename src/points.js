@@ -514,7 +514,7 @@ setupPointFixedRadiusPanel = function() {
 $('#pointFixedRadiusSlider').html('<input type="range" class="pointFixedRadiusSlider" step="1" min="' + min_point_radius + '" max="' + max_point_radius + '" value="'+pointRadius+'"  />');
 $('#pointFixedRadiusSlider').append('<span>' + pointRadius + '</span>');
 
-$('.pointFixedRadiusSlider').on("change mousemove", function() {
+$('.pointFixedRadiusSlider').on("input", function() {
 
 pointRadius = $(this).val();
 

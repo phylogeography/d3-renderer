@@ -436,7 +436,7 @@ function setupLineFixedOpacityPanel() {
 	$('#lineFixedOpacitySlider').html('<input type="range" class="lineFixedOpacitySlider" step="0.1" min="' + min_line_opacity + '" max="' + max_line_opacity + '" value="'+lineOpacity+'"  />');
 	$('#lineFixedOpacitySlider').append('<span>' + lineOpacity + '</span>');
 
-	$('.lineFixedOpacitySlider').on("change mousemove", function() {
+	$('.lineFixedOpacitySlider').on("input", function() {
 
 	lineOpacity = $(this).val();
 
@@ -454,65 +454,57 @@ function setupLineFixedOpacityPanel() {
 
 function setupLineFixedCurvaturePanel() {
 
-var step = 0.1;
+	$('#lineFixedCurvatureSlider').html('<input type="range" class="lineFixedCurvatureSlider" step="0.1" min="' + min_line_curvature + '" max="' + max_line_curvature + '" value="'+lineCurvature+'"  />');
+	// $('#lineFixedCurvatureSlider').append('<span>' + lineCurvature + '</span>');
 
-	var maxCurvatureSlider = d3.slider().axis(d3.svg.axis().orient("top").ticks(
-			(max_line_curvature - min_line_curvature) / step)).min(
-			min_line_curvature).max(max_line_curvature).step(step).value(
-			lineCurvature);
+	$('.lineFixedCurvatureSlider').on("input", function() {
 
-	d3.select('#maxCurvatureSlider').call(maxCurvatureSlider);
+	value = $(this).val();
 
-	// line curvature listener
-	maxCurvatureSlider.on("slide", function(evt, value) {
+	//  $(this).next().html(value);
 
-if(value == 0) {
-lineCurvature =0;
-} else if(value == 1) {
-lineCurvature =0.1;
-} else {
-		lineCurvature = (1-value);
-}
+	 if(value == 0) {
+	 lineCurvature =0;
+	 } else if(value == 1) {
+	 lineCurvature =0.1;
+	 } else {
+	 		lineCurvature = (1-value);
+	 }
 
-		console.log(lineCurvature);
+	 		linesLayer.selectAll(".line").transition().ease("linear") //
+	 		.attr(
+	 				"d",
+	 				function(d) {
 
-		linesLayer.selectAll(".line").transition().ease("linear") //
-		.attr(
-				"d",
-				function(d) {
+	 					var line = d;
 
-					var line = d;
+	 					// console.log(Date.parse(line.startTime));
 
-					// console.log(Date.parse(line.startTime));
+	 					// var curvature = lineCurvature;
 
-					// var curvature = lineCurvature;
+	 					var targetX = line.targetX;
+	 					var targetY = line.targetY;
+	 					var sourceX = line.sourceX;
+	 					var sourceY = line.sourceY;
 
-					var targetX = line.targetX;
-					var targetY = line.targetY;
-					var sourceX = line.sourceX;
-					var sourceY = line.sourceY;
+	 					var dx = targetX - sourceX;
+	 					var dy = targetY - sourceY;
+	 					var dr = Math.sqrt(dx * dx + dy * dy) * lineCurvature;
 
-					var dx = targetX - sourceX;
-					var dy = targetY - sourceY;
-					var dr = Math.sqrt(dx * dx + dy * dy) * lineCurvature;
+	 					var bearing = "M" + sourceX + "," + sourceY + "A" + dr + ","
+	 							+ dr + " 0 0,1 " + targetX + "," + targetY;
 
-					var bearing = "M" + sourceX + "," + sourceY + "A" + dr + ","
-							+ dr + " 0 0,1 " + targetX + "," + targetY;
+	 					return (bearing);
 
-					return (bearing);
+	 				}) //
+	 		.attr("stroke-dasharray", function(d) {
 
-				}) //
-		.attr("stroke-dasharray", function(d) {
+	 			var totalLength = d3.select(this).node().getTotalLength();
+	 			return (totalLength + " " + totalLength);
 
-			var totalLength = d3.select(this).node().getTotalLength();
-			return (totalLength + " " + totalLength);
+	 		});
 
 		});
-
-		// update(currentSliderValue, timeScale,
-		// currentDateDisplay, dateFormat);
-
-	});
 
 }// END: setupLineFixedCurvaturePanel
 

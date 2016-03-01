@@ -192,7 +192,7 @@ function createHtml() {
 	document.write(" <div class=\"panelcollapsed\">");
 	document.write(" <h2>Lines curvature<\/h2>");
 	document.write(" <div class=\"panelcontent\">");
-	document.write(" <div id=\"maxCurvatureSlider\"><\/div>");
+	document.write(" <div id=\"lineFixedCurvatureSlider\"><\/div>");
 	document.write(" <\/div>");
 	document.write(" <\/div>");
 
