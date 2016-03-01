@@ -129,8 +129,6 @@ function createHtml() {
 	document.write("						<div id=\"pointFixedRadiusSlider\">");
   document.write("						<\/div>");
 
-	  // document.write("                 <input id=\"pointFixedRadiusSlider\" type=\"range\">");
-
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
@@ -184,10 +182,8 @@ function createHtml() {
 	document.write("                    <h2>Lines opacity<\/h2>");
 	document.write("                    <div class=\"panelcontent\">");
 
-	document.write("                        <div class=\"wrapper\">");
 	document
 			.write("                            <div id=\"lineFixedOpacitySlider\"><\/div>");
-	document.write("                        <\/div>");
 
 	document.write("                    <\/div>");
 	document.write("                <\/div>");
@@ -196,11 +192,7 @@ function createHtml() {
 	document.write(" <div class=\"panelcollapsed\">");
 	document.write(" <h2>Lines curvature<\/h2>");
 	document.write(" <div class=\"panelcontent\">");
-	document.write("");
-	document.write(" <div class=\"wrapper\">");
 	document.write(" <div id=\"maxCurvatureSlider\"><\/div>");
-	document.write(" <\/div>");
-	document.write("");
 	document.write(" <\/div>");
 	document.write(" <\/div>");
 
@@ -208,9 +200,7 @@ function createHtml() {
 	document.write("					<h2>Lines width<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 
-	document.write("						<div class=\"wrapper\">");
 	document.write("							<div id=\"lineWidthSlider\"><\/div>");
-	document.write("						<\/div>");
 
 	document.write("					<\/div>");
 	document.write("				<\/div>");
@@ -226,9 +216,7 @@ function createHtml() {
 	document.write("						<\/br>");
 	document.write("						<\/br>");
 
-	document.write("						<div class=\"wrapper\">");
 	document.write("							<div id=\"lineCutoffSlider\"><\/div>");
-	document.write("						<\/div>");
 
 	document.write("					<\/div>");
 	document.write("				<\/div>");
@@ -272,9 +260,7 @@ function createHtml() {
 	document.write("					<h2>Polygons opacity<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 
-	document.write("						<div class=\"wrapper\">");
 	document.write("							<div id=\"areaFixedOpacitySlider\"><\/div>");
-	document.write("						<\/div>");
 
 	document.write("					<\/div>");
 	document.write("				<\/div>");
@@ -303,12 +289,9 @@ function createHtml() {
 	 document.write(" <div class=\"panelcollapsed\">");
 	 document.write(" <h2>Counts opacity<\/h2>");
 	 document.write(" <div class=\"panelcontent\">");
-	 document.write(" <div class=\"wrapper\">");
 	 document.write(" <div id=\"countFixedOpacitySlider\"><\/div>");
 	 document.write(" <\/div>");
 	 document.write(" <\/div>");
-	 document.write(" <\/div>");
-
 
 
 	document.write("				<div class=\"panelcollapsed\">");
@@ -348,11 +331,7 @@ function createHtml() {
 	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Map fixed opacity<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
-
-	document.write("						<div class=\"wrapper\">");
 	document.write("							<div id=\"mapFixedOpacitySlider\"><\/div>");
-	document.write("						<\/div>");
-
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
@@ -363,11 +342,9 @@ function createHtml() {
 	document.write("						<select id=\"mapbackground\">");
 	document.write("						<\/select>");
 
-	document
-			.write("						<div id=\"mapBackgroundLegend\" class=\"legend\"><\/div>");
+	document.write("					 <div id=\"mapBackgroundLegend\" class=\"legend\"><\/div>");
 	document.write("					<\/div>");
 	document.write("				<\/div>");
-
 
 	document.write("			<\/div>");
 	// ---END: SELECTORS ---//

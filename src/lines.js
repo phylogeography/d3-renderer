@@ -433,27 +433,22 @@ function updateLineColors(scale, colorAttribute) {
 
 function setupLineFixedOpacityPanel() {
 
-	var step = 0.1
-	var lineFixedOpacitySlider = d3.slider().axis(
-			d3.svg.axis().orient("top").ticks(
-					(max_line_opacity - min_line_opacity) / step)).min(
-			min_line_opacity).max(max_line_opacity).step(step).value(
-			lineOpacity);
+	$('#lineFixedOpacitySlider').html('<input type="range" class="lineFixedOpacitySlider" step="0.1" min="' + min_line_opacity + '" max="' + max_line_opacity + '" value="'+lineOpacity+'"  />');
+	$('#lineFixedOpacitySlider').append('<span>' + lineOpacity + '</span>');
 
-	d3.select('#lineFixedOpacitySlider').call(lineFixedOpacitySlider);
+	$('.lineFixedOpacitySlider').on("change mousemove", function() {
 
-	// line fixed opacity listener
-	lineFixedOpacitySlider.on("slide", function(evt, value) {
+	lineOpacity = $(this).val();
 
-		lineOpacity = value;
+	 $(this).next().html(lineOpacity);
 
-		// fill-opacity / stroke-opacity / opacity
-		linesLayer.selectAll(".line") //
-		.transition() //
-		.ease("linear") //
-		.attr("stroke-opacity", lineOpacity);
+	 	// fill-opacity / stroke-opacity / opacity
+ 		linesLayer.selectAll(".line") //
+ 		.transition() //
+ 		.ease("linear") //
+ 		.attr("stroke-opacity", lineOpacity);
 
-	});
+		});
 
 }// END: setupLineFixedOpacityPanel
 
