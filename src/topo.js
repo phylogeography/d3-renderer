@@ -349,28 +349,22 @@ updateMapBackgroundLegend = function(scale) {
 
 setupTopoFixedOpacityPanel = function() {
 
-	var step = 0.1;
+	$('#mapFixedOpacitySlider').html('<input type="range" class="mapFixedOpacitySlider" step="0.1" min="' + min_map_opacity + '" max="' + max_map_opacity + '" value="'+mapFixedOpacity+'"  />');
+	$('#mapFixedOpacitySlider').append('<span>' + mapFixedOpacity + '</span>');
 
-	var mapFixedOpacitySlider = d3.slider().axis(
-			d3.svg.axis().orient("top").ticks(
-					(max_map_opacity - min_map_opacity) / step)).min(
-			min_map_opacity).max(max_map_opacity).step(0.1).value(
-			mapFixedOpacity);
+	$('.mapFixedOpacitySlider').on("input", function() {
 
-	d3.select('#mapFixedOpacitySlider').call(mapFixedOpacitySlider);
+	mapFixedOpacity = $(this).val();
 
-	// map fixed opacity listener
-	mapFixedOpacitySlider.on("slide", function(evt, value) {
+	 $(this).next().html(mapFixedOpacity);
 
-		mapFixedOpacity = value;
+	 	// fill-opacity / stroke-opacity / opacity
+ 		topoLayer.selectAll(".topo") //
+ 		.transition() //
+ 		.ease("linear") //
+ 		.attr("fill-opacity", mapFixedOpacity);
 
-		// fill-opacity / stroke-opacity / opacity
-		topoLayer.selectAll(".topo") //
-		.transition() //
-		.ease("linear") //
-		.attr("fill-opacity", mapFixedOpacity);
-
-	});
+		});
 
 }// END:setupTopoFixedOpacityPanel
 

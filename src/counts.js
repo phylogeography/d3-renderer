@@ -197,26 +197,22 @@ exports.setupPanels = function(attributes) {
 
 function setupCountsFixedOpacityPanel() {
 
-	var step = 0.1;
-	
-	var countFixedOpacitySlider = d3.slider().axis(d3.svg.axis().orient("top").ticks(
-			(max_count_opacity - min_count_opacity) / step))
-			.min(0.0).max(1.0).step(0.1).value(countOpacity);
+	$('#countFixedOpacitySlider').html('<input type="range" class="countFixedOpacitySlider" step="0.1" min="' + min_count_opacity + '" max="' + max_count_opacity + '" value="'+countOpacity+'"  />');
+	$('#countFixedOpacitySlider').append('<span>' + countOpacity + '</span>');
 
-	d3.select('#countFixedOpacitySlider').call(countFixedOpacitySlider);
+	$('.countFixedOpacitySlider').on("input", function() {
 
-	// map fixed opacity listener
-	countFixedOpacitySlider.on("slide", function(evt, value) {
+	countOpacity = $(this).val();
 
-		countOpacity = value;
+	 $(this).next().html(countOpacity);
 
-		// fill-opacity / stroke-opacity / opacity
-		countsLayer.selectAll(".count") //
-		.transition() //
-		.ease("linear") //
-		.attr("fill-opacity", countOpacity);
+	 	// fill-opacity / stroke-opacity / opacity
+ 		countsLayer.selectAll(".count") //
+ 		.transition() //
+ 		.ease("linear") //
+ 		.attr("fill-opacity", countOpacity);
 
-	});
+		});
 
 }// END: setupCountsFixedOpacityPanel
 
@@ -309,4 +305,3 @@ function setupCountsLayerCheckbox() {
 	});
 
 }// END:setupCountsLayerCheckbox
-

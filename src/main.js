@@ -200,7 +200,7 @@ function createHtml() {
 	document.write("					<h2>Lines width<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 
-	document.write("							<div id=\"lineWidthSlider\"><\/div>");
+	document.write("							<div id=\"lineFixedWidthSlider\"><\/div>");
 
 	document.write("					<\/div>");
 	document.write("				<\/div>");
@@ -216,7 +216,9 @@ function createHtml() {
 	document.write("						<\/br>");
 	document.write("						<\/br>");
 
+	document.write("					<div class=\"wrapper\">");
 	document.write("							<div id=\"lineCutoffSlider\"><\/div>");
+	document.write("					<\/div>");
 
 	document.write("					<\/div>");
 	document.write("				<\/div>");

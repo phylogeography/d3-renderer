@@ -510,20 +510,20 @@ function setupLineFixedCurvaturePanel() {
 
 function setupLineFixedWidthPanel() {
 
-	var lineWidthSlider = d3.slider().axis(d3.svg.axis().orient("top"))
-			.min(0.5).max(5.0).step(0.5).value(lineWidth);
 
-	d3.select('#lineWidthSlider').call(lineWidthSlider);
+	$('#lineFixedWidthSlider').html('<input type="range" class="lineFixedWidthSlider" step="0.5" min="' + min_line_width + '" max="' + max_line_width + '" value="'+lineWidth+'"  />');
+	$('#lineFixedWidthSlider').append('<span>' + lineWidth + '</span>');
 
-	// line width listener
-	lineWidthSlider.on("slide", function(evt, value) {
+	$('.lineFixedWidthSlider').on("input", function() {
 
-		lineWidth = value;
+	lineWidth = $(this).val();
 
-		linesLayer.selectAll(".line").transition().ease("linear") //
-		.attr("stroke-width", lineWidth + "px");
+	 $(this).next().html(lineWidth);
 
-	});
+	 	linesLayer.selectAll(".line").transition().ease("linear") //
+ 		.attr("stroke-width", lineWidth + "px");
+
+		});
 
 }// END: setupLineFixedWidthPanel
 

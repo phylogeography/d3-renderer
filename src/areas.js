@@ -125,35 +125,29 @@ exports.setupPanels = function(attributes) {
 	setupAreaFixedColorPanel();
 	setupAreaColorAttributePanel(attributes);
 	setupAreaFixedOpacityPanel();
-	
+
 }// END: setupPanels
 
 setupAreaFixedOpacityPanel = function() {
-	
-	var step = 0.1;
-	
-	var areaFixedOpacitySlider = d3.slider().axis(d3.svg.axis().orient("top").ticks(
-			(max_polygon_opacity - min_polygon_opacity) / step))
-	.min(min_polygon_opacity).max(max_polygon_opacity).step(step).value(polygonOpacity);
 
-d3.select('#areaFixedOpacitySlider').call(areaFixedOpacitySlider);
 
-// map fixed opacity listener
-areaFixedOpacitySlider.on("slide", function(evt, value) {
+	$('#areaFixedOpacitySlider').html('<input type="range" class="areaFixedOpacitySlider" step="0.1" min="' + min_polygon_opacity + '" max="' + max_polygon_opacity + '" value="'+polygonOpacity+'"  />');
+	$('#areaFixedOpacitySlider').append('<span>' + polygonOpacity + '</span>');
 
-	polygonOpacity = value;
+	$('.areaFixedOpacitySlider').on("input", function() {
 
-// fill-opacity / stroke-opacity / opacity
-areasLayer.selectAll(".area") //
-.transition() //
-.ease("linear") //
-.attr("fill-opacity", polygonOpacity);
+	polygonOpacity = $(this).val();
 
-});
-	
-	
-	
-	
+	 $(this).next().html(polygonOpacity);
+
+	// fill-opacity / stroke-opacity / opacity
+	areasLayer.selectAll(".area") //
+	.transition() //
+	.ease("linear") //
+	.attr("fill-opacity", polygonOpacity);
+
+		});
+
 }//END: setupAreaFixedOpacityPanel
 
 setupAreaColorAttributePanel = function(attributes) {
