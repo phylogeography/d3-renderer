@@ -386,7 +386,7 @@ function move() {
 
 function render() {
 
-	d3.json("H3N2.json", function(error, json) {
+	d3.json("ebov.json", function(error, json) {
 
 	  if (error) {
 			return console.warn(error);

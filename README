@@ -1,17 +1,11 @@
 LICENSE
 -------
 
- * ----------------------------------------------------------------------------
- * "THE BEER-WARE LICENSE" (Revision 42):
- * <fbielejece> wrote this software. As long as you retain this notice you
- * can do whatever you want with this stuff. If we meet some day, and you think
- * this stuff is worth it, you can buy me a beer in return.
- * ----------------------------------------------------------------------------
- */
+GNU Lesser General Public License v3.0
  
  PURPOSE
  -------
- Render SpreaD3 JSON files.
+ Render SpreaD3 [http://github.com/phylogeography/SpreaD3] JSON files.
  
  USAGE
  ----- 
