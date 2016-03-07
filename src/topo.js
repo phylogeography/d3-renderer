@@ -144,7 +144,6 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 
 	/*console.log("width: " + global.width);
 	console.log("height: " + global.height);
-
 	console.log("xlim: " + xlim);
 	console.log("ylim: " + ylim);*/
 
@@ -189,8 +188,8 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 			- zeroProjection([ 0, 0 ])[1];
 	//console.log("current X difference: " + currentXDifference);
 	//console.log("current Y difference: " + currentYDifference);
-    //var oldXDifference = currentXDifference;
-    //var oldYDifference = currentYDifference;
+    var oldXDifference = currentXDifference;
+    var oldYDifference = currentYDifference;
 
 	projectionScale = global.minScaleExtent * projectionScale
 			/ currentXDifference;
@@ -217,15 +216,23 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 	).scale(projectionScale);
 
     // test projection
-    /*console.log("test projection [-1.37,-4.3]: " + global.projection([ -1.37, -4.3 ]));
-    console.log("test projection [-1.37,4.29]: " + global.projection([ -1.37, 4.29 ]));
-    console.log("test projection [52.39,-4.3]: " + global.projection([ 52.39, -4.3 ]));
-    console.log("test projection [52.39,4.29]: " + global.projection([ 52.39, 4.29 ]));
+    /*console.log("global.projection([xlim[0],ylim[0])[0]: " + global.projection([xlim[0],ylim[0]])[0]);
+    console.log("global.projection([xlim[0],ylim[0])[1]: " + global.projection([xlim[0],ylim[0]])[1]);
+    console.log("global.projection([xlim[1],ylim[1])[0]: " + global.projection([xlim[1],ylim[1]])[0]);
+    console.log("global.projection([xlim[1],ylim[1])[1]: " + global.projection([xlim[1],ylim[1]])[1]);*/
 
-    console.log("global.projection([-1.37,-4.3])[0]: " + global.projection([-1.37,-4.3])[0]);
-    console.log("global.projection([ 52.39, 4.29 ])[0]: " + global.projection([ 52.39, 4.29 ])[0]);
+    var xOffset = global.projection([xlim[1],ylim[1]])[0] - global.projection([xlim[0],ylim[0]])[0];
+    var yOffset = global.projection([xlim[0],ylim[0]])[1] - global.projection([xlim[1],ylim[1]])[1];
+    //console.log("xOffset: " + xOffset);
+    //console.log("yOffset: " + yOffset);
+    var offsetRatio = xOffset/yOffset;
+    //console.log("offsetRatio: " + offsetRatio);
+    //var xMarginPercentage = 0.10;
+    //var yMarginPercentage = 0.40;
+    var yMarginPercentage = 0.40;
+    var xMarginPercentage = yMarginPercentage/offsetRatio;
 
-    console.log("global.projection([0,0])[0]: " + global.projection([0,0])[0]);
+    /*console.log("global.projection([0,0])[0]: " + global.projection([0,0])[0]);
     console.log("global.projection([0,0])[1]: " + global.projection([0,0])[1]);
     console.log("global.projection([1,1])[0]: " + global.projection([1,1])[0]);
     console.log("global.projection([1,1])[1]: " + global.projection([1,1])[1]);*/
@@ -234,18 +241,24 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
     //var xScale = d3.scale.linear().domain(xlim).nice().range([ 0, global.width ]);
     var xScale = d3.scale.linear().domain(xlim).range([ global.projection([xlim[0],ylim[0]])[0], global.projection([ xlim[1], ylim[1] ])[0] ]);
 
+    //xScale = d3.scale.linear().domain([xlim[0]-1,xlim[1]+1]).range([ global.projection([xlim[0],ylim[0]])[0], global.projection([ xlim[1], ylim[1] ])[0] ]);
+
     // x axis
+    //var xAxis = d3.svg.axis().scale(xScale).orient("bottom").innerTickSize(
+    //    -global.height).outerTickSize(0).ticks(xlim[1]-xlim[0]);
     var xAxis = d3.svg.axis().scale(xScale).orient("bottom").innerTickSize(
-        -global.height).outerTickSize(0).ticks(xlim[1]-xlim[0]);
+        -yOffset - 2*global.margin.bottom).outerTickSize(0).ticks(xlim[1]-xlim[0]);
 
     // add the x axis
     var xAxisLayer = global.g.append("g").attr("class", "x axis");
-    xAxisLayer.attr("transform", "translate(0," + global.height + ")").call(xAxis);
+    //xAxisLayer.attr("transform", "translate(0," + global.height + ")").call(xAxis);
+    //xAxisLayer.attr("transform", "translate(0," + (global.projection([xlim[0],ylim[0]])[1] + yMarginPercentage*yOffset) + ")").call(xAxis);
+    xAxisLayer.attr("transform", "translate(0," + (global.projection([xlim[0],ylim[0]])[1] + global.margin.bottom) + ")").call(xAxis);
 
     // x axis title
     global.g.append("text").attr("class", "x label").attr("text-anchor",
         "middle").attr("x", global.width / 2).attr("y",
-        global.height + global.margin.bottom - 20).style("font-size",
+        (global.projection([xlim[0],ylim[0]])[1] + global.margin.bottom) + global.margin.bottom - 20).style("font-size",
         "18px") //
         .style({
             'stroke' : 'Black',
@@ -262,11 +275,15 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
     //var yScale = d3.scale.linear().domain(ylim).nice().range([ global.height, 0 ]);
     var yScale = d3.scale.linear().domain(ylim).range([ global.projection([xlim[0],ylim[0]])[1], global.projection([ xlim[1], ylim[1] ])[1] ]);
 
+    //var yAxis = d3.svg.axis().scale(yScale).orient("left").innerTickSize(
+    //    -global.width).outerTickSize(0).ticks(ylim[1]-ylim[0]);
     var yAxis = d3.svg.axis().scale(yScale).orient("left").innerTickSize(
-        -global.width).outerTickSize(0).ticks(ylim[1]-ylim[0]);
+        -xOffset - 2*global.margin.left).outerTickSize(0).ticks(ylim[1]-ylim[0]);
 
     var yAxisLayer = global.g.append("g").attr("class", "y axis");
-    yAxisLayer.attr("transform", "translate(" + (global.margin.left - 10) + ",0)").call(yAxis);
+    //yAxisLayer.attr("transform", "translate(" + (global.margin.left + 20) + ",0)").call(yAxis);
+    //yAxisLayer.attr("transform", "translate(" + ((global.projection([xlim[0],ylim[0]])[0] - xMarginPercentage*xOffset) + 20) + ",0)").call(yAxis);
+    yAxisLayer.attr("transform", "translate(" + ((global.projection([xlim[0],ylim[0]])[0] - global.margin.left) + 20) + ",0)").call(yAxis);
 
     /*yAxisLayer.selectAll(".tick").filter(function(d) {
         return d === yScale.domain()[0] || d === yScale.domain()[1];
@@ -277,8 +294,7 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
         .attr("text-anchor", "middle") //
         // .attr("x", 0).attr("y", width / 2)
         // .attr("transform","rotate(-90)")
-        .attr("transform",
-        "translate(" + (20) + "," + (global.height / 2) + ")rotate(-90)") //
+        .attr("transform", "translate(" + ((global.projection([xlim[0],ylim[0]])[0] - global.margin.left)) + "," + (global.height / 2) + ")rotate(-90)") //
         .style("font-size", "18px") //
         .style({
             'stroke' : 'Black',
