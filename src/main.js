@@ -121,7 +121,7 @@ function createHtml() {
 	document.write("					<\/div>");
 	document.write("				<\/div>");
 
-	document.write("				<div class=\"panel\">");
+	document.write("				<div class=\"panelcollapsed\">");
 	document.write("					<h2>Points fixed radius<\/h2>");
 	document.write("					<div class=\"panelcontent\">");
 
@@ -386,7 +386,7 @@ function move() {
 
 function render() {
 
-	d3.json("ebov.json", function(error, json) {
+	d3.json("ebov_nomap.json", function(error, json) {
 
 	  if (error) {
 			return console.warn(error);
