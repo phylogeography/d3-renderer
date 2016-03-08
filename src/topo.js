@@ -248,12 +248,12 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 
     var yAxisLayer = global.g.append("g").attr("class", "y axis");
     //yAxisLayer.attr("transform", "translate(" + (global.margin.left + 20) + ",0)").call(yAxis);
-    yAxisLayer.attr("transform", "translate(" + ((global.projection([xlim[0],ylim[0]])[0] - global.margin.left) + 20) + ",0)").call(yAxis);
+    yAxisLayer.attr("transform", "translate(" + ((global.projection([xlim[0],ylim[0]])[0] - global.margin.left)) + ",0)").call(yAxis);
 
     // y axis title
     global.g.append("text").attr("class", "y label") //
         .attr("text-anchor", "middle") //
-        .attr("transform", "translate(" + ((global.projection([xlim[0],ylim[0]])[0] - global.margin.left)) + "," + (global.height / 2) + ")rotate(-90)") //
+        .attr("transform", "translate(" + ((global.projection([xlim[0],ylim[0]])[0] - global.margin.left - 20)) + "," + (global.height / 2) + ")rotate(-90)") //
         .style("font-size", "18px") //
         .style({
             'stroke' : 'Black',
