@@ -187,6 +187,9 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 	currentYDifference = zeroProjection([ 1, 1 ])[1]
 			- zeroProjection([ 0, 0 ])[1];
 
+    //console.log("currentXDifference: " + currentXDifference);
+    //console.log("currentYDifference: " + currentYDifference);
+
 	global.projection = zeroProjection.translate(
 			[
 					global.width / 2 + (bounds[1][0] + bounds[1][1]) / 2
@@ -200,20 +203,26 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
     /*console.log("global.projection([xlim[0],ylim[0])[0]: " + global.projection([xlim[0],ylim[0]])[0]);
     console.log("global.projection([xlim[0],ylim[0])[1]: " + global.projection([xlim[0],ylim[0]])[1]);
     console.log("global.projection([xlim[1],ylim[1])[0]: " + global.projection([xlim[1],ylim[1]])[0]);
-    console.log("global.projection([xlim[1],ylim[1])[1]: " + global.projection([xlim[1],ylim[1]])[1]);
-     console.log("global.projection([0,0])[0]: " + global.projection([0,0])[0]);
-     console.log("global.projection([0,0])[1]: " + global.projection([0,0])[1]);
-     console.log("global.projection([1,1])[0]: " + global.projection([1,1])[0]);
-     console.log("global.projection([1,1])[1]: " + global.projection([1,1])[1]);*/
+    console.log("global.projection([xlim[1],ylim[1])[1]: " + global.projection([xlim[1],ylim[1]])[1]);*/
+    /*console.log("global.projection([0,0])[0]: " + global.projection([0,0])[0]);
+    console.log("global.projection([0,0])[1]: " + global.projection([0,0])[1]);
+    console.log("global.projection([1,1])[0]: " + global.projection([1,1])[0]);
+    console.log("global.projection([1,1])[1]: " + global.projection([1,1])[1]);*/
 
     var xOffset = global.projection([xlim[1],ylim[1]])[0] - global.projection([xlim[0],ylim[0]])[0];
     var yOffset = global.projection([xlim[0],ylim[0]])[1] - global.projection([xlim[1],ylim[1]])[1];
 
+    var addedXAxis = global.margin.left/currentXDifference;
+    var addedYAxis = -global.margin.bottom/currentYDifference;
+    //console.log("addedXAxis: " + addedXAxis);
+    //console.log("addedYAxis: " + addedYAxis);
+
     // x axis
     //var xScale = d3.scale.linear().domain(xlim).nice().range([ 0, global.width ]);
-    var xScale = d3.scale.linear().domain(xlim).range([ global.projection([xlim[0],ylim[0]])[0], global.projection([ xlim[1], ylim[1] ])[0] ]);
+    //var xScale = d3.scale.linear().domain(xlim).range([ global.projection([xlim[0],ylim[0]])[0], global.projection([ xlim[1], ylim[1] ])[0] ]);
 
-    //xScale = d3.scale.linear().domain([xlim[0]-1,xlim[1]+1]).range([ global.projection([xlim[0],ylim[0]])[0], global.projection([ xlim[1], ylim[1] ])[0] ]);
+    //try the xScale below to make the axes intersect
+    var xScale = d3.scale.linear().domain([xlim[0]-addedXAxis,xlim[1]+addedXAxis]).range([ global.projection([xlim[0]-addedXAxis,ylim[0]])[0]-0, global.projection([ xlim[1]+addedXAxis, ylim[1] ])[0]+0]);
 
     // x axis
     //var xAxis = d3.svg.axis().scale(xScale).orient("bottom").innerTickSize(
@@ -239,7 +248,10 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 
     // y axis
     //var yScale = d3.scale.linear().domain(ylim).nice().range([ global.height, 0 ]);
-    var yScale = d3.scale.linear().domain(ylim).range([ global.projection([xlim[0],ylim[0]])[1], global.projection([ xlim[1], ylim[1] ])[1] ]);
+    //var yScale = d3.scale.linear().domain(ylim).range([ global.projection([xlim[0],ylim[0]])[1], global.projection([ xlim[1], ylim[1] ])[1] ]);
+
+    //try the yScale below to make the axes intersect
+    var yScale = d3.scale.linear().domain([ylim[0]-addedYAxis,ylim[1]+addedYAxis]).range([ global.projection([xlim[0],ylim[0]-addedYAxis])[1]-0, global.projection([ xlim[1], ylim[1]+addedYAxis ])[1]+0]);
 
     //var yAxis = d3.svg.axis().scale(yScale).orient("left").innerTickSize(
     //    -global.width).outerTickSize(0).ticks(ylim[1]-ylim[0]);
@@ -248,7 +260,7 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 
     var yAxisLayer = global.g.append("g").attr("class", "y axis");
     //yAxisLayer.attr("transform", "translate(" + (global.margin.left + 20) + ",0)").call(yAxis);
-    yAxisLayer.attr("transform", "translate(" + ((global.projection([xlim[0],ylim[0]])[0] - global.margin.left)) + ",0)").call(yAxis);
+    yAxisLayer.attr("transform", "translate(" + (global.projection([xlim[0],ylim[0]])[0] - global.margin.left) + ",0)").call(yAxis);
 
     // y axis title
     global.g.append("text").attr("class", "y label") //
