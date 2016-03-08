@@ -1,10 +1,17 @@
 .container {
 	border: 2px solid #000;
 	border-radius: 5px;
-	height: auto;
-	width: auto;
-	overflow: hidden;
+/* 	height: auto; */
+/* 	width: auto; */
+/* 	overflow: hidden; */
+/* 	display: inline-block; */
+    position: relative;
+/*     width: 100%; */
+/*     padding-bottom: 100%; aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
 }
+
 
 .selectors {
 		/*width: 20%;*/

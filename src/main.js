@@ -28,10 +28,17 @@ var zoom = d3.behavior.zoom().scaleExtent(
 		[ global.width / 2, global.height / 2 ]).size(
 		[ global.width, global.height ]).on("zoom", move);
 
+
+// TODO: make responsive
 var svg = d3.select(".container").append('svg') //
-.attr("width", global.width + global.margin.left + global.margin.right) //
-.attr("height", global.height + global.margin.top + global.margin.bottom) //
+//.attr("width", global.width + global.margin.left + global.margin.right) //
+//.attr("height", global.height + global.margin.top + global.margin.bottom) //
+  .attr("preserveAspectRatio", "xMinYMin meet")
+   .attr("viewBox", "0 0 " + global.width + " " + global.height)
 .call(zoom);
+
+
+
 
 global.g = svg.append("g");
 
@@ -386,7 +393,7 @@ function move() {
 
 function render() {
 
-	d3.json("ebov_nomap.json", function(error, json) {
+	d3.json("ebov.json", function(error, json) {
 
 	  if (error) {
 			return console.warn(error);
