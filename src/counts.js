@@ -197,6 +197,17 @@ exports.setupPanels = function(attributes) {
 
 function setupCountsFixedOpacityPanel() {
 
+	 var str = (" <div class=\"panelcollapsed\">")+
+   (" <h2>Counts opacity<\/h2>")+
+   (" <div class=\"panelcontent\">")+
+   (" <div id=\"countFixedOpacitySlider\"><\/div>")+
+   (" <\/div>")+
+   (" <\/div>");
+
+	 var html = $.parseHTML(str);
+
+	 $(".selectors").append(html);
+
 	$('#countFixedOpacitySlider').html('<input type="range" class="countFixedOpacitySlider" step="0.1" min="' + min_count_opacity + '" max="' + max_count_opacity + '" value="'+countOpacity+'"  />');
 	$('#countFixedOpacitySlider').append('<span>' + countOpacity + '</span>');
 
@@ -217,6 +228,19 @@ function setupCountsFixedOpacityPanel() {
 }// END: setupCountsFixedOpacityPanel
 
 function setupCountsFixedColorPanel() {
+
+	var str = (" <div class=\"panelcollapsed\">") +
+  (" <h2>Counts fixed color<\/h2>")+
+  (" <div class=\"panelcontent\">")+
+  (" <select id=\"countFixedColor\">")+
+  (" <\/select>")+
+  (" <div id=\"countFixedColorLegend\"><\/div>")+
+  (" <\/div>")+
+  (" <\/div>");
+
+	var html = $.parseHTML(str);
+
+	$(".selectors").append(html);
 
 	var countFixedColorSelect = document.getElementById("countFixedColor");
 	var scale = utils.alternatingColorScale().domain(global.fixedColors).range(

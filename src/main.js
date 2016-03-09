@@ -75,39 +75,6 @@ function createHtml() {
 
   document.write("			<div class=\"selectors\" style=\"display: block;\">");
 
-
-	//  document.write(" <div class=\"panelcollapsed\">");
-  //  document.write(" <h2>Labels color<\/h2>");
-  //  document.write(" <div class=\"panelcontent\">");
-  //  document.write(" <select id=\"labelcolor\">");
-  //  document.write(" <\/select>");
-  //  document.write(" <div id=\"labelColorLegend\"><\/div>");
-  //  document.write(" <\/div>");
-  //  document.write(" <\/div>");
-  //
-  // document.write(" <div class=\"panelcollapsed\">");
-  // document.write(" <h2>Counts fixed color<\/h2>");
-  // document.write(" <div class=\"panelcontent\">");
-  // document.write(" <select id=\"countFixedColor\">");
-  // document.write(" <\/select>");
-  // document
-  // 		.write(" <div id=\"countFixedColorLegend\"><\/div>");
-  // document.write(" <\/div>");
-  // document.write(" <\/div>");
-  //
-  //  document.write(" <div class=\"panelcollapsed\">");
-  //  document.write(" <h2>Counts opacity<\/h2>");
-  //  document.write(" <div class=\"panelcontent\">");
-  //  document.write(" <div id=\"countFixedOpacitySlider\"><\/div>");
-  //  document.write(" <\/div>");
-  //  document.write(" <\/div>");
-  //
-  //
-
-
-
-
-
   document.write("			<\/div>");
   // ---END: SELECTORS ---//
 
