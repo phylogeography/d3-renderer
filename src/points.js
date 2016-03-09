@@ -342,8 +342,6 @@ var str = ("				<div class=\"panelcollapsed\">") +
 
 	$(".selectors").append(html);
 
-/////////
-
 	var pointFixedColorSelect = document.getElementById("pointFixedColor");
 	var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
 			global.fixedColors);
