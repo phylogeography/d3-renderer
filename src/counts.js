@@ -15,7 +15,7 @@ var global = require('./global.js');
 var countsLayer;
 var countDefaultColorIndex = 1;
 var countOpacity = 0.3;
-var min_count_opacity = 0.3;
+var min_count_opacity = 0.1;
 var max_count_opacity = 1;
 
 d3.kodama

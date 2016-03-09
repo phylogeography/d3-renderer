@@ -21,8 +21,8 @@ var lineWidth = 2;
 var min_line_width = 0.5;
 var max_line_width = 5;
 
-var lineOpacity = 0.5;
-var min_line_opacity = 0.3;
+var lineOpacity = 1.0;
+var min_line_opacity = 0.1;
 var max_line_opacity = 1;
 
 var lineCurvature = 0.1;
@@ -488,7 +488,7 @@ function setupLineFixedOpacityPanel() {
     linesLayer.selectAll(".line") //
       .transition() //
       .ease("linear") //
-      .attr("stroke-opacity", lineOpacity);
+      .attr("opacity", lineOpacity);
 
   });
 
