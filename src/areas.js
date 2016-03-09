@@ -130,6 +130,16 @@ exports.setupPanels = function(attributes) {
 
 setupAreaFixedOpacityPanel = function() {
 
+  var str = ("				<div class=\"panelcollapsed\">")+
+   ("					<h2>Polygons opacity<\/h2>")+
+   ("					<div class=\"panelcontent\">")+
+   ("							<div id=\"areaFixedOpacitySlider\"><\/div>")+
+ ("					<\/div>")+
+   ("				<\/div>");
+
+	 var html = $.parseHTML(str);
+
+	 $(".selectors").append(html);
 
 	$('#areaFixedOpacitySlider').html('<input type="range" class="areaFixedOpacitySlider" step="0.1" min="' + min_polygon_opacity + '" max="' + max_polygon_opacity + '" value="'+polygonOpacity+'"  />');
 	$('#areaFixedOpacitySlider').append('<span>' + polygonOpacity + '</span>');
@@ -151,6 +161,24 @@ setupAreaFixedOpacityPanel = function() {
 }//END: setupAreaFixedOpacityPanel
 
 setupAreaColorAttributePanel = function(attributes) {
+
+  var str = ("				<div class=\"panelcollapsed\">")+
+  ("					<h2>Polygons color attribute<\/h2>")+
+  ("					<div class=\"panelcontent\">")+
+  ("						<div id='areaStartColor'>")+
+  ("						<\/div>")+
+  ("						<div id='areaEndColor'>")+
+  ("						<\/div>")+
+  ("						<h4>Attribute<\/h4>")+
+  ("						<select id=\"areaColorAttribute\">")+
+  ("						<\/select>")+
+  ("						<div id=\"areaColorLegend\" ><\/div>")+
+  ("					<\/div>")+
+  ("				<\/div>");
+
+	var html = $.parseHTML(str);
+
+	$(".selectors").append(html);
 
 	// attribute
 	var areaColorAttributeSelect = document
@@ -343,6 +371,19 @@ updateAreaColors = function(scale, colorAttribute) {
 }// END: updateAreaColors
 
 setupAreaFixedColorPanel = function() {
+
+  var str = ("				<div class=\"panelcollapsed\">") +
+  ("					<h2>Polygons fixed color<\/h2>") +
+  ("					<div class=\"panelcontent\">") +
+  ("						<select id=\"areaFixedColor\">") +
+  ("						<\/select>") +
+  ("						<div id=\"areaFixedColorLegend\"><\/div>") +
+  ("					<\/div>") +
+  ("				<\/div>");
+
+	var html = $.parseHTML(str);
+
+	$(".selectors").append(html);
 
 	var areaFixedColorSelect = document.getElementById("areaFixedColor");
 	var scale = utils.alternatingColorScale().domain(global.fixedColors).range(

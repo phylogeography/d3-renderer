@@ -76,54 +76,7 @@ function createHtml() {
   document.write("			<div class=\"selectors\" style=\"display: block;\">");
 
 
-
-  //
-  // document.write("				<div class=\"panelcollapsed\">");
-  // document.write("					<h2>Polygons fixed color<\/h2>");
-  //
-  // document.write("					<div class=\"panelcontent\">");
-  // document.write("						<select id=\"areaFixedColor\">");
-  // document.write("						<\/select>");
-  //
-  // document.write("						<div id=\"areaFixedColorLegend\"><\/div>");
-  //
-  // document.write("					<\/div>");
-  // document.write("				<\/div>");
-  //
-  // document.write("				<div class=\"panelcollapsed\">");
-  // document.write("					<h2>Polygons color attribute<\/h2>");
-  // document.write("					<div class=\"panelcontent\">");
-  //
-  // document.write("						<div id='areaStartColor'>");
-  // // document.write(" <h4>Start color<\/h4>");
-  // // document.write(" <input class='areaStartColor' \/>");
-  // document.write("						<\/div>");
-  //
-  // document.write("						<div id='areaEndColor'>");
-  // // document.write(" <h4>End color<\/h4>");
-  // // document.write(" <input class='areaEndColor' \/>");
-  // document.write("						<\/div>");
-  //
-  // document.write("						<h4>Attribute<\/h4>");
-  // document.write("						<select id=\"areaColorAttribute\">");
-  // document.write("						<\/select>");
-  //
-  // document.write("						<div id=\"areaColorLegend\" ><\/div>");
-  //
-  // document.write("					<\/div>");
-  // document.write("				<\/div>");
-  //
-  // document.write("				<div class=\"panelcollapsed\">");
-  // document.write("					<h2>Polygons opacity<\/h2>");
-  // document.write("					<div class=\"panelcontent\">");
-  //
-  // document.write("							<div id=\"areaFixedOpacitySlider\"><\/div>");
-  //
-  // document.write("					<\/div>");
-  // document.write("				<\/div>");
-  //
-  //
-  //  document.write(" <div class=\"panelcollapsed\">");
+	//  document.write(" <div class=\"panelcollapsed\">");
   //  document.write(" <h2>Labels color<\/h2>");
   //  document.write(" <div class=\"panelcontent\">");
   //  document.write(" <select id=\"labelcolor\">");
@@ -131,7 +84,6 @@ function createHtml() {
   //  document.write(" <div id=\"labelColorLegend\"><\/div>");
   //  document.write(" <\/div>");
   //  document.write(" <\/div>");
-  //
   //
   // document.write(" <div class=\"panelcollapsed\">");
   // document.write(" <h2>Counts fixed color<\/h2>");
@@ -151,57 +103,10 @@ function createHtml() {
   //  document.write(" <\/div>");
   //
   //
-  // document.write("				<div class=\"panelcollapsed\">");
-  // document.write("					<h2>Map color<\/h2>");
-  // document.write("					<div class=\"panelcontent\">");
-  // document.write("						<select id=\"mapFixedColor\">");
-  // document.write("						<\/select>");
-  //
-  // document.write("						<div id=\"mapFixedColorLegend\" ><\/div>");
-  //
-  // document.write("					<\/div>");
-  // document.write("				<\/div>");
-  //
-  // document.write("				<div class=\"panelcollapsed\">");
-  // document.write("					<h2>Map color attribute<\/h2>");
-  // document.write("					<div class=\"panelcontent\">");
-  //
-  // document.write("						<div id='mapStartColor'>");
-  // // document.write(" <h4>Start color<\/h4>");
-  // // document.write(" <input class='mapStartFill' \/>");
-  // document.write("						<\/div>");
-  //
-  // document.write("						<div id='mapEndColor'>");
-  // // document.write(" <h4>End color<\/h4>");
-  // // document.write(" <input class='mapEndFill' \/>");
-  // document.write("						<\/div>");
-  //
-  // document.write("						<h4>Attribute<\/h4>");
-  // document.write("						<select id=\"mapColorAttribute\">");
-  // document.write("						<\/select>");
-  //
-  // document.write("						<div id=\"mapColorLegend\"><\/div>");
-  //
-  // document.write("					<\/div>");
-  // document.write("				<\/div>");
-  //
-  // document.write("				<div class=\"panelcollapsed\">");
-  // document.write("					<h2>Map fixed opacity<\/h2>");
-  // document.write("					<div class=\"panelcontent\">");
-  // document.write("							<div id=\"mapFixedOpacitySlider\"><\/div>");
-  // document.write("					<\/div>");
-  // document.write("				<\/div>");
-  //
-  // document.write("				<div class=\"panelcollapsed\">");
-  // document.write("					<h2>Background color<\/h2>");
-  // document.write("					<div class=\"panelcontent\">");
-  //
-  // document.write("						<select id=\"mapbackground\">");
-  // document.write("						<\/select>");
-  //
-  // document.write("					 <div id=\"mapBackgroundLegend\" class=\"legend\"><\/div>");
-  // document.write("					<\/div>");
-  // document.write("				<\/div>");
+
+
+
+
 
   document.write("			<\/div>");
   // ---END: SELECTORS ---//
@@ -241,7 +146,7 @@ function move() {
 
 function render() {
 
-  d3.json("H3N2.json", function(error, json) {
+  d3.json("ebov.json", function(error, json) {
 
     if (error) {
       return console.warn(error);

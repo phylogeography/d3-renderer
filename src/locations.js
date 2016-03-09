@@ -64,7 +64,7 @@ exports.generateLabels = function(locations_) {
 				var xy = global.projection([ d.coordinate.xCoordinate, // long
 						d.coordinate.yCoordinate // lat
 						]);
-				
+
 				var x = xy[0]; // long
 
 				return (x);
@@ -76,13 +76,13 @@ exports.generateLabels = function(locations_) {
 				var xy = global.projection([ d.coordinate.xCoordinate, // long
 						d.coordinate.yCoordinate // lat
 						]);
-				
+
 				var y = xy[1]; // lat
 
 				return (y);
 			}) //
 	.text(function(d) {
-		
+
 		return (d.id);
 	}) //
 	.attr("font-family", "sans-serif")//
@@ -93,10 +93,10 @@ exports.generateLabels = function(locations_) {
 }// END: generateLocationsLayer
 
 exports.setupPanels = function() {
-	
+
 	setupLocationsLayerCheckbox();
 	setupLocationsFixedColorPanel();
-	
+
 }//END: setupPanels
 
 function setupLocationsLayerCheckbox() {
@@ -104,7 +104,7 @@ function setupLocationsLayerCheckbox() {
 	$('#layerVisibility')
 	.append(
 			"<input type=\"checkbox\" id=\"locationsLayerCheckbox\"> Locations layer<br>");
-	
+
 	var locationsLayerCheckbox = document.getElementById("locationsLayerCheckbox");
 	// default state is checked
 	locationsLayerCheckbox.checked = true;
@@ -114,13 +114,26 @@ function setupLocationsLayerCheckbox() {
 		var visibility = this.checked ? "visible" : "hidden";
 		locationsLayer.selectAll("text").style("visibility", visibility);
 		locationsLayer.selectAll("circle").style("visibility", visibility);
-		
+
 	});
-	
-	
+
+
 }//END: setupLocationsLayerCheckbox
 
 function setupLocationsFixedColorPanel() {
+
+	var str = (" <div class=\"panelcollapsed\">")+
+	 (" <h2>Labels color<\/h2>")+
+	 (" <div class=\"panelcontent\">")+
+	 (" <select id=\"labelcolor\">")+
+	 (" <\/select>")+
+	 (" <div id=\"labelColorLegend\"><\/div>")+
+	 (" <\/div>")+
+	 (" <\/div>");
+
+	 var html = $.parseHTML(str);
+
+	 $(".selectors").append(html);
 
 	var labelColorSelect = document.getElementById("labelcolor");
 
@@ -138,11 +151,11 @@ function setupLocationsFixedColorPanel() {
 		labelColorSelect.appendChild(element);
 
 	}// END: i loop
-	
+
 	// select the default
 	labelColorSelect.selectedIndex = locationsColorIndex;
-	
-	
+
+
 	// label color listener
 	d3
 			.select(labelColorSelect)
@@ -160,12 +173,12 @@ function setupLocationsFixedColorPanel() {
 
 						// setup legend
 						updateLocationsFixedColorLegend(scale);
-						
+
 					});
-	
-	
+
+
 }//END: setupLocationsFixedColorPanel
-	
+
 function updateLocationsFixedColorLegend(scale) {
 
 	var width = 150;
@@ -186,7 +199,6 @@ function updateLocationsFixedColorLegend(scale) {
 	svg.append("g").attr("class", "labelColorLegend").attr("transform",
 			"translate(" + (margin.left) + "," + (margin.top) + ")").call(
 					labelColorLegend);
-	
-	
-}//END:updateLocationsFixedColorLegend
 
+
+}//END:updateLocationsFixedColorLegend

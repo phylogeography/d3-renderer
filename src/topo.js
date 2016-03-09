@@ -292,6 +292,19 @@ exports.setupPanels = function(attributes) {
 
 setupTopoBackgroundPanel = function() {
 
+  var str = ("				<div class=\"panelcollapsed\">")+
+   ("					<h2>Background color<\/h2>")+
+  ("					<div class=\"panelcontent\">")+
+  ("						<select id=\"mapbackground\">")+
+  ("						<\/select>")+
+  ("					 <div id=\"mapBackgroundLegend\" class=\"legend\"><\/div>")+
+  ("					<\/div>")+
+  ("				<\/div>");
+
+	var html = $.parseHTML(str);
+
+	$(".selectors").append(html);
+
 	var mapBackgroundSelect = document.getElementById("mapbackground");
 
 	// var domain = [ "white", "black", "grey", "light blue" ];
@@ -361,6 +374,17 @@ updateMapBackgroundLegend = function(scale) {
 
 setupTopoFixedOpacityPanel = function() {
 
+  var str = ("				<div class=\"panelcollapsed\">")+
+   ("					<h2>Map fixed opacity<\/h2>")+
+   ("					<div class=\"panelcontent\">")+
+   ("							<div id=\"mapFixedOpacitySlider\"><\/div>")+
+   ("					<\/div>")+
+   ("				<\/div>");
+
+	 var html = $.parseHTML(str);
+
+	 $(".selectors").append(html);
+
 	$('#mapFixedOpacitySlider').html('<input type="range" class="mapFixedOpacitySlider" step="0.1" min="' + min_map_opacity + '" max="' + max_map_opacity + '" value="'+mapFixedOpacity+'"  />');
 	$('#mapFixedOpacitySlider').append('<span>' + mapFixedOpacity + '</span>');
 
@@ -381,6 +405,24 @@ setupTopoFixedOpacityPanel = function() {
 }// END:setupTopoFixedOpacityPanel
 
 setupTopoColorAttributePanel = function(attributes) {
+
+  var str = ("				<div class=\"panelcollapsed\">") +
+  ("					<h2>Map color attribute<\/h2>") +
+   ("					<div class=\"panelcontent\">") +
+   ("						<div id='mapStartColor'>") +
+   ("						<\/div>") +
+   ("						<div id='mapEndColor'>") +
+   ("						<\/div>") +
+   ("						<h4>Attribute<\/h4>")+
+   ("						<select id=\"mapColorAttribute\">")+
+   ("						<\/select>") +
+   ("						<div id=\"mapColorLegend\"><\/div>")+
+   ("					<\/div>")+
+   ("				<\/div>");
+
+	 var html = $.parseHTML(str);
+
+	 $(".selectors").append(html);
 
 	// attribute
 	var mapColorAttributeSelect = document.getElementById("mapColorAttribute");
@@ -553,6 +595,19 @@ updateMapColors = function(scale, colorAttribute) {
 }// END:updateMapColors
 
 setupTopoFixedColorPanel = function() {
+
+ var str = ("				<div class=\"panelcollapsed\">")+
+ ("					<h2>Map color<\/h2>")+
+ ("					<div class=\"panelcontent\">")+
+ ("						<select id=\"mapFixedColor\">")+
+ ("						<\/select>")+
+ ("						<div id=\"mapFixedColorLegend\" ><\/div>")+
+   ("					<\/div>")+
+   ("				<\/div>");
+
+  var html = $.parseHTML(str);
+
+  $(".selectors").append(html);
 
 	var mapFixedColorSelect = document.getElementById("mapFixedColor");
 	var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
