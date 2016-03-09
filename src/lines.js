@@ -35,672 +35,750 @@ var exports = module.exports = {};
 
 exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 
-	linesLayer = global.g.append("g").attr("class", "linesLayer");
+    linesLayer = global.g.append("g").attr("class", "linesLayer");
 
-	var lines = linesLayer.selectAll("path").data(branches).enter().append(
-			"path") //
-	.attr("class", "line") //
-	.attr(
-			"d",
-			function(d, i) {
+    var lines = linesLayer.selectAll("path").data(branches).enter().append(
+        "path") //
+      .attr("class", "line") //
+      .attr(
+        "d",
+        function(d, i) {
 
-				var line = d;
+          var line = d;
 
-				var startPointId = line.startPointId;
-				var startPoint = utils.getObject(nodes, "id", startPointId);
-				line['startPoint'] = startPoint;
+          var startPointId = line.startPointId;
+          var startPoint = utils.getObject(nodes, "id", startPointId);
+          line['startPoint'] = startPoint;
 
-				var startCoordinate;
-				var startLocation = startPoint.location;
-				if (typeof startLocation != 'undefined') {
+          var startCoordinate;
+          var startLocation = startPoint.location;
+          if (typeof startLocation != 'undefined') {
 
-					startCoordinate = startLocation.coordinate;
+            startCoordinate = startLocation.coordinate;
 
-				} else {
+          } else {
 
-					startCoordinate = startPoint.coordinate;
+            startCoordinate = startPoint.coordinate;
 
-				}
+          }
 
-				var endPointId = line.endPointId;
-				var endPoint = utils.getObject(nodes, "id", endPointId);
-				line['endPoint'] = endPoint;
+          var endPointId = line.endPointId;
+          var endPoint = utils.getObject(nodes, "id", endPointId);
+          line['endPoint'] = endPoint;
 
-				var endCoordinate;
-				var endLocation = endPoint.location;
-				if (typeof startLocation != 'undefined') {
+          var endCoordinate;
+          var endLocation = endPoint.location;
+          if (typeof startLocation != 'undefined') {
 
-					endCoordinate = endLocation.coordinate;
+            endCoordinate = endLocation.coordinate;
 
-				} else {
+          } else {
 
-					endCoordinate = endPoint.coordinate;
+            endCoordinate = endPoint.coordinate;
 
-				}
+          }
 
-				var curvature;
-				var startTime = line.startTime;
-				// if (typeof startTime != "undefined") {
+          var curvature;
+          var startTime = line.startTime;
+          // if (typeof startTime != "undefined") {
 
-					curvature = lineCurvature;// scale(formDate(line.startTime));
+          curvature = lineCurvature; // scale(formDate(line.startTime));
 
-				// } else {
-				// 	curvature = min_line_curvature;
-				// }
+          // } else {
+          // 	curvature = min_line_curvature;
+          // }
 
-				var startY = startCoordinate.yCoordinate;
-				var startX = startCoordinate.xCoordinate;
+          var startY = startCoordinate.yCoordinate;
+          var startX = startCoordinate.xCoordinate;
 
-				var endY = endCoordinate.yCoordinate;
-				var endX = endCoordinate.xCoordinate;
+          var endY = endCoordinate.yCoordinate;
+          var endX = endCoordinate.xCoordinate;
 
-				var sourceXY = global.projection([ startX, // long
-				startY // lat
-				]);
+          var sourceXY = global.projection([startX, // long
+            startY // lat
+          ]);
 
-				var targetXY = global.projection([ endX, // long
-				endY // lat
-				]);
+          var targetXY = global.projection([endX, // long
+            endY // lat
+          ]);
 
-				var sourceX = sourceXY[0]; // long
-				var sourceY = sourceXY[1]; // lat
+          var sourceX = sourceXY[0]; // long
+          var sourceY = sourceXY[1]; // lat
 
-				var targetX = targetXY[0]; // long
-				var targetY = targetXY[1]; // lat
+          var targetX = targetXY[0]; // long
+          var targetY = targetXY[1]; // lat
 
-				// store for referencing in curvature listener
-				line['targetX'] = targetX;
-				line['targetY'] = targetY;
-				line['sourceX'] = sourceX;
-				line['sourceY'] = sourceY;
+          // store for referencing in curvature listener
+          line['targetX'] = targetX;
+          line['targetY'] = targetY;
+          line['sourceX'] = sourceX;
+          line['sourceY'] = sourceY;
 
-				var dx = targetX - sourceX;
-				var dy = targetY - sourceY;
-				var dr = Math.sqrt(dx * dx + dy * dy) * Math.log(curvature);
+          var dx = targetX - sourceX;
+          var dy = targetY - sourceY;
+          var dr = Math.sqrt(dx * dx + dy * dy) * Math.log(curvature);
 
-				var bearing = "M" + sourceX + "," + sourceY + "A" + dr + ","
-						+ dr + " 0 0,1 " + targetX + "," + targetY;
+          var bearing = "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
 
-				return (bearing);
+          return (bearing);
 
-			}) //
-	.attr("fill", "none") //
-	.attr("stroke-width", lineWidth + "px") //
-	.attr("stroke-linejoin", "round") //
-	.attr("stroke", global.fixedColors[lineDefaultColorIndex]) //
-	.attr("startTime", function(d) {
-		return (d.startTime);
-	}) //
-	.attr("endTime", function(d) {
-		return (d.endTime);
-	}) //
-	.attr("stroke-dasharray", function(d) {
+        }) //
+      .attr("fill", "none") //
+      .attr("stroke-width", lineWidth + "px") //
+      .attr("stroke-linejoin", "round") //
+      .attr("stroke", global.fixedColors[lineDefaultColorIndex]) //
+      .attr("startTime", function(d) {
+        return (d.startTime);
+      }) //
+      .attr("endTime", function(d) {
+        return (d.endTime);
+      }) //
+      .attr("stroke-dasharray", function(d) {
 
-		var totalLength = d3.select(this).node().getTotalLength();
-		return (totalLength + " " + totalLength);
-	}) //
-	.attr("stroke-dashoffset", 0) //
-	.attr("opacity", lineOpacity);
+        var totalLength = d3.select(this).node().getTotalLength();
+        return (totalLength + " " + totalLength);
+      }) //
+      .attr("stroke-dashoffset", 0) //
+      .attr("opacity", lineOpacity);
 
-	// dump attribute values into DOM
-	lines[0].forEach(function(d, i) {
+    // dump attribute values into DOM
+    lines[0].forEach(function(d, i) {
 
-		var thisLine = d3.select(d);
-		var properties = branches[i].attributes;
+      var thisLine = d3.select(d);
+      var properties = branches[i].attributes;
 
-		for ( var property in properties) {
-			if (properties.hasOwnProperty(property)) {
+      for (var property in properties) {
+        if (properties.hasOwnProperty(property)) {
 
-				thisLine.attr(property, properties[property]);
+          thisLine.attr(property, properties[property]);
 
-			}
-		}// END: properties loop
-	});
+        }
+      } // END: properties loop
+    });
 
-}// END: generateLinesLayer
+  } // END: generateLinesLayer
 
 exports.setupPanels = function(attributes) {
 
-	setupLinesLayerCheckbox();
-	setupLineFixedColorPanel();
-	setupLineColorAttributePanel(attributes);
-	setupLineFixedOpacityPanel();
-	setupLineFixedCurvaturePanel();
-	setupLineFixedWidthPanel();
-	setupLineCutoffPanel(attributes);
+    setupLinesLayerCheckbox();
+    setupLineFixedColorPanel();
+    setupLineColorAttributePanel(attributes);
+    setupLineFixedOpacityPanel();
+    setupLineFixedCurvaturePanel();
+    setupLineFixedWidthPanel();
+    setupLineCutoffPanel(attributes);
 
-}// END: setupPanels
+  } // END: setupPanels
 
 function setupLinesLayerCheckbox() {
 
-	$('#layerVisibility')
-			.append(
-					"<input type=\"checkbox\" id=\"linesLayerCheckbox\"> Lines layer<br>");
+  $('#layerVisibility')
+    .append(
+      "<input type=\"checkbox\" id=\"linesLayerCheckbox\"> Lines layer<br>");
 
-	linesLayerCheckbox = document.getElementById("linesLayerCheckbox");
-	// default state is checked
-	linesLayerCheckbox.checked = true;
+  linesLayerCheckbox = document.getElementById("linesLayerCheckbox");
+  // default state is checked
+  linesLayerCheckbox.checked = true;
 
-	d3.select(linesLayerCheckbox).on("change", function() {
+  d3.select(linesLayerCheckbox).on("change", function() {
 
-		if (this.checked) {
-			// remove style, then visibility is driven by the time-based
-			// selections
-			linesLayer.selectAll("path").style("visibility", null);
-		} else {
-			// style is superior to attribute, make them hidden
-			linesLayer.selectAll("path").style("visibility", "hidden");
-		}
+    if (this.checked) {
+      // remove style, then visibility is driven by the time-based
+      // selections
+      linesLayer.selectAll("path").style("visibility", null);
+    } else {
+      // style is superior to attribute, make them hidden
+      linesLayer.selectAll("path").style("visibility", "hidden");
+    }
 
-	});
+  });
 
-}// END: setupLinesVisibility
+} // END: setupLinesVisibility
 
 function setupLineFixedColorPanel() {
 
-	var lineFixedColorSelect = document.getElementById("lineFixedColor");
-	var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
-			global.fixedColors);
+  var str =
+    ("				<div class=\"panelcollapsed\">") +
+    ("					<h2>Lines fixed color<\/h2>") +
+    ("					<div class=\"panelcontent\">") +
+    ("						<select id=\"lineFixedColor\">") +
+    ("						<\/select>") +
+    ("						<div id=\"lineFixedColorLegend\"><\/div>") +
+    ("					<\/div>") +
+    ("				<\/div>");
 
-	for (var i = 0; i < global.fixedColors.length; i++) {
+  var html = $.parseHTML(str);
 
-		var option = global.fixedColors[i];
-		var element = document.createElement("option");
-		element.textContent = option;
-		element.value = option;
+  $(".selectors").append(html);
 
-		lineFixedColorSelect.appendChild(element);
+  var lineFixedColorSelect = document.getElementById("lineFixedColor");
+  var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
+    global.fixedColors);
 
-	}// END: i loop
+  for (var i = 0; i < global.fixedColors.length; i++) {
 
-	// select the default
-	lineFixedColorSelect.selectedIndex = lineDefaultColorIndex;
+    var option = global.fixedColors[i];
+    var element = document.createElement("option");
+    element.textContent = option;
+    element.value = option;
 
-	// line fixed color listener
-	d3
-			.select(lineFixedColorSelect)
-			.on(
-					'change',
-					function() {
+    lineFixedColorSelect.appendChild(element);
 
-						var colorSelect = lineFixedColorSelect.options[lineFixedColorSelect.selectedIndex].text;
-						var color = scale(colorSelect);
+  } // END: i loop
 
-						linesLayer.selectAll(".line") //
-						.transition() //
-						.ease("linear") //
-						.attr("stroke", color);
+  // select the default
+  lineFixedColorSelect.selectedIndex = lineDefaultColorIndex;
 
-						// setup legend
-						updateLineFixedColorLegend(scale);
+  // line fixed color listener
+  d3
+    .select(lineFixedColorSelect)
+    .on(
+      'change',
+      function() {
 
-					});
+        var colorSelect = lineFixedColorSelect.options[lineFixedColorSelect.selectedIndex].text;
+        var color = scale(colorSelect);
 
-}// END: setupLineFixedColorPanel
+        linesLayer.selectAll(".line") //
+          .transition() //
+          .ease("linear") //
+          .attr("stroke", color);
+
+        // setup legend
+        updateLineFixedColorLegend(scale);
+
+      });
+
+} // END: setupLineFixedColorPanel
 
 updateLineFixedColorLegend = function(scale) {
 
-	var width = 150;
-	var height = 230;
+    var width = 150;
+    var height = 230;
 
-	var margin = {
-		left : 20,
-		top : 20
-	};
+    var margin = {
+      left: 20,
+      top: 20
+    };
 
-	$('#lineFixedColorLegend').html('');
-	var svg = d3.select("#lineFixedColorLegend").append('svg').attr("width",
-			width).attr("height", height);
+    $('#lineFixedColorLegend').html('');
+    var svg = d3.select("#lineFixedColorLegend").append('svg').attr("width",
+      width).attr("height", height);
 
-	var lineFixedColorLegend = d3.legend.color().scale(scale).shape('line')
-			.shapeWidth(20).shapePadding(15).cells(5).orient('vertical')
+    var lineFixedColorLegend = d3.legend.color().scale(scale).shape('line')
+      .shapeWidth(20).shapePadding(15).cells(5).orient('vertical')
 
-	svg.append("g").attr("class", "lineFixedColorLegend").attr("transform",
-			"translate(" + (margin.left) + "," + (margin.top) + ")").call(
-			lineFixedColorLegend);
+    svg.append("g").attr("class", "lineFixedColorLegend").attr("transform",
+      "translate(" + (margin.left) + "," + (margin.top) + ")").call(
+      lineFixedColorLegend);
 
-}// END: updateLineFixedColorLegend
+  } // END: updateLineFixedColorLegend
 
 function setupLineColorAttributePanel(attributes) {
 
-	var lineColorAttributeSelect = document
-			.getElementById("lineColorAttribute");
+  var str = ("				<div class=\"panelcollapsed\">") +
+    ("					<h2>Lines color attribute<\/h2>") +
+    ("					<div class=\"panelcontent\">") +
+    ("						<div id=\"lineStartColor\">") +
+    ("						<\/div>") +
+    ("						<div id=\"lineEndColor\">") +
+    ("						<\/div>") +
+    ("						<h4>Attribute<\/h4>") +
+    ("						<select id=\"lineColorAttribute\">") +
+    ("						<\/select>") +
+    ("						<div id=\"lineColorLegend\"><\/div>") +
+    ("					<\/div>") +
+    ("				<\/div>");
 
-	for (var i = 0; i < attributes.length; i++) {
+  var html = $.parseHTML(str);
 
-		var option = attributes[i].id;
-		var element = document.createElement("option");
-		element.textContent = option;
-		element.value = option;
+  $(".selectors").append(html);
 
-		lineColorAttributeSelect.appendChild(element);
-	}// END: i loop
+  var lineColorAttributeSelect = document
+    .getElementById("lineColorAttribute");
 
-	// line color attribute listener
-	d3
-			.select(lineColorAttributeSelect)
-			.on(
-					'change',
-					function() {
+  for (var i = 0; i < attributes.length; i++) {
 
-						var colorAttribute = lineColorAttributeSelect.options[lineColorAttributeSelect.selectedIndex].text;
-						var attribute = utils.getObject(attributes, "id",
-								colorAttribute);
+    var option = attributes[i].id;
+    var element = document.createElement("option");
+    element.textContent = option;
+    element.value = option;
 
-						var data;
-						var scale;
+    lineColorAttributeSelect.appendChild(element);
+  } // END: i loop
 
-						$('#lineStartColor').html('');
-						$('#lineEndColor').html('');
+  // line color attribute listener
+  d3
+    .select(lineColorAttributeSelect)
+    .on(
+      'change',
+      function() {
 
-						if (attribute.scale == global.ORDINAL) {
+        var colorAttribute = lineColorAttributeSelect.options[lineColorAttributeSelect.selectedIndex].text;
+        var attribute = utils.getObject(attributes, "id",
+          colorAttribute);
 
-							data = attribute.domain;
-							scale = d3.scale.ordinal().range(
-									global.ordinalColors).domain(data);
+        var data;
+        var scale;
 
-							updateLineColorLegend(scale);
+        $('#lineStartColor').html('');
+        $('#lineEndColor').html('');
 
-						} else if (attribute.scale == global.LINEAR) {
+        if (attribute.scale == global.ORDINAL) {
 
-							data = attribute.range;
-							scale = d3.scale.linear().domain(data).range(
-									[ lineStartColor, lineEndColor ]);
+          data = attribute.domain;
+          scale = d3.scale.ordinal().range(
+            global.ordinalColors).domain(data);
 
-							updateLineColorLegend(scale);
+          updateLineColorLegend(scale);
 
-							// start color
-							$('#lineStartColor').html("<h4>Start color<\/h4>");
-							$('#lineStartColor').append(
-									"<input class=\"lineStartColor\" \/>");
+        } else if (attribute.scale == global.LINEAR) {
 
-							$('.lineStartColor')
-									.simpleColor(
-											{
-												cellWidth : 13,
-												cellHeight : 13,
-												columns : 4,
-												displayColorCode : true,
-												colors : utils
-														.getSimpleColors(global.pairedSimpleColors),
+          data = attribute.range;
+          scale = d3.scale.linear().domain(data).range(
+            [lineStartColor, lineEndColor]);
 
-												onSelect : function(hex,
-														element) {
+          updateLineColorLegend(scale);
 
-													lineStartColor = "#" + hex;
-													scale.range([
-															lineStartColor,
-															lineEndColor ]);
+          // start color
+          $('#lineStartColor').html("<h4>Start color<\/h4>");
+          $('#lineStartColor').append(
+            "<input class=\"lineStartColor\" \/>");
 
-													updateLineColorLegend(scale);
+          $('.lineStartColor')
+            .simpleColor({
+              cellWidth: 13,
+              cellHeight: 13,
+              columns: 4,
+              displayColorCode: true,
+              colors: utils
+                .getSimpleColors(global.pairedSimpleColors),
 
-													// trigger repaint
-													updateLineColors(scale,
-															colorAttribute);
+              onSelect: function(hex,
+                  element) {
 
-												}// END: onSelect
-											});
+                  lineStartColor = "#" + hex;
+                  scale.range([
+                    lineStartColor,
+                    lineEndColor
+                  ]);
 
-							$('.lineStartColor').setColor(lineStartColor);
+                  updateLineColorLegend(scale);
 
-							// end color
-							$('#lineEndColor').html("<h4>End color<\/h4>");
-							$('#lineEndColor').append(
-									"<input class=\"lineEndColor\" \/>");
+                  // trigger repaint
+                  updateLineColors(scale,
+                    colorAttribute);
 
-							$('.lineEndColor')
-									.simpleColor(
-											{
-												cellWidth : 13,
-												cellHeight : 13,
-												columns : 4,
-												colors : utils
-														.getSimpleColors(global.pairedSimpleColors),
-												displayColorCode : true,
-												onSelect : function(hex,
-														element) {
+                } // END: onSelect
+            });
 
-													lineEndColor = "#" + hex;
-													scale.range([
-															lineStartColor,
-															lineEndColor ]);
+          $('.lineStartColor').setColor(lineStartColor);
 
-													updateLineColorLegend(scale);
+          // end color
+          $('#lineEndColor').html("<h4>End color<\/h4>");
+          $('#lineEndColor').append(
+            "<input class=\"lineEndColor\" \/>");
 
-													// trigger repaint
-													updateLineColors(scale,
-															colorAttribute);
-												}// END: onSelect
-											});
+          $('.lineEndColor')
+            .simpleColor({
+              cellWidth: 13,
+              cellHeight: 13,
+              columns: 4,
+              colors: utils
+                .getSimpleColors(global.pairedSimpleColors),
+              displayColorCode: true,
+              onSelect: function(hex,
+                  element) {
 
-							$('.lineEndColor').setColor(lineEndColor);
+                  lineEndColor = "#" + hex;
+                  scale.range([
+                    lineStartColor,
+                    lineEndColor
+                  ]);
 
-						} else {
-							console
-									.log("Error occured when resolving scale type!");
-						}
+                  updateLineColorLegend(scale);
 
-						// trigger repaint
-						updateLineColors(scale, colorAttribute);
+                  // trigger repaint
+                  updateLineColors(scale,
+                    colorAttribute);
+                } // END: onSelect
+            });
 
-					});
+          $('.lineEndColor').setColor(lineEndColor);
 
-}// END: setupLineColorAttributePanel
+        } else {
+          console
+            .log("Error occured when resolving scale type!");
+        }
+
+        // trigger repaint
+        updateLineColors(scale, colorAttribute);
+
+      });
+
+} // END: setupLineColorAttributePanel
 
 function updateLineColorLegend(scale) {
 
-	var width = 150;
-	var height = 110;
+  var width = 150;
+  var height = 110;
 
-	var margin = {
-		left : 20,
-		top : 20
-	};
+  var margin = {
+    left: 20,
+    top: 20
+  };
 
-	$('#lineColorLegend').html('');
-	var svg = d3.select("#lineColorLegend").append('svg').attr("width", width)
-			.attr("height", height);
+  $('#lineColorLegend').html('');
+  var svg = d3.select("#lineColorLegend").append('svg').attr("width", width)
+    .attr("height", height);
 
-	var lineColorLegend = d3.legend.color().scale(scale).shape('line')
-			.shapeWidth(20).shapePadding(15).cells(5).orient('vertical');
+  var lineColorLegend = d3.legend.color().scale(scale).shape('line')
+    .shapeWidth(20).shapePadding(15).cells(5).orient('vertical');
 
-	svg.append("g").attr("class", "lineColorLegend").attr("transform",
-			"translate(" + (margin.left) + "," + (margin.top) + ")").call(
-			lineColorLegend);
+  svg.append("g").attr("class", "lineColorLegend").attr("transform",
+    "translate(" + (margin.left) + "," + (margin.top) + ")").call(
+    lineColorLegend);
 
-}// END:updateLineColorLegend
+} // END:updateLineColorLegend
 
 function updateLineColors(scale, colorAttribute) {
 
-	linesLayer.selectAll(".line") //
-	.transition() //
-	.ease("linear") //
-	.attr("stroke", function() {
+  linesLayer.selectAll(".line") //
+    .transition() //
+    .ease("linear") //
+    .attr("stroke", function() {
 
-		var line = d3.select(this);
-		var attributeValue = line.attr(colorAttribute);
-		var color = scale(attributeValue);
+      var line = d3.select(this);
+      var attributeValue = line.attr(colorAttribute);
+      var color = scale(attributeValue);
 
-		if (attributeValue == null) {
-			console.log("null attribute value found for line color attribute");
-			color = "#000";
-		}
+      if (attributeValue == null) {
+        console.log("null attribute value found for line color attribute");
+        color = "#000";
+      }
 
-		return (color);
-	});
+      return (color);
+    });
 
-}// END: updateLineColors
+} // END: updateLineColors
 
 function setupLineFixedOpacityPanel() {
 
-	$('#lineFixedOpacitySlider').html('<input type="range" class="lineFixedOpacitySlider" step="0.1" min="' + min_line_opacity + '" max="' + max_line_opacity + '" value="'+lineOpacity+'"  />');
-	$('#lineFixedOpacitySlider').append('<span>' + lineOpacity + '</span>');
+  var str = ("                <div class=\"panelcollapsed\">") +
+    ("                    <h2>Lines opacity<\/h2>") +
+    ("                    <div class=\"panelcontent\">") +
+    ("                            <div id=\"lineFixedOpacitySlider\"><\/div>") +
+    ("                    <\/div>") +
+    ("                <\/div>");
 
-	$('.lineFixedOpacitySlider').on("input", function() {
+  var html = $.parseHTML(str);
 
-	lineOpacity = $(this).val();
+  $(".selectors").append(html);
 
-	 $(this).next().html(lineOpacity);
+  $('#lineFixedOpacitySlider').html('<input type="range" class="lineFixedOpacitySlider" step="0.1" min="' + min_line_opacity + '" max="' + max_line_opacity + '" value="' + lineOpacity + '"  />');
+  $('#lineFixedOpacitySlider').append('<span>' + lineOpacity + '</span>');
 
-	 	// fill-opacity / stroke-opacity / opacity
- 		linesLayer.selectAll(".line") //
- 		.transition() //
- 		.ease("linear") //
- 		.attr("stroke-opacity", lineOpacity);
+  $('.lineFixedOpacitySlider').on("input", function() {
 
-		});
+    lineOpacity = $(this).val();
 
-}// END: setupLineFixedOpacityPanel
+    $(this).next().html(lineOpacity);
+
+    // fill-opacity / stroke-opacity / opacity
+    linesLayer.selectAll(".line") //
+      .transition() //
+      .ease("linear") //
+      .attr("stroke-opacity", lineOpacity);
+
+  });
+
+} // END: setupLineFixedOpacityPanel
 
 function setupLineFixedCurvaturePanel() {
 
-	$('#lineFixedCurvatureSlider').html('<input type="range" class="lineFixedCurvatureSlider" step="0.1" min="' + min_line_curvature + '" max="' + max_line_curvature + '" value="'+lineCurvature+'"  />');
-	// $('#lineFixedCurvatureSlider').append('<span>' + lineCurvature + '</span>');
+  var str = (" <div class=\"panelcollapsed\">") +
+    (" <h2>Lines curvature<\/h2>") +
+    (" <div class=\"panelcontent\">") +
+    (" <div id=\"lineFixedCurvatureSlider\"><\/div>") +
+    (" <\/div>") +
+    (" <\/div>");
 
-	$('.lineFixedCurvatureSlider').on("input", function() {
+  var html = $.parseHTML(str);
 
-	value = $(this).val();
+  $(".selectors").append(html);
 
-	//  $(this).next().html(value);
+  $('#lineFixedCurvatureSlider').html('<input type="range" class="lineFixedCurvatureSlider" step="0.1" min="' + min_line_curvature + '" max="' + max_line_curvature + '" value="' + lineCurvature + '"  />');
+  // $('#lineFixedCurvatureSlider').append('<span>' + lineCurvature + '</span>');
 
-	 if(value == 0) {
-	 lineCurvature =0;
-	 } else if(value == 1) {
-	 lineCurvature =0.1;
-	 } else {
-	 		lineCurvature = (1-value);
-	 }
+  $('.lineFixedCurvatureSlider').on("input", function() {
 
-	 		linesLayer.selectAll(".line").transition().ease("linear") //
-	 		.attr(
-	 				"d",
-	 				function(d) {
+    value = $(this).val();
 
-	 					var line = d;
+    //  $(this).next().html(value);
 
-	 					// console.log(Date.parse(line.startTime));
+    if (value == 0) {
+      lineCurvature = 0;
+    } else if (value == 1) {
+      lineCurvature = 0.1;
+    } else {
+      lineCurvature = (1 - value);
+    }
 
-	 					// var curvature = lineCurvature;
+    linesLayer.selectAll(".line").transition().ease("linear") //
+      .attr(
+        "d",
+        function(d) {
 
-	 					var targetX = line.targetX;
-	 					var targetY = line.targetY;
-	 					var sourceX = line.sourceX;
-	 					var sourceY = line.sourceY;
+          var line = d;
 
-	 					var dx = targetX - sourceX;
-	 					var dy = targetY - sourceY;
-	 					var dr = Math.sqrt(dx * dx + dy * dy) * lineCurvature;
+          // console.log(Date.parse(line.startTime));
 
-	 					var bearing = "M" + sourceX + "," + sourceY + "A" + dr + ","
-	 							+ dr + " 0 0,1 " + targetX + "," + targetY;
+          // var curvature = lineCurvature;
 
-	 					return (bearing);
+          var targetX = line.targetX;
+          var targetY = line.targetY;
+          var sourceX = line.sourceX;
+          var sourceY = line.sourceY;
 
-	 				}) //
-	 		.attr("stroke-dasharray", function(d) {
+          var dx = targetX - sourceX;
+          var dy = targetY - sourceY;
+          var dr = Math.sqrt(dx * dx + dy * dy) * lineCurvature;
 
-	 			var totalLength = d3.select(this).node().getTotalLength();
-	 			return (totalLength + " " + totalLength);
+          var bearing = "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
 
-	 		});
+          return (bearing);
 
-		});
+        }) //
+      .attr("stroke-dasharray", function(d) {
 
-}// END: setupLineFixedCurvaturePanel
+        var totalLength = d3.select(this).node().getTotalLength();
+        return (totalLength + " " + totalLength);
+
+      });
+
+  });
+
+} // END: setupLineFixedCurvaturePanel
 
 function setupLineFixedWidthPanel() {
 
+  var str = ("				<div class=\"panelcollapsed\">") +
+    ("					<h2>Lines width<\/h2>") +
+    ("					<div class=\"panelcontent\">") +
+    ("							<div id=\"lineFixedWidthSlider\"><\/div>") +
+    ("					<\/div>") +
+    ("				<\/div>");
 
-	$('#lineFixedWidthSlider').html('<input type="range" class="lineFixedWidthSlider" step="0.5" min="' + min_line_width + '" max="' + max_line_width + '" value="'+lineWidth+'"  />');
-	$('#lineFixedWidthSlider').append('<span>' + lineWidth + '</span>');
+  var html = $.parseHTML(str);
 
-	$('.lineFixedWidthSlider').on("input", function() {
+  $(".selectors").append(html);
 
-	lineWidth = $(this).val();
+  $('#lineFixedWidthSlider').html('<input type="range" class="lineFixedWidthSlider" step="0.5" min="' + min_line_width + '" max="' + max_line_width + '" value="' + lineWidth + '"  />');
+  $('#lineFixedWidthSlider').append('<span>' + lineWidth + '</span>');
 
-	 $(this).next().html(lineWidth);
+  $('.lineFixedWidthSlider').on("input", function() {
 
-	 	linesLayer.selectAll(".line").transition().ease("linear") //
- 		.attr("stroke-width", lineWidth + "px");
+    lineWidth = $(this).val();
 
-		});
+    $(this).next().html(lineWidth);
 
-}// END: setupLineFixedWidthPanel
+    linesLayer.selectAll(".line").transition().ease("linear") //
+      .attr("stroke-width", lineWidth + "px");
+
+  });
+
+} // END: setupLineFixedWidthPanel
 
 function setupLineCutoffPanel(attributes) {
 
-	// TODO: discrete attributes
+  var str = ("				<div class=\"panelcollapsed\">") +
+    ("					<h2>Lines cut-off<\/h2>") +
+    ("					<div class=\"panelcontent\">") +
+    ("						<select id=\"lineCutoffAttribute\">") +
+    ("						<\/select>") +
+    ("						<\/br>") +
+    ("						<\/br>") +
+    ("						<\/br>") +
+    ("					<div class=\"wrapper\">") +
+    ("							<div id=\"lineCutoffSlider\"><\/div>") +
+    ("					<\/div>") +
+    ("					<\/div>") +
+    ("				<\/div>");
 
-	var lineCutoffAttributeSelect = document
-			.getElementById("lineCutoffAttribute");
+  var html = $.parseHTML(str);
 
-	for (var i = 0; i < attributes.length; i++) {
+  $(".selectors").append(html);
 
-		if (attributes[i].scale == global.LINEAR) {
-			var option = attributes[i].id;
-			var element = document.createElement("option");
-			element.textContent = option;
-			element.value = option;
-			lineCutoffAttributeSelect.appendChild(element);
-		}
+  var lineCutoffAttributeSelect = document
+    .getElementById("lineCutoffAttribute");
 
-	}// END: i loop
+  for (var i = 0; i < attributes.length; i++) {
 
-	// listener
-	d3
-			.select(lineCutoffAttributeSelect)
-			.on(
-					'change',
-					function() {
+    // TODO: discrete attributes
+    if (attributes[i].scale == global.LINEAR) {
+      var option = attributes[i].id;
+      var element = document.createElement("option");
+      element.textContent = option;
+      element.value = option;
+      lineCutoffAttributeSelect.appendChild(element);
+    }
 
-						// clean-up
-						$('#lineCutoffSlider').html('');
-						// linesLayer.selectAll("path").style("visibility",
-						// null);
+  } // END: i loop
 
-						var cutoffAttribute = lineCutoffAttributeSelect.options[lineCutoffAttributeSelect.selectedIndex].text;
-						var attribute = utils.getObject(attributes, "id",
-								cutoffAttribute);
+  // listener
+  d3
+    .select(lineCutoffAttributeSelect)
+    .on(
+      'change',
+      function() {
 
-						// slider
-						// TODO: discrete too
-						if (attribute.scale == global.LINEAR) {
+        // clean-up
+        $('#lineCutoffSlider').html('');
+        // linesLayer.selectAll("path").style("visibility",
+        // null);
 
-							var minValue = Math
-									.floor(attribute.range[global.MIN_INDEX]);
-							var maxValue = Math
-									.ceil(attribute.range[global.MAX_INDEX]);
-							var step = (maxValue - minValue) / 10;
+        var cutoffAttribute = lineCutoffAttributeSelect.options[lineCutoffAttributeSelect.selectedIndex].text;
+        var attribute = utils.getObject(attributes, "id",
+          cutoffAttribute);
 
-							var lineCutoffSlider = d3.slider().axis(
-									d3.svg.axis().orient("top")).min(minValue)
-									.max(maxValue).step(step).value(minValue);
+        // slider
+        // TODO: discrete too
+        if (attribute.scale == global.LINEAR) {
 
-							d3.select('#lineCutoffSlider').call(
-									lineCutoffSlider);
+          var minValue = Math
+            .floor(attribute.range[global.MIN_INDEX]);
+          var maxValue = Math
+            .ceil(attribute.range[global.MAX_INDEX]);
+          var step = (maxValue - minValue) / 10;
 
-							lineCutoffSlider
-									.on(
-											"slide",
-											function(evt, value) {
+          var lineCutoffSlider = d3.slider().axis(
+              d3.svg.axis().orient("top")).min(minValue)
+            .max(maxValue).step(step).value(minValue);
 
-												linesLayer
-														.selectAll("path")
-														.style(
-																"visibility",
-																function(d) {
+          d3.select('#lineCutoffSlider').call(
+            lineCutoffSlider);
 
-																	var sliderValue = value;
+          lineCutoffSlider
+            .on(
+              "slide",
+              function(evt, value) {
 
-																	var line = d3
-																			.select(this);
-																	var attributeValue = line
-																			.attr(attribute.id);
+                linesLayer
+                  .selectAll("path")
+                  .style(
+                    "visibility",
+                    function(d) {
 
-																	var visibility = "visible";
+                      var sliderValue = value;
 
-																	if (attributeValue < sliderValue
-																			|| !linesLayerCheckbox.checked) {
-																		visibility = "hidden";
-																	}
+                      var line = d3
+                        .select(this);
+                      var attributeValue = line
+                        .attr(attribute.id);
 
-																	return (visibility);
-																});
+                      var visibility = "visible";
 
-											});
+                      if (attributeValue < sliderValue || !linesLayerCheckbox.checked) {
+                        visibility = "hidden";
+                      }
 
-						}// END: scale check
+                      return (visibility);
+                    });
 
-					}// END: function
-			);
+              });
 
-}// END: setupLineCutoffPanel
+        } // END: scale check
+
+      } // END: function
+    );
+
+} // END: setupLineCutoffPanel
 
 exports.updateLinesLayer = function(value) {
 
-	// ---select lines painting now---//
+    // ---select lines painting now---//
 
-	linesLayer.selectAll("path.line")
-	//
-	.filter(
-			function(d) {
+    linesLayer.selectAll("path.line")
+      //
+      .filter(
+        function(d) {
 
-				var linePath = this;
-				var lineStartDate = utils.formDate(
-						linePath.attributes.startTime.value).getTime();
-				var lineEndDate = utils.formDate(
-						linePath.attributes.endTime.value).getTime();
+          var linePath = this;
+          var lineStartDate = utils.formDate(
+            linePath.attributes.startTime.value).getTime();
+          var lineEndDate = utils.formDate(
+            linePath.attributes.endTime.value).getTime();
 
-				return (lineStartDate <= value && value <= lineEndDate);
-			})
-	//
-	.transition()
-	//
-	.ease("linear")
-			//
-			.attr(
-					"stroke-dashoffset",
-					function(d, i) {
+          return (lineStartDate <= value && value <= lineEndDate);
+        })
+      //
+      .transition()
+      //
+      .ease("linear")
+      //
+      .attr(
+        "stroke-dashoffset",
+        function(d, i) {
 
-						var linePath = this;
-						var totalLength = linePath.getTotalLength();
+          var linePath = this;
+          var totalLength = linePath.getTotalLength();
 
-						var lineStartDate = utils.formDate(
-								linePath.attributes.startTime.value).getTime();
-						var lineEndDate = utils.formDate(
-								linePath.attributes.endTime.value).getTime();
-						var duration = lineEndDate - lineStartDate;
-						var timePassed = value - lineStartDate;
+          var lineStartDate = utils.formDate(
+            linePath.attributes.startTime.value).getTime();
+          var lineEndDate = utils.formDate(
+            linePath.attributes.endTime.value).getTime();
+          var duration = lineEndDate - lineStartDate;
+          var timePassed = value - lineStartDate;
 
-						var offset = totalLength;
-						if (duration == 0) {
+          var offset = totalLength;
+          if (duration == 0) {
 
-							offset = 0;
+            offset = 0;
 
-						} else {
+          } else {
 
-							offset = utils.map(timePassed, 0, duration, 0,
-									totalLength);
+            offset = utils.map(timePassed, 0, duration, 0,
+              totalLength);
 
-							offset = totalLength - offset;
+            offset = totalLength - offset;
 
-						}// END: instantaneous line check
+          } // END: instantaneous line check
 
-						return (offset);
-					}) //
-			.attr("visibility", "visible");
+          return (offset);
+        }) //
+      .attr("visibility", "visible");
 
-	// ---select lines yet to be painted---//
+    // ---select lines yet to be painted---//
 
-	linesLayer.selectAll("path.line") //
-	.filter(
-			function(d) {
-				var linePath = this;
-				var lineStartDate = utils.formDate(
-						linePath.attributes.startTime.value).getTime();
+    linesLayer.selectAll("path.line") //
+      .filter(
+        function(d) {
+          var linePath = this;
+          var lineStartDate = utils.formDate(
+            linePath.attributes.startTime.value).getTime();
 
-				return (lineStartDate > value);
-			}) //
-	.attr("stroke-dashoffset", function(d, i) {
-		var linePath = this;
-		var totalLength = linePath.getTotalLength();
+          return (lineStartDate > value);
+        }) //
+      .attr("stroke-dashoffset", function(d, i) {
+        var linePath = this;
+        var totalLength = linePath.getTotalLength();
 
-		return (totalLength);
-	}) //
-	.attr("visibility", "hidden");
+        return (totalLength);
+      }) //
+      .attr("visibility", "hidden");
 
-	// ---select lines already painted---//
+    // ---select lines already painted---//
 
-	linesLayer.selectAll("path.line") //
-	.filter(
-			function(d) {
-				var linePath = this;
-				var lineEndDate = utils.formDate(
-						linePath.attributes.endTime.value).getTime();
+    linesLayer.selectAll("path.line") //
+      .filter(
+        function(d) {
+          var linePath = this;
+          var lineEndDate = utils.formDate(
+            linePath.attributes.endTime.value).getTime();
 
-				return (lineEndDate < value);
-			}) //
-	.attr("stroke-dashoffset", 0) //
-	.attr("visibility", "visible");
+          return (lineEndDate < value);
+        }) //
+      .attr("stroke-dashoffset", 0) //
+      .attr("visibility", "visible");
 
-}// END: updateLinesLayer
+  } // END: updateLinesLayer

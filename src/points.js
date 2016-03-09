@@ -329,6 +329,21 @@ updatePointFixedColorLegend = function(scale) {
 
 setupPointFixedColorPanel = function() {
 
+var str = ("				<div class=\"panelcollapsed\">") +
+ ("					<h2>Points fixed color<\/h2>")+
+   ("					<div class=\"panelcontent\">")+
+  ("						<select id=\"pointFixedColor\">") +
+  ("						<\/select>") +
+("						<div id=\"pointFixedColorLegend\"><\/div>") +
+("					<\/div>") +
+  ("				<\/div>");
+
+	var html = $.parseHTML( str );
+
+	$(".selectors").append(html);
+
+/////////
+
 	var pointFixedColorSelect = document.getElementById("pointFixedColor");
 	var scale = utils.alternatingColorScale().domain(global.fixedColors).range(
 			global.fixedColors);
@@ -373,6 +388,24 @@ setupPointFixedColorPanel = function() {
 }// END: setupFixedColorPanel
 
 setupPointColorAttributePanel = function(attributes) {
+
+var str = ("				<div class=\"panelcollapsed\">")+
+  ("					<h2>Points color attribute<\/h2>") +
+  ("					<div class=\"panelcontent\">") +
+  ("						<div id=\"pointStartColor\">")+
+  ("						<\/div>") +
+("						<div id=\"pointEndColor\">") +
+("						<\/div>") +
+("						<h4>Attribute<\/h4>") +
+("						<select id=\"pointColorAttribute\">") +
+("						<\/select>") +
+("						<div id=\"pointColorLegend\"><\/div>") +
+("					<\/div>") +
+("				<\/div>");
+
+var html = $.parseHTML(str);
+
+$(".selectors").append(html);
 
 	// attribute
 	var pointColorAttributeSelect = document
@@ -511,6 +544,18 @@ setupPointColorAttributePanel = function(attributes) {
 
 setupPointFixedRadiusPanel = function() {
 
+	var str = ("				<div class=\"panelcollapsed\">") +
+ ("					<h2>Points fixed radius<\/h2>") +
+   ("					<div class=\"panelcontent\">") +
+ ("						<div id=\"pointFixedRadiusSlider\">") +
+   ("						<\/div>") +
+   ("					<\/div>") +
+   ("				<\/div>");
+
+	 var html = $.parseHTML(str);
+
+	 $(".selectors").append(html);
+
 $('#pointFixedRadiusSlider').html('<input type="range" class="pointFixedRadiusSlider" step="1" min="' + min_point_radius + '" max="' + max_point_radius + '" value="'+pointRadius+'"  />');
 $('#pointFixedRadiusSlider').append('<span>' + pointRadius + '</span>');
 
@@ -533,6 +578,19 @@ pointRadius = $(this).val();
 }// END: setupPointFixedAreaPanel
 
 setupPointRadiusAttributePanel = function(attributes) {
+
+  var str = ("				<div class=\"panelcollapsed\">") +
+ ("					<h2>Points radius attribute<\/h2>") +
+   ("					<div class=\"panelcontent\">") +
+   ("						<select id=\"pointRadiusAttribute\">") +
+   ("						<\/select>") +
+ ("						  <div id=\"pointRadiusLegend\"  ><\/div>  ") +
+   ("					<\/div>") +
+   ("				<\/div>");
+
+	 var html = $.parseHTML(str);
+
+	 $(".selectors").append(html);
 
 	var pointRadiusAttributeSelect = document
 			.getElementById("pointRadiusAttribute");
