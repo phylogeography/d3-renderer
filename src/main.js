@@ -30,14 +30,9 @@ var zoom = d3.behavior.zoom().scaleExtent(
 
 // TODO: make responsive
 var svg = d3.select(".container").append('svg') //
-  //.attr("width", global.width + global.margin.left + global.margin.right) //
-  //.attr("height", global.height + global.margin.top + global.margin.bottom) //
   .attr("preserveAspectRatio", "xMinYMin meet")
   .attr("viewBox", "0 0 " + global.width + " " + global.height)
   .call(zoom);
-
-
-
 
 global.g = svg.append("g");
 
@@ -186,23 +181,7 @@ function render() {
         var branches = layer.lines;
         var areas_ = layer.areas;
 
-				if (!(typeof nodes === 'undefined')) {
-          points.generatePointsLayer(nodes, nodeAttributes);
-          points.setupPanels(nodeAttributes);
-          global.hasPoints = true;
-        } else {
-          global.hasPoints = false;
-        }
-
-				if (!(typeof branches === 'undefined')) {
-          lines.generateLinesLayer(branches, nodes, lineAttributes);
-          lines.setupPanels(lineAttributes);
-          global.hasLines = true;
-        } else {
-          global.hasLines = false;
-        }
-
-				if (!(typeof areas_ === 'undefined')) {
+        if (!(typeof areas_ === 'undefined')) {
           areas.generateAreasLayer(areas_, areaAttributes);
           areas.setupPanels(areaAttributes);
           global.hasAreas = true;
@@ -210,29 +189,21 @@ function render() {
           global.hasAreas = false;
         }
 
-        // if (!(typeof areas_ === 'undefined')) {
-        //   areas.generateAreasLayer(areas_, areaAttributes);
-        //   areas.setupPanels(areaAttributes);
-        //   global.hasAreas = true;
-        // } else {
-        //   global.hasAreas = false;
-        // }
+        if (!(typeof branches === 'undefined')) {
+          lines.generateLinesLayer(branches, nodes, lineAttributes);
+          lines.setupPanels(lineAttributes);
+          global.hasLines = true;
+        } else {
+          global.hasLines = false;
+        }
 
-        // if (!(typeof branches === 'undefined')) {
-        //   lines.generateLinesLayer(branches, nodes, lineAttributes);
-        //   lines.setupPanels(lineAttributes);
-        //   global.hasLines = true;
-        // } else {
-        //   global.hasLines = false;
-        // }
-
-        // if (!(typeof nodes === 'undefined')) {
-        //   points.generatePointsLayer(nodes, nodeAttributes);
-        //   points.setupPanels(nodeAttributes);
-        //   global.hasPoints = true;
-        // } else {
-        //   global.hasPoints = false;
-        // }
+        if (!(typeof nodes === 'undefined')) {
+          points.generatePointsLayer(nodes, nodeAttributes);
+          points.setupPanels(nodeAttributes);
+          global.hasPoints = true;
+        } else {
+          global.hasPoints = false;
+        }
 
       } // END: TREE check
 
