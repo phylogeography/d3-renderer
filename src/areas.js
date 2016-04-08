@@ -150,7 +150,6 @@ var html = $.parseHTML(str);
 
 $(".selectors").append(html);
 
-
 // attribute
 var areaOpacityAttributeSelect = document
 		.getElementById("areaOpacityAttribute");
@@ -199,13 +198,15 @@ d3
 					} else if (attribute.scale == global.LINEAR) {
 
 						data = attribute.range;
-
 						scale = d3.scale.linear().domain(data).range(
 								// [ min_polygon_opacity, max_polygon_opacity ]
                    [0.1, 0.2]
 							);
 
 	// updatePolygonOpacityLegend(scale);
+
+	// $('#areaStartOpacitySlider').html('<input type="range" class="areaFixedOpacitySlider" step="0.1" min="' + min_polygon_opacity + '" max="' + max_polygon_opacity + '" value="'+polygonOpacity+'"  />');
+	// $('#areaStartOpacitySlider').append('<span>' + min_polygon_opacity + '</span>');
 
 					} else {
 
@@ -220,6 +221,10 @@ d3
 					// updateTooltips();
 
 } );
+
+
+
+}//END: setupAreaOpacityAttributePanel
 
 updatePolygonOpacity = function(scale, opacityAttribute) {
 
@@ -242,14 +247,6 @@ updatePolygonOpacity = function(scale, opacityAttribute) {
 	});
 
 }// END: updatePolygonOpacity
-
-// $('#areaStartOpacitySlider').html('<input type="range" class="areaFixedOpacitySlider" step="0.1" min="' + min_polygon_opacity + '" max="' + max_polygon_opacity + '" value="'+polygonOpacity+'"  />');
-// $('#areaStartOpacitySlider').append('<span>' + min_polygon_opacity + '</span>');
-
-
-
-
-}//END: setupAreaOpacityAttributePanel
 
 setupAreaFixedOpacityPanel = function() {
 
