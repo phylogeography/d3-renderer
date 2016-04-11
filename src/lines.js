@@ -33,7 +33,7 @@ var max_line_curvature = 1.0;
 
 var exports = module.exports = {};
 
-exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
+exports.generateLinesLayer = function(branches, nodes, locations, branchAttributes) {
 
     linesLayer = global.g.append("g").attr("class", "linesLayer");
 
@@ -46,47 +46,53 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 
           var line = d;
 
-          var startPointId = line.startPointId;
-          var startPoint = utils.getObject(nodes, "id", startPointId);
-          line['startPoint'] = startPoint;
+          var startCoordinate = line['startCoordinate'];
+          if (typeof startCoordinate == 'undefined') {
 
-          var startCoordinate;
-          var startLocation = startPoint.location;
-          if (typeof startLocation != 'undefined') {
+            var startPointId = line.startPointId;
+            var startPoint = utils.getObject(nodes, "id", startPointId);
 
-            startCoordinate = startLocation.coordinate;
+            var startLocationId = startPoint.locationId;
+            if (typeof startLocationId != 'undefined') {
 
-          } else {
+              // discrete
+              var startLocation = utils.getObject(locations, "id", startLocationId);
+              startCoordinate = startLocation.coordinate;
+              line['startCoordinate'] = startCoordinate;
 
-            startCoordinate = startPoint.coordinate;
+            } else {
+              // continuous
+              startCoordinate = startPoint.coordinate;
+              line['startCoordinate'] = startCoordinate;
 
-          }
+            }
 
-          var endPointId = line.endPointId;
-          var endPoint = utils.getObject(nodes, "id", endPointId);
-          line['endPoint'] = endPoint;
+          }//END: start coord check
 
-          var endCoordinate;
-          var endLocation = endPoint.location;
-          if (typeof startLocation != 'undefined') {
+          var endCoordinate = line['endCoordinate'];
+          if (typeof endCoordinate == 'undefined') {
 
-            endCoordinate = endLocation.coordinate;
+            var endPointId = line.endPointId;
+            var endPoint = utils.getObject(nodes, "id", endPointId);
 
-          } else {
+            var endLocationId = endPoint.locationId;
+            if (typeof endLocationId != 'undefined') {
 
-            endCoordinate = endPoint.coordinate;
+              // discrete
+              var endLocation = utils.getObject(locations, "id", endLocationId);
+              endCoordinate = endLocation.coordinate;
+              line['endCoordinate'] = endCoordinate;
 
-          }
+            } else {
+              // continuous
+              endCoordinate = endPoint.coordinate;
+              line['endCoordinate'] = endCoordinate;
 
-          var curvature;
-          var startTime = line.startTime;
-          // if (typeof startTime != "undefined") {
+            }
 
-          curvature = lineCurvature; // scale(formDate(line.startTime));
+          }//END: end coord check
 
-          // } else {
-          // 	curvature = min_line_curvature;
-          // }
+          // var startTime = line.startTime;
 
           var startY = startCoordinate.yCoordinate;
           var startX = startCoordinate.xCoordinate;
@@ -116,12 +122,13 @@ exports.generateLinesLayer = function(branches, nodes, branchAttributes) {
 
           var dx = targetX - sourceX;
           var dy = targetY - sourceY;
+
+          var curvature = lineCurvature;
           var dr = Math.sqrt(dx * dx + dy * dy) * Math.log(curvature);
 
           var bearing = "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
 
           return (bearing);
-
         }) //
       .attr("fill", "none") //
       .attr("stroke-width", lineWidth + "px") //

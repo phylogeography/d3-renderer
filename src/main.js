@@ -27,8 +27,6 @@ var zoom = d3.behavior.zoom().scaleExtent(
   [global.width / 2, global.height / 2]).size(
   [global.width, global.height]).on("zoom", move);
 
-
-// TODO: make responsive
 var svg = d3.select(".container").append('svg') //
   .attr("preserveAspectRatio", "xMinYMin meet")
   .attr("viewBox", "0 0 " + global.width + " " + global.height)
@@ -45,15 +43,12 @@ var COUNT = "count";
 
 function createHtml() {
 
-  // TODO: delegate relevant bits to modules, setupPanel methods
-
   document.write("<div class=\"all\" style=\"display: block;\">");
 
   document.write("		<div id=\"controls\">");
   document.write("			<h2>");
   document.write("				Current date: <span id=\"currentDate\"> 0 <\/span>");
   document.write("			<\/h2>");
-
 
   document.write("			<div>");
   document.write("				<div id=\"playPause\"><\/div>");
@@ -161,7 +156,10 @@ function render() {
         var counts_ = layer.points;
 
         if (counts_.length > 0) {
-          counts.generateCountsLayer(counts_, countAttribute);
+
+// console.log(locations_);
+
+          counts.generateCountsLayer(counts_, locations_, countAttribute);
           counts.setupPanels(countAttribute);
           global.hasCounts = true;
         } else {
@@ -190,7 +188,7 @@ function render() {
         }
 
         if (!(typeof branches === 'undefined')) {
-          lines.generateLinesLayer(branches, nodes, lineAttributes);
+          lines.generateLinesLayer(branches, nodes, locations_, lineAttributes);
           lines.setupPanels(lineAttributes);
           global.hasLines = true;
         } else {
@@ -198,7 +196,7 @@ function render() {
         }
 
         if (!(typeof nodes === 'undefined')) {
-          points.generatePointsLayer(nodes, nodeAttributes);
+          points.generatePointsLayer(nodes, locations_, nodeAttributes);
           points.setupPanels(nodeAttributes);
           global.hasPoints = true;
         } else {

@@ -27,9 +27,9 @@ exports.capitalizeFirstLetter = function(string) {
 	return string[0].toUpperCase() + string.slice(1);
 }// END: capitalizeFirstLetter
 
-exports.getObject = function(obj, key, val) {
+exports.getObject = function(objects, key, val) {
 	var newObj = false;
-	$.each(obj, function() {
+	$.each(objects, function() {
 		var testObject = this;
 		$.each(testObject, function(k, v) {
 			// alert(k);
