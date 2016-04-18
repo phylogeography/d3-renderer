@@ -28,6 +28,7 @@ var zoom = d3.behavior.zoom().scaleExtent(
   [global.width, global.height]).on("zoom", move);
 
 var svg = d3.select(".container").append('svg') //
+.attr("class", "svg")
   .attr("preserveAspectRatio", "xMinYMin meet")
   .attr("viewBox", "0 0 " + global.width + " " + global.height)
   .call(zoom);
@@ -156,9 +157,6 @@ function render() {
         var counts_ = layer.points;
 
         if (counts_.length > 0) {
-
-// console.log(locations_);
-
           counts.generateCountsLayer(counts_, locations_, countAttribute);
           counts.setupPanels(countAttribute);
           global.hasCounts = true;

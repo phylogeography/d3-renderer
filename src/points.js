@@ -28,7 +28,7 @@ var pointEndColor = global.pairedSimpleColors[global.pairedSimpleColors.length -
 
 var pointRadius = 2;
 var min_point_radius = 1;
-var max_point_radius = 7;
+var max_point_radius = 10;
 
 var tooltipAttributes = {
   color: null,

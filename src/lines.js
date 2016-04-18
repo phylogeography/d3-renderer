@@ -67,7 +67,7 @@ exports.generateLinesLayer = function(branches, nodes, locations, branchAttribut
 
             }
 
-          }//END: start coord check
+          } //END: start coord check
 
           var endCoordinate = line['endCoordinate'];
           if (typeof endCoordinate == 'undefined') {
@@ -90,9 +90,7 @@ exports.generateLinesLayer = function(branches, nodes, locations, branchAttribut
 
             }
 
-          }//END: end coord check
-
-          // var startTime = line.startTime;
+          } //END: end coord check
 
           var startY = startCoordinate.yCoordinate;
           var startX = startCoordinate.xCoordinate;
@@ -123,7 +121,16 @@ exports.generateLinesLayer = function(branches, nodes, locations, branchAttribut
           var dx = targetX - sourceX;
           var dy = targetY - sourceY;
 
-          var curvature = lineCurvature;
+          var curvature;
+          if (global.EXPERIMENTAL) {
+
+            var heightAttribute = utils.getObject(branchAttributes, "id", "height");
+
+            var scale = d3.scale.linear().domain(heightAttribute.range).range([0, 0.3]);
+            curvature = scale(line.attributes.height);
+          } else {
+            curvature = lineCurvature;
+          }
           var dr = Math.sqrt(dx * dx + dy * dy) * Math.log(curvature);
 
           var bearing = "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;

@@ -141,7 +141,7 @@ exports.generateCountsLayer = function(counts_, locations, countAttribute) {
       .call(d3.kodama.tooltip().format(function(d, i) {
 
           return {
-            title: d.location.id,
+            title: d.locationId,
             items: [{
               title: 'Date',
               value: d.startTime

@@ -344,7 +344,9 @@ setupTopoBackgroundPanel = function() {
 
 updateMapBackground = function(color) {
 
-	d3.select('.container').style("background", color);
+	// d3.select('.container').style("background", color);
+
+	d3.select('.svg').style("background", color);
 
 }//END: updateMapBackground
 

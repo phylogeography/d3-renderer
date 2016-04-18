@@ -11,6 +11,9 @@ var colorbrewer = require("colorbrewer");
 
 var exports = module.exports = {};
 
+var EXPERIMENTAL = true;
+exports.EXPERIMENTAL = EXPERIMENTAL;
+
 var hasTime = false;
 exports.hasTime = hasTime;
 
