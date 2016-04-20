@@ -1,0 +1,79 @@
+.container {
+	border: 2px solid #000;
+	border-radius: 5px;
+/* 	height: auto; */
+/* 	width: auto; */
+/* 	overflow: hidden; */
+/* 	display: inline-block; */
+    position: relative;
+/*     width: 100%; */
+/*     padding-bottom: 100%; aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
+}
+
+
+.selectors {
+		/*width: 20%;*/
+	/*margin-top: 1.5cm;*/
+	float: left;
+	overflow: hidden;
+}
+
+/* styling for collapsible panels */
+.panel, .panelcollapsed {
+	margin-top: 5px;
+	margin-right: 5px;
+}
+
+/* panel heading */
+.panel h2, .panelcollapsed h2 {
+	font-size: 14px;
+	font-weight: 300;
+	margin: 0px;
+	padding: 4px;
+	padding-left: 20px;
+	/*	background: #EEEEEE; */
+	background-image: url('./img/arrow-up.png');
+	background-repeat: no-repeat;
+	background-position: left center;
+	border-top: 1px solid #CCC;
+	/*	border-bottom: 1px solid #CCC;
+			border-right: 1px solid #CCC;
+			border-left: 1px solid #CCC;
+			-moz-border-radius: 3px;
+			-webkit-border-radius: 3px;
+			*/
+}
+
+/* panel heading on rollover */
+.panel h2:hover, .panelcollapsed h2:hover {
+	background-color: #F5F7F9;
+}
+
+/* heading of a collapsed panel */
+.panelcollapsed h2 {
+	/*	background: #DDDDDD; */
+	background-image: url('./img/arrow-dn.png');
+	background-repeat: no-repeat;
+	background-position: left center;
+	border-color: #CCC;
+}
+
+/* panel content - do not set borders or paddings */
+.panelcontent {
+	background: #FFFFFF;
+	overflow: hidden;
+}
+
+/* collapsed panel content */
+.panelcollapsed .panelcontent {
+	display: none;
+}
+
+.wrapper {
+	width: 190px;
+	margin: 25px 0;
+	margin-left: 10px;
+	margin-right: 15px;
+}

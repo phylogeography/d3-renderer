@@ -1,0 +1,24 @@
+BRANCH EXPERIMENTAL
+-------------------
+
+LICENSE
+-------
+
+GNU Lesser General Public License v3.0
+ 
+ PURPOSE
+ -------
+ Render SpreaD3 [http://github.com/phylogeography/SpreaD3] JSON files.
+ Example: [https://phylogeography.github.io/SpreaD3/]
+ 
+ USAGE
+ ----- 
+ * DEV
+  npm install
+  npm start
+  Point your browser to http://localhost:8080
+ * DIST
+  npm install
+  npm run build
+  Point your browser to dist/index.html
+

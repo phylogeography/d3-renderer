@@ -1,0 +1,22 @@
+#timeSlider {
+	margin-left: 80px;
+	margin-right: 5%;
+	margin-bottom: 2cm;
+	width: 90%;
+}
+
+.playPause {
+	float: left;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #CCCCCC;
+	border-radius: 5px;
+	width: 40px;
+	height: 40px;
+	/*  position: absolute; */
+	background: url('./img/play.png');
+}
+
+.playPause.playing {
+	background: url('./img/pause.png');
+}
