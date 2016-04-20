@@ -27,13 +27,16 @@ var max_line_opacity = 1;
 
 var lineCurvature = 0.1;
 var min_line_curvature = 0.0;
-var max_line_curvature = 1.0;
+var max_line_curvature = 0.3;
 
 // ---MODULE EXPORTS---//
 
 var exports = module.exports = {};
 
 exports.generateLinesLayer = function(branches, nodes, locations, branchAttributes) {
+
+  var heightAttribute = utils.getObject(branchAttributes, "id", "height");
+  var scale = d3.scale.linear().domain(heightAttribute.range).range([min_line_curvature, max_line_curvature]);
 
     linesLayer = global.g.append("g").attr("class", "linesLayer");
 
@@ -87,7 +90,6 @@ exports.generateLinesLayer = function(branches, nodes, locations, branchAttribut
               // continuous
               endCoordinate = endPoint.coordinate;
               line['endCoordinate'] = endCoordinate;
-
             }
 
           } //END: end coord check
@@ -122,17 +124,13 @@ exports.generateLinesLayer = function(branches, nodes, locations, branchAttribut
           var dy = targetY - sourceY;
 
           var curvature;
-          if (global.EXPERIMENTAL) {
-
-            var heightAttribute = utils.getObject(branchAttributes, "id", "height");
-
-            var scale = d3.scale.linear().domain(heightAttribute.range).range([0, 0.3]);
+          if (line.attributes.height) {
             curvature = scale(line.attributes.height);
           } else {
             curvature = lineCurvature;
           }
-          var dr = Math.sqrt(dx * dx + dy * dy) * Math.log(curvature);
 
+          var dr = Math.sqrt(dx * dx + dy * dy) * Math.log(curvature);
           var bearing = "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
 
           return (bearing);
@@ -345,6 +343,9 @@ function setupLineColorAttributePanel(attributes) {
             global.ordinalColors).domain(data);
 
           updateLineColorLegend(scale);
+
+// console.log(data);
+// console.log(global.ordinalColors);
 
         } else if (attribute.scale == global.LINEAR) {
 
