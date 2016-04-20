@@ -1,12 +1,13 @@
-LICENSE
--------
-
-GNU Lesser General Public License v3.0
- 
  PURPOSE
  -------
  Render SpreaD3 [http://github.com/phylogeography/SpreaD3] JSON files.
  Example: [https://phylogeography.github.io/SpreaD3/]
+
+ LICENSE
+ -------
+
+ GNU Lesser General Public License v3.0
+ 
  
  USAGE
  ----- 

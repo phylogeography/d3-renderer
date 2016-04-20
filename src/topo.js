@@ -353,7 +353,7 @@ updateMapBackground = function(color) {
 updateMapBackgroundLegend = function(scale) {
 
 	var width = 150;
-	var height = 250;
+	var height = 100;
 
 	var margin = {
 		left : 20,

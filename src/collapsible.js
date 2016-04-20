@@ -12,9 +12,8 @@ var exports = module.exports = {
 		expandAll : expandAll
 };
 
-
 function setUpPanels() {
-	
+
 	loadSettings();
 
 	// get all headings
@@ -57,7 +56,7 @@ function setUpPanels() {
 
 /**
  * Start the expand/collapse animation of the panel
- * 
+ *
  * @param panel
  *            reference to the panel div
  */
@@ -92,7 +91,7 @@ function animateTogglePanel(panel, expanding) {
 
 /**
  * Change the height of the target
- * 
+ *
  * @param panelContent
  *            reference to the panel content to change height
  * @param iteration
@@ -168,14 +167,14 @@ function collapseAll() {
 	for ( var key in panelsStatus) {
 		saveSettings(key, "false");
 	}
-		
+
 	setUpPanels();
 }
 
 /**
  * Takes data from the panelsStatus object, formats as key:value|key:value...
  * and puts in cookie valid for 365 days
- * 
+ *
  * @param key
  *            key name to save
  * @paeam value key value

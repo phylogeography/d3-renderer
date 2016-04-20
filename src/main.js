@@ -95,12 +95,9 @@ function move() {
 
   // fit the paths to the zoom level
   // d3.selectAll(".country").attr("stroke-width", 1.0 / s);
-  //	 d3.selectAll(".line").attr("stroke-width", lines.lineWidth / s);
-  // d3.selectAll(".point").attr("stroke-width", 1.0 / s);
-
+  // d3.selectAll(".line").attr("stroke-width", lines.lineWidth / s);
+  d3.selectAll(".point").attr("stroke-width", 1.0 / s);
 } // END: move
-
-// var json;
 
 function render() {
 
@@ -185,20 +182,20 @@ function render() {
           global.hasAreas = false;
         }
 
-        if (!(typeof branches === 'undefined')) {
-          lines.generateLinesLayer(branches, nodes, locations_, lineAttributes);
-          lines.setupPanels(lineAttributes);
-          global.hasLines = true;
-        } else {
-          global.hasLines = false;
-        }
-
         if (!(typeof nodes === 'undefined')) {
           points.generatePointsLayer(nodes, locations_, nodeAttributes);
           points.setupPanels(nodeAttributes);
           global.hasPoints = true;
         } else {
           global.hasPoints = false;
+        }
+
+        if (!(typeof branches === 'undefined')) {
+          lines.generateLinesLayer(branches, nodes, locations_, lineAttributes);
+          lines.setupPanels(lineAttributes);
+          global.hasLines = true;
+        } else {
+          global.hasLines = false;
         }
 
       } // END: TREE check
@@ -334,5 +331,6 @@ render();
 
 collapsible.setUpPanels();
 collapsible.collapseAll();
+// collapsible.expandAll();
 
 console.log("Done!");

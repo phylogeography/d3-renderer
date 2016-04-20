@@ -11,9 +11,6 @@ var colorbrewer = require("colorbrewer");
 
 var exports = module.exports = {};
 
-var EXPERIMENTAL = true;
-exports.EXPERIMENTAL = EXPERIMENTAL;
-
 var hasTime = false;
 exports.hasTime = hasTime;
 
@@ -80,7 +77,8 @@ var pairedSimpleColors = colorbrewer.Paired[12];
 exports.pairedSimpleColors = fixedColors;
 
 // colors for categorical attributes
-var ordinalColors = d3.scale.category20().range();// ordinalColors = colorbrewer.Blues[3] ;
+var ordinalColors = d3.scale.category20().range();
+// var ordinalColors = colorbrewer.Set1[9] ;
 exports.ordinalColors = ordinalColors;
 
 var projection;

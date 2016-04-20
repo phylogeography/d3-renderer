@@ -27,7 +27,7 @@ var max_line_opacity = 1;
 
 var lineCurvature = 0.1;
 var min_line_curvature = 0.0;
-var max_line_curvature = 1.0;
+var max_line_curvature = 0.3;//1.0;
 
 // ---MODULE EXPORTS---//
 
@@ -121,17 +121,7 @@ exports.generateLinesLayer = function(branches, nodes, locations, branchAttribut
           var dx = targetX - sourceX;
           var dy = targetY - sourceY;
 
-          var curvature;
-          if (global.EXPERIMENTAL) {
-
-            var heightAttribute = utils.getObject(branchAttributes, "id", "height");
-
-            var scale = d3.scale.linear().domain(heightAttribute.range).range([0, 0.3]);
-            curvature = scale(line.attributes.height);
-          } else {
-            curvature = lineCurvature;
-          }
-          var dr = Math.sqrt(dx * dx + dy * dy) * Math.log(curvature);
+          var dr = Math.sqrt(dx * dx + dy * dy) * Math.log(lineCurvature);
 
           var bearing = "M" + sourceX + "," + sourceY + "A" + dr + "," + dr + " 0 0,1 " + targetX + "," + targetY;
 
@@ -435,7 +425,7 @@ function setupLineColorAttributePanel(attributes) {
 function updateLineColorLegend(scale) {
 
   var width = 150;
-  var height = 110;
+  var height = 230;
 
   var margin = {
     left: 20,
@@ -546,7 +536,6 @@ function setupLineFixedCurvaturePanel() {
           var line = d;
 
           // console.log(Date.parse(line.startTime));
-
           // var curvature = lineCurvature;
 
           var targetX = line.targetX;
