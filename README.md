@@ -11,14 +11,17 @@ License: LGPL <br />
  Live [example](https://phylogeography.github.io/SpreaD3/).
 
 ## USAGE
-h1. DEV
-  npm install
-  npm start
-  Point your browser to http://localhost:8080
-h1. DIST
-  npm install
-  npm run build
-  Point your browser to dist/index.html
+DEV
+===
+  npm install <br />
+  npm start <br />
+  Point your browser to http://localhost:8080 <br />
+  
+DIST  
+====
+  npm install <br />
+  npm run dist <br />
+  Point your browser to dist/index.html <br />
 
 ## LICENSE
   This is free software; you can redistribute it and/or modify 
