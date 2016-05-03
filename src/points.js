@@ -6,17 +6,11 @@
 require("script!kodama");
 var d3 = require('d3');
 require("script!./d3-legend.js");
+require("imports?$=jquery!./jquery.simple-color.js");
 
 var utils = require('./utils.js');
 var global = require('./global.js');
 
-// var slider = require('rangeslider.js');
-// require("script!rangeslider.js");
-
-require("imports?$=jquery!rangeslider.js");
-
-// import("./jquery.simple-color.js");
-require("imports?$=jquery!./jquery.simple-color.js");
 
 // ---MODULE VARIABLES---//
 
