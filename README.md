@@ -10,15 +10,12 @@ License: LGPL <br />
  Render [SpreaD3](http://github.com/phylogeography/SpreaD3) JSON files.
  Live [example](https://phylogeography.github.io/SpreaD3/).
 
-## USAGE
-DEV
-===
+## DEV
   npm install <br />
   npm start <br />
   Point your browser to http://localhost:8080 <br />
   
-DIST  
-====
+## DIST  
   npm install <br />
   npm run dist <br />
   Point your browser to dist/index.html <br />
