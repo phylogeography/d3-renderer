@@ -34,119 +34,117 @@ var processID;
 
 var exports = module.exports = {};
 
-exports.initializeTimeSlider = function( timeLine) {
+exports.initializeTimeSlider = function(timeLine) {
 
-	// initialize module variables
-	initializeVariables(timeLine);
+    // initialize module variables
+    initializeVariables(timeLine);
 
-	// put slider at the end of timeLine, everything painted
-	timeSlider.value( sliderEndValue);
-	updateDateDisplay(sliderEndValue);
+    // put slider at the end of timeLine, everything painted
+    timeSlider.value(sliderEndValue);
+    updateDateDisplay(sliderEndValue);
 
-	// time slider listener
-	timeSlider.on('slide', function(evt, value) {
+    // time slider listener
+    timeSlider.on('slide', function(evt, value) {
 
-		update(value);
-		currentSliderValue = value;
+      update(value);
+      currentSliderValue = value;
 
-	});// END: slide
+    }); // END: slide
 
-	var playPauseButton = d3.select('#playPause').attr("class", "playPause")
-			.on(
-					"click",
-					function() {
+    var playPauseButton = d3.select('#playPause').attr("class", "playPause")
+      .on(
+        "click",
+        function() {
 
-						if ( playing) {
-							playing = false;
-							playPauseButton.classed("playing", playing);
+          if (playing) {
+            playing = false;
+            playPauseButton.classed("playing", playing);
 
-							clearInterval(processID);
+            clearInterval(processID);
 
-						} else {
-							playing = true;
-							playPauseButton.classed("playing", playing);
+          } else {
+            playing = true;
+            playPauseButton.classed("playing", playing);
 
-							processID = setInterval(function() {
+            processID = setInterval(function() {
 
-								var sliderValue = currentSliderValue
-										+ sliderInterval;
-								if (sliderValue > sliderEndValue) {
-									sliderValue = sliderStartValue;
-								}
+              var sliderValue = currentSliderValue + sliderInterval;
+              if (sliderValue > sliderEndValue) {
+                sliderValue = sliderStartValue;
+              }
 
-								timeSlider.value(sliderValue);
-								update(sliderValue);
+              timeSlider.value(sliderValue);
+              update(sliderValue);
 
-								currentSliderValue = sliderValue;
+              currentSliderValue = sliderValue;
 
-							}, 100);
+            }, 100);
 
-						}// END: playing check
+          } // END: playing check
 
-					});
+        });
 
-}// END: initializeTimeSlider
+  } // END: initializeTimeSlider
 
 // ---FUNCTIONS---//
 
 initializeVariables = function(timeLine) {
 
-	dateFormat = d3.time.format("%Y/%m/%d");
+    dateFormat = d3.time.format("%Y/%m/%d");
 
-	var startDate = utils.formDate(timeLine.startTime);
-	sliderStartValue = startDate.getTime();
+    var startDate = utils.formDate(timeLine.startTime);
+    sliderStartValue = startDate.getTime();
 
-	var endDate = utils.formDate(timeLine.endTime);
-	sliderEndValue = endDate.getTime();
+    var endDate = utils.formDate(timeLine.endTime);
+    sliderEndValue = endDate.getTime();
 
-	currentSliderValue =  sliderStartValue;
+    currentSliderValue = sliderStartValue;
 
-	var duration =  sliderEndValue -  sliderStartValue;
-	sliderInterval = duration / sliderSpeed;
+    var duration = sliderEndValue - sliderStartValue;
+    sliderInterval = duration / sliderSpeed;
 
-	// initial value
-	currentDateDisplay = d3.select('#currentDate');//.text(dateFormat(startDate));
+    // initial value
+    currentDateDisplay = d3.select('#currentDate'); //.text(dateFormat(startDate));
 
-	 timeScale = d3.time.scale.utc().domain([ startDate, endDate ]).range(
-			[ 0, 1 ]);
+    timeScale = d3.time.scale.utc().domain([startDate, endDate]).range(
+      [0, 1]);
 
-	timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
-	d3.select('#timeSlider').call(timeSlider);
+    timeSlider = d3.slider().scale(timeScale).axis(d3.svg.axis());
+    d3.select('#timeSlider').call(timeSlider);
 
-}// END: generateTime
+  } // END: generateTime
 
 function updateDateDisplay(value) {
 
-	var currentDate = timeScale.invert(timeScale(value));
-	currentDateDisplay.text(dateFormat(currentDate));
+  var currentDate = timeScale.invert(timeScale(value));
+  currentDateDisplay.text(dateFormat(currentDate));
 
-}// END: updateDateDisplay
+} // END: updateDateDisplay
 
 function update(value) {
 
-	updateDateDisplay(value);
+  updateDateDisplay(value);
 
-    //---POINTS---//
+  //---POINTS---//
 
-	if(global.hasPoints) {
-	points.updatePointsLayer(value);
-	}
+  if (global.hasPoints) {
+    points.updatePointsLayer(value);
+  }
 
-	// ---LINES---//
+  // ---LINES---//
 
-	if(global.hasLines) {
-	lines.updateLinesLayer(value);
-	}
+  if (global.hasLines) {
+    lines.updateLinesLayer(value);
+  }
 
+  // --- AREAS--//
+  if (global.hasAreas) {
+    areas.updateAreasLayer(value);
+  }
 
-	// --- AREAS--//
-	if(global.hasAreas) {
-	areas.updateAreasLayer(value);
-	}
+  // --- COUNTS--//
+  if (global.hasCounts) {
+    counts.updateCountsLayer(value);
+  }
 
-	// --- COUNTS--//
-	if(global.hasCounts) {
-	counts.updateCountsLayer(value);
-	}
-
-}// END: update
+} // END: update

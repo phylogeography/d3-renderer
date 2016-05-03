@@ -417,7 +417,6 @@ function setupLineColorAttributePanel(attributes) {
 
         // trigger repaint
         updateLineColors(scale, colorAttribute);
-
       });
 
 } // END: setupLineColorAttributePanel

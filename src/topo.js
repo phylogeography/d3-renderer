@@ -3,13 +3,13 @@
  */
 
 // ---MODULE IMPORTS---//
+
 require('./topo.css');
 var d3 = require('d3');
 require("script!./d3-legend.js");
+require("imports?$=jquery!./jquery.simple-color.js");
 var utils = require('./utils.js');
 var global = require('./global.js');
-
-require("imports?$=jquery!./jquery.simple-color.js");
 
 // ---MODULE VARIABLES---//
 
@@ -51,6 +51,7 @@ exports.generateTopoLayer = function(geojson) {
 
 	// determine the bounds
 	var bounds = path.bounds(geojson);
+
 	var hscale = projectionScale * global.width / (bounds[1][0] - bounds[0][0]);
 	var vscale = projectionScale * global.height
 			/ (bounds[1][1] - bounds[0][1]);
@@ -64,14 +65,12 @@ exports.generateTopoLayer = function(geojson) {
 
 	// if it failed stick to basics
 	if (projectionScale < basicScale) {
-
 		projectionScale = (global.width / 2 / Math.PI);
 		var offset = [ (global.width / 2), (global.height / 2) ];
 
 		global.projection = d3.geo.mercator() //
 		.scale(projectionScale) //
 		.translate(offset);
-
 	}
 
 	// new path
@@ -130,7 +129,6 @@ exports.generateTopoLayer = function(geojson) {
 	});
 
 updateMapBackground(backgroundColors[backgrounDefaultColorIndex]);
-
 }// END: generateTopoLayer
 
 exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
@@ -345,8 +343,14 @@ setupTopoBackgroundPanel = function() {
 updateMapBackground = function(color) {
 
 	// d3.select('.container').style("background", color);
+	// d3.select('.svg').style("background", color);
 
-	d3.select('.svg').style("background", color);
+	d3.select('.svg').style({
+		// "fill": color,
+	 //  "color" :color,
+     "background" : color
+	});
+
 
 }//END: updateMapBackground
 

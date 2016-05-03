@@ -101,7 +101,7 @@ function move() {
 
 function render() {
 
-  d3.json("ebov.json", function(error, json) {
+  d3.json("data.json", function(error, json) {
 
     if (error) {
       return console.warn(error);
@@ -182,20 +182,20 @@ function render() {
           global.hasAreas = false;
         }
 
-        if (!(typeof nodes === 'undefined')) {
-          points.generatePointsLayer(nodes, locations_, nodeAttributes);
-          points.setupPanels(nodeAttributes);
-          global.hasPoints = true;
-        } else {
-          global.hasPoints = false;
-        }
-
         if (!(typeof branches === 'undefined')) {
           lines.generateLinesLayer(branches, nodes, locations_, lineAttributes);
           lines.setupPanels(lineAttributes);
           global.hasLines = true;
         } else {
           global.hasLines = false;
+        }
+
+        if (!(typeof nodes === 'undefined')) {
+          points.generatePointsLayer(nodes, locations_, nodeAttributes);
+          points.setupPanels(nodeAttributes);
+          global.hasPoints = true;
+        } else {
+          global.hasPoints = false;
         }
 
       } // END: TREE check
