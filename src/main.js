@@ -101,7 +101,7 @@ function move() {
 
 function render() {
 
-  d3.json("ebov.json", function(error, json) {
+  d3.json("data.json", function(error, json) {
 
     if (error) {
       return console.warn(error);

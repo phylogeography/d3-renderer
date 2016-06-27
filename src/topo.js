@@ -161,7 +161,7 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
 	//console.log("vscale: " + vscale);
 
 	var projectionScale = (hscale < vscale) ? hscale : vscale;
-    projectionScale = projectionScale * 100;
+  projectionScale = projectionScale * 100;
 
     //console.log("projectionScale: " + projectionScale);
 
@@ -273,7 +273,6 @@ exports.generateEmptyTopoLayer = function(pointAttributes, axisAttributes) {
         .text(utils.capitalizeFirstLetter(axisAttributes.yCoordinate));
 
     updateMapBackground(backgroundColors[backgrounDefaultColorIndex]);
-
 }// END: generateEmptyLayer
 
 exports.setupPanels = function(attributes) {
@@ -317,7 +316,6 @@ setupTopoBackgroundPanel = function() {
 		element.value = option;
 
 		mapBackgroundSelect.appendChild(element);
-
 	}// END: i loop
 
 	// map background listener
@@ -335,23 +333,16 @@ setupTopoBackgroundPanel = function() {
 
 						// setup legend
 						updateMapBackgroundLegend(scale);
-
 					});
 
 }// END:setupTopoBackgroundPanel
 
 updateMapBackground = function(color) {
-
-	// d3.select('.container').style("background", color);
-	// d3.select('.svg').style("background", color);
-
 	d3.select('.svg').style({
 		// "fill": color,
 	 //  "color" :color,
      "background" : color
 	});
-
-
 }//END: updateMapBackground
 
 updateMapBackgroundLegend = function(scale) {

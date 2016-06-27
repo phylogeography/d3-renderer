@@ -193,7 +193,8 @@ exports.updatePointsLayer = function(value) {
         }) //
       .transition() //
       .ease("linear") //
-      .attr("visibility", "hidden").attr("opacity", 0);
+      .attr("visibility", "hidden") //
+      .attr("opacity", 0);
 
     // ---select points displayed now---//
 

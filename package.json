@@ -11,26 +11,27 @@
   },
   "dependencies": {
     "colorbrewer": "^1.0.0",
-    "d3": "^3.5.15",
+    "d3": "^3.5.17",
     "d3-svg-legend": "^1.8.0",
     "jquery": "^2.2.0",
     "jquery-simple-color": "git+ssh://git@github.com/recurser/jquery-simple-color.git",
     "kodama": "^1.4.3"
   },
   "devDependencies": {
+    "css-loader": "^0.14.5",
+    "exports-loader": "^0.6.3",
     "express": "^4.13.4",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.8.5",
+    "html-webpack-plugin": "^1.5.0",
+    "imports-loader": "~0.6.5",
+    "path": "^0.12.7",
+    "script-loader": "git+ssh://git@github.com:webpack/script-loader.git",
+    "style-loader": "^0.13.0",
+    "url-loader": "^0.5.7",
     "webpack": "^1.9.10",
     "webpack-dev-middleware": "^1.5.1",
     "webpack-dev-server": "^1.9.0",
-    "webpack-hot-middleware": "^2.8.1",
-    "html-webpack-plugin": "^1.5.0",
-    "extract-text-webpack-plugin": "^1.0.1",
-    "css-loader": "^0.14.5",
-    "exports-loader": "^0.6.3",
-    "file-loader": "^0.8.5",
-    "imports-loader": "~0.6.5",
-    "script-loader": "git+ssh://git@github.com:webpack/script-loader.git",
-    "style-loader": "^0.13.0",
-    "url-loader": "^0.5.7"
+    "webpack-hot-middleware": "^2.8.1"
   }
 }
