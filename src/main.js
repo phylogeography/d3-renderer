@@ -186,8 +186,10 @@ function render() {
           lines.generateLinesLayer(branches, nodes, locations_, lineAttributes);
           lines.setupPanels(lineAttributes);
           global.hasLines = true;
+          console.log("hasLines = true");
         } else {
           global.hasLines = false;
+          console.log("hasLines = false");
         }
 
         if (!(typeof nodes === 'undefined')) {
